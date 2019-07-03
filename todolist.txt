@@ -1,0 +1,13 @@
+Additional Data Structure:
+  ☐ Set @critical
+  ☐ Sorted Set @low
+  ☐ Binary Heap @high
+  ☐ Fibonacci Heap @low
+  ☐ Trie @low
+  ☐ Linked List @critical
+  ☐ Collection Iterators @high
+  ☐ Grid @low
+
+Extra Utilities:
+  ☐ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high
+  
