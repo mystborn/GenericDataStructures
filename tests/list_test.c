@@ -1,6 +1,6 @@
 #include <check.h>
 
-#include "../include/list.h"
+#include "../include/generic_list.h"
 
 LIST_DEFINE_H(IntList, il, int)
 

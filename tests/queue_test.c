@@ -1,6 +1,6 @@
 #include <check.h>
 
-#include "../include/queue.h"
+#include "../include/generic_queue.h"
 
 QUEUE_DEFINE_H(IntQueue, iq, int)
 

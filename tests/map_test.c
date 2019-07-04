@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <check.h>
 
-#include "../include/map.h"
+#include "../include/generic_map.h"
 
 MAP_DEFINE_H(StringMap, string_map, char*, char*)
 
