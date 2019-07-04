@@ -24,14 +24,14 @@
     } \
  \
     static inline value_type function_prefix ## _get(type_name* grid, int x, int y) { \
-        assert((uint)x < grid->width); \
-        assert((uint)y < grid->height); \
+        assert((unsigned int)x < grid->width); \
+        assert((unsigned int)y < grid->height); \
         return grid->grid[y * grid->width + x]; \
     } \
  \
     static inline void value_type function_prefix ## _set(type_name* grid, int x, int y) { \
-        assert((uint)x < grid->width); \
-        assert((uint)y < grid->height); \
+        assert((unsigned int)x < grid->width); \
+        assert((unsigned int)y < grid->height); \
         grid->grid[y * grid->width + x]; \
     } \
 

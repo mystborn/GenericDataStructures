@@ -17,6 +17,8 @@
         unsigned int end; \
     } type_name; \
     \
+    type_name* function_prefix ## _create(void); \
+    type_name* function_prefix ## _create_capacity(unsigned int capacity); \
     void* function_prefix ## _init(type_name* queue); \
     void* function_prefix ## _init_capacity(type_name* queue, unsigned int capacity); \
     void function_prefix ## _clear(type_name* queue); \
@@ -27,9 +29,22 @@
         return queue->buffer[queue->start]; \
     } \
     static inline unsigned int function_prefix ## _count(type_name* queue) { return queue->count; } \
-    static inline void function_prefix ## _free(type_name* queue) { free(queue->buffer); }
+    static inline void function_prefix ## _free_resources(type_name* queue) { free(queue->buffer); } \
+    static inline void function_prefix ## _free(type_name* queue) { free(queue->buffer); free(queue); }
 
 #define QUEUE_DEFINE_C(type_name, function_prefix, value_type) \
+    type_name* function_prefix ## _create(void) { \
+        type_name* queue = malloc(sizeof(type_name)); \
+        function_prefix ## _init(queue); \
+        return queue; \
+    } \
+    \
+    type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
+        type_name* queue = malloc(sizeof(type_name)); \
+        function_prefix ## _init_capacity(capacity); \
+        return queue; \
+    } \
+    \
     void* function_prefix ## _init(type_name* queue) { \
         queue->start = 0; \
         queue->end = 0; \

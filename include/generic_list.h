@@ -23,7 +23,9 @@
     \
     static inline unsigned int function_prefix ## _count(type_name* list) { return list->count; } \
     \
-    static inline void function_prefix ## _free(type_name* list) { free(list->buffer); } \
+    static inline void function_prefix ## _free_resources(type_name* list) { free(list->buffer); } \
+    \
+    static inline void function_prefix ## _free(type_name* list) { free(list->buffer); free(list); } \
     \
     static inline value_type function_prefix ## _get(type_name* list, unsigned int index) {  \
         assert(index < list->count); \

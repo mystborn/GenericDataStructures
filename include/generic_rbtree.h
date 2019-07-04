@@ -29,8 +29,7 @@ typedef enum RBColor {
         unsigned int count; \
     } type_name; \
     \
-    void function_prefix ## _init(type_name* tree); \
-    void function_prefix ## _free(type_name* tree); \
+    void function_prefix ## _free_resources(type_name* tree); \
     void function_prefix ## _add(type_name* tree, key_type key, value_type value); \
     value_type function_prefix ## _remove(type_name* tree, key_type key); \
     value_type function_prefix ## _remove_min(type_name* tree); \
@@ -38,6 +37,17 @@ typedef enum RBColor {
     value_type function_prefix ## _get(type_name* tree, key_type key); \
     value_type function_prefix ## _get_min(type_name* tree); \
     value_type function_prefix ## _get_max(type_name* tree); \
+    \
+    static inline type_name* function_prefix ## _create(void) { \
+        type_name* tree = malloc(sizeof(type_name)); \
+        tree->root = NULL; \
+        tree->count = 0; \
+    } \
+    static inline void function_prefix ## _init(type_name* tree) { tree->root = NULL; tree->count = 0; } \
+    static inline void function_prefix ## _free(type_name* tree) { \
+        function_prefix ## _free_resources(tree); \
+        free(tree); \
+    } \
     static inline type_name ## Node* function_prefix ## _root(type_name* tree) { return tree->root; } \
     static inline unsigned int function_prefix ## _count(type_name* tree) { return tree->count; }
 
@@ -73,11 +83,6 @@ typedef enum RBColor {
     \
     static inline RBColor function_prefix ## _color(type_name ## Node* node) { \
         return node == NULL ? RB_BLACK : node->color; \
-    } \
-    \
-    void function_prefix ## _init(type_name* tree) { \
-        tree->root = NULL; \
-        tree->count = 0; \
     } \
     \
     static type_name ## Node* function_prefix ## _max_node(type_name ## Node* node) { \
@@ -415,7 +420,7 @@ typedef enum RBColor {
         return result; \
     } \
     \
-    void function_prefix ## _free(type_name* tree) { \
+    void function_prefix ## _free_resources(type_name* tree) { \
         if(tree->root == NULL)  \
             return; \
         \
