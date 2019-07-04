@@ -41,7 +41,7 @@
     \
     type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
         type_name* queue = malloc(sizeof(type_name)); \
-        function_prefix ## _init_capacity(capacity); \
+        function_prefix ## _init_capacity(queue, capacity); \
         return queue; \
     } \
     \

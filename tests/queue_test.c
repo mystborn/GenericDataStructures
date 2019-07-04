@@ -10,22 +10,20 @@ QUEUE_DEFINE_C(IntQueue, iq, int)
 static IntQueue* queue;
 
 void queue_start(void) {
-    queue = malloc(sizeof(IntQueue));
-    iq_init(queue);
+    queue = iq_create();
 }
 
 void queue_reset(void) {
     iq_free(queue);
-    free(queue);
 }
 
 START_TEST(queue_allocate_and_deallocate) {
     IntQueue temp;
-    ck_assert(iq_init(&temp) != NULL);
-    iq_free(&temp);
+    ck_assert(iq_init(&temp));
+    iq_free_resources(&temp);
 
     ck_assert(iq_init_capacity(&temp, 8));
-    iq_free(&temp);
+    iq_free_resources(&temp);
 }
 END_TEST
 

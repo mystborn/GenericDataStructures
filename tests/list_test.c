@@ -14,19 +14,17 @@ void list_start(void) {
 
 void list_reset(void) {
     il_free(list);
-    free(list);
 }
 
 START_TEST(list_allocate_and_deallocate) {
     IntList temp1;
     ck_assert(il_init(&temp1));
-    il_free(&temp1);
+    il_free_resources(&temp1);
     ck_assert(il_init_capacity(&temp1, 8));
-    il_free(&temp1);
+    il_free_resources(&temp1);
     IntList* temp2 = il_create();
     ck_assert(temp2);
     il_free(temp2);
-    free(temp2);
 }
 END_TEST
 

@@ -15,20 +15,17 @@ static StringMap* map;
 static int test_number = 0;
 
 void map_start(void) {
-    map = malloc(sizeof(StringMap));
-    string_map_init(map);
+    map = string_map_create();
 }
 
 void map_reset(void) {
     string_map_free(map);
-    free(map);
-    printf("Test Number: %d\n", ++test_number);
 }
 
 START_TEST(map_allocate_and_deallocate) {
     StringMap temp;
     ck_assert(string_map_init(&temp) != NULL);
-    string_map_free(&temp);
+    string_map_free_resources(&temp);
 }
 END_TEST
 

@@ -15,7 +15,10 @@ RBTREE_DEFINE_C(IITree, iitree, int, int, int_cmp, INT_MIN)
 START_TEST(tree_allocates_and_deallocates_no_elements) {
     IITree tree;
     iitree_init(&tree);
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
+
+    IITree* tree_ptr = iitree_create();
+    iitree_free(tree_ptr);
 }
 END_TEST
 
@@ -28,9 +31,18 @@ START_TEST(tree_allocates_and_deallocates_some_elements) {
 
     ck_assert(iitree_count(&tree) == 2);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 
     ck_assert(iitree_count(&tree) == 0);
+
+    IITree* tree_ptr = iitree_create();
+
+    iitree_add(tree_ptr, 0, 0);
+    iitree_add(tree_ptr, 1, 1);
+
+    ck_assert(iitree_count(tree_ptr) == 2);
+
+    iitree_free(tree_ptr);
 }
 END_TEST
 
@@ -64,7 +76,7 @@ START_TEST(tree_adds_items_in_order_simple) {
     }
     free(stack);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -101,7 +113,7 @@ START_TEST(tree_adds_items_in_order_complex) {
     }
     free(stack);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -121,7 +133,7 @@ START_TEST(tree_remove_root) {
     ck_assert(iitree_root(&tree) == NULL);
     ck_assert(iitree_count(&tree) == 0);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -156,7 +168,7 @@ START_TEST(tree_remove_preserves_order) {
     }
     free(stack);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -172,7 +184,7 @@ START_TEST(tree_remove_min_removes_min) {
         ck_assert(value == i);
     }
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -188,7 +200,7 @@ START_TEST(tree_remove_max_removes_max) {
         ck_assert(value == i);
     }
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -201,7 +213,7 @@ START_TEST(tree_get_invalid_key_returns_default) {
 
     ck_assert(iitree_get(&tree, 10) == INT_MIN);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -215,7 +227,7 @@ START_TEST(tree_get_valid_key_returns_value) {
     for(int i = 0; i < 6; i++)
         ck_assert(iitree_get(&tree, i) == i);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -228,7 +240,7 @@ START_TEST(tree_get_min_returns_min) {
 
     ck_assert(iitree_get_min(&tree) == 0);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
@@ -241,7 +253,7 @@ START_TEST(tree_get_max_returns_max) {
 
     ck_assert(iitree_get_max(&tree) == 5);
 
-    iitree_free(&tree);
+    iitree_free_resources(&tree);
 }
 END_TEST
 
