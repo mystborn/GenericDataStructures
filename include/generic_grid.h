@@ -62,8 +62,8 @@
     } \
     \
     void function_prefix ## _clear(type_name* grid, value_type default_value) { \
-        for(int w = 0; w < grid->width; w++) { \
-            for(int h = 0; h < grid->height; h++) { \
+        for(int h = 0; h < grid->height; h++) { \
+            for(int w = 0; w < grid->width; w++) { \
                 grid->grid[h * grid->width + w] = default_value; \
             } \
         } \
