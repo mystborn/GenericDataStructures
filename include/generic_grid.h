@@ -14,6 +14,7 @@
     type_name* function_prefix ## _create(int width, int height); \
     void function_prefix ## _free(type_name* grid); \
     void function_prefix ## _free_resources(type_name* grid); \
+    void function_prefix ## _clear(type_name* grid, value_type default_value); \
  \
     static inline int function_prefix ## _width(type_name* grid) { \
         return grid->width; \
@@ -29,10 +30,10 @@
         return grid->grid[y * grid->width + x]; \
     } \
  \
-    static inline void value_type function_prefix ## _set(type_name* grid, int x, int y) { \
+    static inline void value_type function_prefix ## _set(type_name* grid, int x, int y, value_type value) { \
         assert((unsigned int)x < grid->width); \
         assert((unsigned int)y < grid->height); \
-        grid->grid[y * grid->width + x]; \
+        grid->grid[y * grid->width + x] = value; \
     } \
 
 #define GRID_DEFINE_C(type_name, function_prefix, value_type) \
@@ -58,5 +59,13 @@
     void function_prefix ## _free_resources(type_name* grid) { \
         free(grid->grid); \
     } \
+    \
+    void function_prefix ## _clear(type_name* grid, value_type default_value) { \
+        for(int w = 0; w < grid->width; w++) { \
+            for(int h = 0; h < grid->height; h++) { \
+                grid->grid[h * grid->width + w] = default_value; \
+            } \
+        } \
+    }
 
 #endif
