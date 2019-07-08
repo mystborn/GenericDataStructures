@@ -42,6 +42,7 @@ typedef enum RBColor {
         type_name* tree = malloc(sizeof(type_name)); \
         tree->root = NULL; \
         tree->count = 0; \
+        return tree; \
     } \
     static inline void function_prefix ## _init(type_name* tree) { tree->root = NULL; tree->count = 0; } \
     static inline void function_prefix ## _free(type_name* tree) { \

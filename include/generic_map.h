@@ -177,13 +177,15 @@ static uint32_t fnv32(const char* data) {
         } \
  \
         start = cell; \
-        while(map->cells[cell].active) { \
+        while(true) { \
             if(++cell == map->capacity) \
                 cell = 0; \
  \
+            if(!map->cells[cell].active) \
+                break; \
+ \
             if(map->cells[cell].hash <= hash) \
                 last = cell; \
- \
         } \
  \
         if(last != -1) { \
