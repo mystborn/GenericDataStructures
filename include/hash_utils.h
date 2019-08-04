@@ -5,6 +5,8 @@
     Defines some utility functions used by both the map and set structures.
 */
 
+#include <stdint.h>
+
 // A detailed explanation of this can be found here: 
 // https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/
 
