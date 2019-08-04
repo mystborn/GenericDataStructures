@@ -7,6 +7,7 @@ Additional Data Structure:
   ☐ Linked List @critical
   ☐ Collection Iterators @high
   ☐ Grid @low
+  ☐ Pair @low
 
 Extra Utilities:
   ☐ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high

@@ -33,6 +33,7 @@
     static inline void function_prefix ## _free(type_name* queue) { free(queue->buffer); free(queue); }
 
 #define QUEUE_DEFINE_C(type_name, function_prefix, value_type) \
+    /* todo: inline the create functions. */ \
     type_name* function_prefix ## _create(void) { \
         type_name* queue = malloc(sizeof(type_name)); \
         function_prefix ## _init(queue); \
