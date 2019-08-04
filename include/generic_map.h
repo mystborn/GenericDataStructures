@@ -60,7 +60,7 @@
         for(int i = 0; i < capacity; i++) { \
             if(old[i].active) { \
                 uint32_t cell; \
-                old[i].hash = cell = ___map_fib_hash(hash_fn(old[i].key), map->shift); \
+                old[i].hash = cell = ___fib_hash(hash_fn(old[i].key), map->shift); \
                 while(new[cell].active) { \
                     if(++cell > map->capacity) \
                         cell = 0; \
@@ -78,7 +78,7 @@
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
-        hash = cell = ___map_fib_hash(hash_fn(key), map->shift); \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -103,7 +103,7 @@
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
-        hash = cell = ___map_fib_hash(hash_fn(key), map->shift); \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -124,7 +124,7 @@
  \
     value_type function_prefix ## _get(type_name* map, key_type key) { \
         uint32_t cell, hash; \
-        hash = cell = ___map_fib_hash(hash_fn(key), map->shift); \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) \
@@ -144,7 +144,7 @@
         int last = -1; \
         uint32_t start, cell, hash; \
  \
-        hash = cell = ___map_fib_hash(hash_fn(key), map->shift); \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) \
