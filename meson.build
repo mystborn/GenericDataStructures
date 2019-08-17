@@ -15,3 +15,5 @@ endif
 if check_location != ''
     subdir('tests')
 endif
+
+GenericDataStructures_dep = declare_dependency(include_directories: inc)

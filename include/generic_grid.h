@@ -46,9 +46,14 @@
  \
     type_name* function_prefix ## _create(int width, int height) { \
         type_name* grid = malloc(sizeof(type_name)); \
+        if(!grid) \
+            return NULL; \
         grid->width = width; \
         grid->height = height; \
-        grid->grid = malloc(width * height * sizeof(value_type)); \
+        if(!(grid->grid = malloc(width * height * sizeof(value_type)))) { \
+            free(grid); \
+            return NULL; \
+        } \
         return grid; \
     } \
  \

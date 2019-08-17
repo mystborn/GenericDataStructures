@@ -38,7 +38,12 @@
 #define MAP_DEFINE_C(type_name, function_prefix, key_type, value_type, hash_fn, compare_fn, default_value) \
     type_name* function_prefix ## _create(void) { \
         type_name* map = malloc(sizeof(type_name)); \
-        function_prefix ## _init(map); \
+        if(!map) \
+            return NULL; \
+        if(!function_prefix ## _init(map)) { \
+            free(map); \
+            return NULL; \
+        } \
         return map; \
     } \
     \

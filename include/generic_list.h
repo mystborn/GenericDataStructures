@@ -2,6 +2,7 @@
 #define GENERIC_DATA_STRUCTURES_LIST_H
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +17,8 @@
     type_name* function_prefix ## _create(void); \
     void* function_prefix ## _init(type_name* list); \
     void* function_prefix ## _init_capacity(type_name* list, unsigned int capacity); \
-    void function_prefix ## _add(type_name* list, value_type value); \
-    void function_prefix ## _insert(type_name* list, unsigned int index, value_type value); \
+    bool function_prefix ## _add(type_name* list, value_type value); \
+    bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value); \
     \
     static inline void function_prefix ## _clear(type_name* list) { list->count = 0; } \
     \
@@ -56,7 +57,7 @@
     static inline value_type function_prefix ## _pop(type_name* list) {  \
         assert(list->count); \
         return list->buffer[--list->count]; \
-    }
+    } \
 
 #define LIST_DEFINE_C(type_name, function_prefix, value_type) \
     type_name* function_prefix ## _create(void) { \
@@ -83,29 +84,34 @@
         return list->buffer = malloc(capacity * sizeof(value_type)); \
     } \
     \
-    void function_prefix ## _add(type_name* list, value_type value) { \
+    bool function_prefix ## _add(type_name* list, value_type value) { \
         if(list->count == list->capacity) { \
             list->capacity *= 2; \
-            list->buffer = realloc(list->buffer, list->capacity * sizeof(value_type)); \
-            assert(list->buffer); \
+            value_type* buffer = realloc(list->buffer, list->capacity * sizeof(value_type)); \
+            if(!buffer) \
+                return false; \
+            list->buffer = buffer; \
         } \
         list->buffer[list->count++] = value; \
+        return true; \
     } \
     \
-    void function_prefix ## _insert(type_name* list, unsigned int index, value_type value) { \
+    bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value) { \
         assert(index <= list->count); \
         if(index == list->count) { \
-            function_prefix ## _add(list, value); \
-            return; \
+            return function_prefix ## _add(list, value); \
         } \
         if(list->count == list->capacity) { \
             list->capacity *= 2; \
-            list->buffer = realloc(list->buffer, list->capacity * sizeof(value_type)); \
-            assert(list->buffer); \
+            value_type* buffer = realloc(list->buffer, list->capacity * sizeof(value_type)); \
+            if(!buffer) \
+                return false; \
+            list->buffer = buffer; \
         } \
         memmove(list->buffer + index + 1, list->buffer + index, (list->count++ - index) * sizeof(value_type)); \
         list->buffer[index] = value; \
-    }
+        return true; \
+    } \
 
 
 
