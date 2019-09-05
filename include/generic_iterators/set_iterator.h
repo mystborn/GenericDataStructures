@@ -7,4 +7,6 @@
             continue; \
         out_key = set->cells[set_iter_i].value;
 
+#define set_iter_end }
+
 #endif
