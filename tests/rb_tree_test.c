@@ -1,4 +1,5 @@
 #include "../include/generic_rbtree.h"
+#include "../include/generic_iterators/rbtree_iterator.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -257,6 +258,85 @@ START_TEST(tree_get_max_returns_max) {
 }
 END_TEST
 
+START_TEST(tree_iter_all) {
+    IITree tree;
+    iitree_init(&tree);
+
+    for(int i = 0; i <= 6; i++)
+        iitree_add(&tree, i, 6-i);
+
+    int key, value;
+    int count = 0;
+    rbtree_iter_start(IITree, &tree, key, value) {
+        ck_assert(count == key);
+        ck_assert(value == 6-key);
+        count++;
+    }
+    rbtree_iter_end
+    ck_assert(count == 7);
+    iitree_free_resources(&tree);
+}
+END_TEST
+
+START_TEST(tree_iter_some) {
+    IITree tree;
+    iitree_init(&tree);
+
+    for(int i = 0; i < 6; i++)
+        iitree_add(&tree, i, i);
+
+    int key, value;
+    int count = 0;
+    rbtree_iter_start(IITree, &tree, key, value) {
+        ck_assert(count == key);
+        count++;
+        if(count == 3)
+            break;
+    }
+    rbtree_iter_end
+    ck_assert(count == 3);
+    iitree_free_resources(&tree);
+}
+END_TEST
+
+START_TEST(tree_iter_keys) {
+    IITree tree;
+    iitree_init(&tree);
+
+    for(int i = 0; i <= 6; i++)
+        iitree_add(&tree, i, 6-i);
+
+    int key;
+    int count = 0;
+    rbtree_iter_keys_start(IITree, &tree, key) {
+        ck_assert(count == key);
+        count++;
+    }
+    rbtree_iter_end
+    ck_assert(count == 7);
+    iitree_free_resources(&tree);
+}
+END_TEST
+
+START_TEST(tree_iter_values) {
+    IITree tree;
+    iitree_init(&tree);
+
+    for(int i = 0; i <= 6; i++)
+        iitree_add(&tree, i, 6-i);
+
+    int value;
+    int count = 0;
+    rbtree_iter_values_start(IITree, &tree, value) {
+        ck_assert(value == 6-count);
+        count++;
+    }
+    rbtree_iter_end
+    ck_assert(count == 7);
+    iitree_free_resources(&tree);
+}
+END_TEST
+
 int main(void) {
     int number_failed;
 
@@ -275,6 +355,10 @@ int main(void) {
     tcase_add_test(tc, tree_get_valid_key_returns_value);
     tcase_add_test(tc, tree_get_min_returns_min);
     tcase_add_test(tc, tree_get_max_returns_max);
+    tcase_add_test(tc, tree_iter_all);
+    tcase_add_test(tc, tree_iter_some);
+    tcase_add_test(tc, tree_iter_keys);
+    tcase_add_test(tc, tree_iter_values);
 
     suite_add_tcase(s, tc);
     
