@@ -1,6 +1,7 @@
 #include <check.h>
 
 #include "../include/generic_list.h"
+#include "../include/generic_iterators/list_iterator.h"
 
 LIST_DEFINE_H(IntList, il, int)
 
@@ -144,6 +145,38 @@ START_TEST(list_insert_end_adds_value) {
 }
 END_TEST
 
+START_TEST(list_iter_all) {
+    for(int i = 0; i < 5; i++)
+        il_add(list, i);
+
+    int value;
+    int current = 0;
+    list_iter_start(list, value) {
+        ck_assert(current == value);
+        current++;
+    }
+    list_iter_end
+    ck_assert(current == 5);
+}
+END_TEST
+
+START_TEST(list_iter_some) {
+    for(int i = 0; i < 5; i++)
+        il_add(list, i);
+
+    int value;
+    int current = 0;
+    list_iter_start(list, value) {
+        ck_assert(current == value);
+        current++;
+        if(current == 3)
+            break;
+    }
+    list_iter_end
+    ck_assert(current == 3);
+}
+END_TEST
+
 int main(void) {
     Suite* s = suite_create("List Tests");
     TCase* tc = tcase_create("List Tests");
@@ -160,6 +193,8 @@ int main(void) {
     tcase_add_test(tc, list_pop_gets_last_value_and_removes);
     tcase_add_test(tc, list_insert_middle_shifts_values);
     tcase_add_test(tc, list_insert_end_adds_value);
+    tcase_add_test(tc, list_iter_all);
+    tcase_add_test(tc, list_iter_some);
 
     suite_add_tcase(s, tc);
 
