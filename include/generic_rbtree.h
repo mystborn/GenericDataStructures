@@ -86,14 +86,14 @@ typedef enum RBColor {
         return node == NULL ? RB_BLACK : node->color; \
     } \
     \
-    static type_name ## Node* function_prefix ## _max_node(type_name ## Node* node) { \
+    static inline type_name ## Node* function_prefix ## _max_node(type_name ## Node* node) { \
         while(node->right != NULL) \
             node = node->right; \
         \
         return node; \
     } \
     \
-    static type_name ## Node* function_prefix ## _min_node(type_name ## Node* node) { \
+    static inline type_name ## Node* function_prefix ## _min_node(type_name ## Node* node) { \
         while(node->left != NULL) \
             node = node->left; \
         \
@@ -191,16 +191,16 @@ typedef enum RBColor {
         function_prefix ## _replace_node(tree, node, left); \
     } \
     \
-    static void function_prefix ## _insert_case1(type_name ## Node* node) { \
+    static inline void function_prefix ## _insert_case1(type_name ## Node* node) { \
         if(function_prefix ## _parent(node) == NULL) \
             node->color = RB_BLACK; \
     } \
     \
-    static void function_prefix ## _insert_case2(type_name ## Node* node) { \
+    static inline void function_prefix ## _insert_case2(type_name ## Node* node) { \
         return; \
     } \
     \
-    static void function_prefix ## _insert_case3(type_name* tree, type_name ## Node* node) { \
+    static inline void function_prefix ## _insert_case3(type_name* tree, type_name ## Node* node) { \
         function_prefix ## _parent(node)->color = RB_BLACK; \
         function_prefix ## _uncle(node)->color = RB_BLACK; \
         type_name ## Node* grandparent = function_prefix ## _grandparent(node); \

@@ -46,7 +46,7 @@ typedef enum rbtree_travel_direction {
 #define rbtree_iter_start(tree_type, tree, out_key, out_value) \
     { \
         rbtree_travel_direction direction = RBTREE_TRAVEL_LEFT; \
-        tree_type ## Node* rbtree_inorder_iter_node = tree->root; \
+        tree_type ## Node* rbtree_inorder_iter_node = (tree)->root; \
  \
         while(rbtree_inorder_iter_node != NULL) { \
             switch(direction) { \
@@ -94,7 +94,7 @@ typedef enum rbtree_travel_direction {
 #define rbtree_iter_key_start(tree_type, tree, out_key) \
     { \
         rbtree_travel_direction direction = RBTREE_TRAVEL_LEFT; \
-        tree_type ## Node* rbtree_inorder_iter_node = tree->root; \
+        tree_type ## Node* rbtree_inorder_iter_node = (tree)->root; \
  \
         while(rbtree_inorder_iter_node != NULL) { \
             switch(direction) { \
@@ -139,7 +139,7 @@ typedef enum rbtree_travel_direction {
 #define rbtree_iter_value_start(tree_type, tree, out_value) \
     { \
         rbtree_travel_direction direction = RBTREE_TRAVEL_LEFT; \
-        tree_type ## Node* rbtree_inorder_iter_node = tree->root; \
+        tree_type ## Node* rbtree_inorder_iter_node = (tree)->root; \
  \
         while(rbtree_inorder_iter_node != NULL) { \
             switch(direction) { \
