@@ -11,4 +11,5 @@ Additional Data Structure:
 
 Extra Utilities:
   ☐ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high
+  ☐ map - remove_and_free function - A function that passes the specified key and value to a function pointer that handles freeing their memory @high
   

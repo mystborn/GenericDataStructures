@@ -1,10 +1,10 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <check.h>
 
 #include "../include/generic_map.h"
+#include "../include/generic_iterators/map_iterator.h"
 
 MAP_DEFINE_H(StringMap, string_map, char*, char*)
 
@@ -96,6 +96,151 @@ START_TEST(map_resizes_when_load_factor_is_hit) {
 }
 END_TEST
 
+START_TEST(map_iter_all) {
+    StringMap forward;
+    StringMap reverse;
+    string_map_init(&forward);
+    string_map_init(&reverse);
+    for(int i = 0; i < 26; i++) {
+        char* mem;
+        mem = calloc(8, sizeof(char));
+        mem[2] = 'a' + i;
+        mem[0] = 'z' - i;
+        mem[4] = 'z' - i;
+        mem[6] = 'a' + i;
+        string_map_add(&forward, mem + 2, mem + 0);
+        string_map_add(&reverse, mem + 4, mem + 6);
+    }
+    char* key;
+    char* value;
+    int count = 0;
+    map_iter_start(&forward, key, value)
+    {
+        ck_assert(strcmp(string_map_get(&reverse, key), value) == 0);
+        ck_assert(strcmp(string_map_get(&reverse, value), key) == 0);
+        count++;
+    }
+    map_iter_end
+
+    ck_assert(count == 26);
+    for(int i = 0; i < 26; i++) {
+        char temp[2] = { 'a' + i, 0 };
+        free(string_map_get(&forward, temp));
+    }
+    string_map_free_resources(&forward);
+    string_map_free_resources(&reverse);
+}
+END_TEST
+
+START_TEST(map_iter_some) {
+    StringMap forward;
+    StringMap reverse;
+    string_map_init(&forward);
+    string_map_init(&reverse);
+    for(int i = 0; i < 26; i++) {
+        char* mem;
+        mem = calloc(8, sizeof(char));
+        mem[2] = 'a' + i;
+        mem[0] = 'z' - i;
+        mem[4] = 'z' - i;
+        mem[6] = 'a' + i;
+        string_map_add(&forward, mem + 2, mem + 0);
+        string_map_add(&reverse, mem + 4, mem + 6);
+    }
+    char* key;
+    char* value;
+    int count = 0;
+    map_iter_start(&forward, key, value)
+    {
+        ck_assert(strcmp(string_map_get(&reverse, key), value) == 0);
+        ck_assert(strcmp(string_map_get(&reverse, value), key) == 0);
+        count++;
+
+        if(count == 13)
+            break;
+    }
+    map_iter_end
+
+    ck_assert(count == 13);
+    for(int i = 0; i < 26; i++) {
+        char temp[2] = { 'a' + i, 0 };
+        free(string_map_get(&forward, temp));
+    }
+    string_map_free_resources(&forward);
+    string_map_free_resources(&reverse);
+}
+END_TEST
+
+START_TEST(map_iter_keys) {
+    StringMap forward;
+    StringMap reverse;
+    string_map_init(&forward);
+    string_map_init(&reverse);
+    for(int i = 0; i < 26; i++) {
+        char* mem;
+        mem = calloc(8, sizeof(char));
+        mem[2] = 'a' + i;
+        mem[0] = 'z' - i;
+        mem[4] = 'z' - i;
+        mem[6] = 'a' + i;
+        string_map_add(&forward, mem + 2, mem + 0);
+        string_map_add(&reverse, mem + 4, mem + 6);
+    }
+    char* key;
+    int count = 0;
+    map_iter_key_start(&forward, key)
+    {
+        char temp[2] = { 'a' + ('z' - key[0]), 0 };
+        ck_assert(strcmp(string_map_get(&reverse, key), temp) == 0);
+        count++;
+    }
+    map_iter_end
+
+    ck_assert(count == 26);
+    for(int i = 0; i < 26; i++) {
+        char temp[2] = { 'a' + i, 0 };
+        free(string_map_get(&forward, temp));
+    }
+    string_map_free_resources(&forward);
+    string_map_free_resources(&reverse);
+}
+END_TEST
+
+START_TEST(map_iter_values) {
+    StringMap forward;
+    StringMap reverse;
+    string_map_init(&forward);
+    string_map_init(&reverse);
+    for(int i = 0; i < 26; i++) {
+        char* mem;
+        mem = calloc(8, sizeof(char));
+        mem[2] = 'a' + i;
+        mem[0] = 'z' - i;
+        mem[4] = 'z' - i;
+        mem[6] = 'a' + i;
+        string_map_add(&forward, mem + 2, mem + 0);
+        string_map_add(&reverse, mem + 4, mem + 6);
+    }
+    char* value;
+    int count = 0;
+    map_iter_key_start(&forward, value)
+    {
+        char temp[2] = { 'a' + ('z' - value[0]), 0 };
+        ck_assert(strcmp(string_map_get(&reverse, value), temp) == 0);
+        count++;
+    }
+    map_iter_end
+
+    ck_assert(count == 26);
+    for(int i = 0; i < 26; i++) {
+        char temp[2] = { 'a' + i, 0 };
+        free(string_map_get(&forward, temp));
+    }
+    string_map_free_resources(&forward);
+    string_map_free_resources(&reverse);
+}
+END_TEST
+
 int main(void) {
     Suite* s = suite_create("Map Tests");
     TCase* tc = tcase_create("Map Tests");
@@ -111,6 +256,10 @@ int main(void) {
     tcase_add_test(tc, map_remove_existing_key_removes);
     tcase_add_test(tc, map_remove_missing_key_returns_false);
     tcase_add_test(tc, map_resizes_when_load_factor_is_hit);
+    tcase_add_test(tc, map_iter_all);
+    tcase_add_test(tc, map_iter_some);
+    tcase_add_test(tc, map_iter_keys);
+    tcase_add_test(tc, map_iter_values);
 
     suite_add_tcase(s, tc);
 
