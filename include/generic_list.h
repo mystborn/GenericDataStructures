@@ -15,8 +15,8 @@
     } type_name; \
     \
     type_name* function_prefix ## _create(void); \
-    void* function_prefix ## _init(type_name* list); \
-    void* function_prefix ## _init_capacity(type_name* list, unsigned int capacity); \
+    bool function_prefix ## _init(type_name* list); \
+    bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity); \
     bool function_prefix ## _add(type_name* list, value_type value); \
     bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value); \
     \
@@ -58,6 +58,12 @@
         assert(list->count); \
         return list->buffer[--list->count]; \
     } \
+    \
+    static inline void function_prefix ## _shrink_to_fit(type_name* list) { \
+        list->buffer = realloc(list->buffer, (list->count == 0 ? 1 : list->count) * sizeof(value_type)); \
+        list->capacity = list->count == 0 ? 1 : list->count; \
+    } \
+
 
 #define LIST_DEFINE_C(type_name, function_prefix, value_type) \
     type_name* function_prefix ## _create(void) { \
@@ -71,17 +77,17 @@
         return list; \
     } \
     \
-    void* function_prefix ## _init(type_name* list) { \
+    bool function_prefix ## _init(type_name* list) { \
         list->capacity = 4; \
         list->count = 0; \
-        return list->buffer = malloc(4 * sizeof(value_type)); \
+        return (list->buffer = malloc(4 * sizeof(value_type))) != NULL; \
     } \
     \
-    void* function_prefix ## _init_capacity(type_name* list, unsigned int capacity) { \
+    bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity) { \
         assert(capacity); \
         list->capacity = capacity; \
         list->count = 0; \
-        return list->buffer = malloc(capacity * sizeof(value_type)); \
+        return (list->buffer = malloc(capacity * sizeof(value_type))) != NULL; \
     } \
     \
     bool function_prefix ## _add(type_name* list, value_type value) { \
@@ -97,10 +103,9 @@
     } \
     \
     bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value) { \
-        assert(index <= list->count); \
-        if(index == list->count) { \
+        if(index > list->count) return false; \
+        if(index == list->count) \
             return function_prefix ## _add(list, value); \
-        } \
         if(list->count == list->capacity) { \
             list->capacity *= 2; \
             value_type* buffer = realloc(list->buffer, list->capacity * sizeof(value_type)); \
