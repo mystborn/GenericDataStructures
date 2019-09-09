@@ -1,15 +1,18 @@
 Additional Data Structure:
-  ☐ Set @critical
   ☐ Sorted Set @low
   ☐ Binary Heap @high
   ☐ Fibonacci Heap @low
   ☐ Trie @low
   ☐ Linked List @critical
-  ☐ Collection Iterators @high
-  ☐ Grid @low
   ☐ Pair @low
 
 Extra Utilities:
-  ☐ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high
-  ☐ map - remove_and_free function - A function that passes the specified key and value to a function pointer that handles freeing their memory @high
   
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high @done (19-09-08 19:36) @project(Extra Utilities)
+ ✔ map - get_and_remove function - A function that gets both the key and value from the map, then removes the associated cell. The user can then free or otherwise manipulate the left over key and value data. @high @done (19-09-08 19:35) @project(Extra Utilities)
+ ✔ Grid @low @done (19-09-05 13:44) @project(Additional Data Structure)
+ ✔ Collection Iterators @high @done (19-09-05 13:44) @project(Additional Data Structure)
+ ✔ Set @critical @done (19-09-05 13:43) @project(Additional Data Structure)
