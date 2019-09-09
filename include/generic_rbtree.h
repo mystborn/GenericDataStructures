@@ -2,6 +2,7 @@
 #define GENERIC_DATA_STRUCTURES_RED_BLACK_TREE_H
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -29,30 +30,166 @@ typedef enum RBColor {
         unsigned int count; \
     } type_name; \
     \
-    void function_prefix ## _free_resources(type_name* tree); \
-    void function_prefix ## _add(type_name* tree, key_type key, value_type value); \
-    value_type function_prefix ## _remove(type_name* tree, key_type key); \
-    value_type function_prefix ## _remove_min(type_name* tree); \
-    value_type function_prefix ## _remove_max(type_name* tree); \
-    value_type function_prefix ## _get(type_name* tree, key_type key); \
-    value_type function_prefix ## _get_min(type_name* tree); \
-    value_type function_prefix ## _get_max(type_name* tree); \
+    static inline type_name* function_prefix ## _create(void); \
+    static inline void function_prefix ## _init(type_name* tree); \
+    static inline void function_prefix ## _free(type_name* tree, bool free_nodes); \
+                  void function_prefix ## _free_resources(type_name* tree); \
+    static inline type_name ## Node* function_prefix ## _root(type_name* tree); \
+    static inline unsigned int function_prefix ## _count(type_name* tree); \
+    static inline type_name ## Node* function_prefix ## _add(type_name* tree, key_type key, value_type value); \
+    static inline bool function_prefix ## _get(type_name* tree, key_type key, value_type* out_value); \
+    static inline bool function_prefix ## _get_min(type_name* tree, value_type* out_value); \
+    static inline bool function_prefix ## _get_max(type_name* tree, value_type* out_value); \
+    static inline bool function_prefix ## _remove(type_name* tree, key_type key, value_type* out_value); \
+    static inline bool function_prefix ## _remove_min(type_name* tree, value_type* out_value); \
+    static inline bool function_prefix ## _remove_max(type_name* tree, value_type* out_value); \
+                  void function_prefix ## _add_node(type_name* tree, type_name ## Node* node); \
+                  type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key); \
+    static inline type_name ## Node* function_prefix ## _get_min_node(type_name* tree); \
+    static inline type_name ## Node* function_prefix ## _get_max_node(type_name* tree); \
+                  void function_prefix ## _remove_node(type_name* tree, type_name ## Node* node); \
+    static inline type_name ## Node* function_prefix ## _remove_min_node(type_name* tree); \
+    static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree); \
     \
     static inline type_name* function_prefix ## _create(void) { \
         type_name* tree = malloc(sizeof(type_name)); \
+        if(!tree) \
+            return NULL; \
         tree->root = NULL; \
         tree->count = 0; \
         return tree; \
     } \
-    static inline void function_prefix ## _init(type_name* tree) { tree->root = NULL; tree->count = 0; } \
-    static inline void function_prefix ## _free(type_name* tree) { \
-        function_prefix ## _free_resources(tree); \
+    \
+    static inline void function_prefix ## _init(type_name* tree) { \
+        tree->root = NULL; \
+        tree->count = 0; \
+    } \
+    \
+    static inline void function_prefix ## _free(type_name* tree, bool free_nodes) { \
+        if(free_nodes) \
+            function_prefix ## _free_resources(tree); \
         free(tree); \
     } \
-    static inline type_name ## Node* function_prefix ## _root(type_name* tree) { return tree->root; } \
-    static inline unsigned int function_prefix ## _count(type_name* tree) { return tree->count; }
+    \
+    static inline type_name ## Node* function_prefix ## _root(type_name* tree) { \
+        return tree->root; \
+    } \
+    \
+    static inline unsigned int function_prefix ## _count(type_name* tree) { \
+        return tree->count; \
+    } \
+    \
+    static inline type_name ## Node* function_prefix ## _add(type_name* tree, key_type key, value_type value) { \
+        type_name ## Node* node = malloc(sizeof(type_name ## Node)); \
+        if(!node) \
+            return NULL; \
+        node->key = key; \
+        node->value = value; \
+        function_prefix ## _add_node(tree, node); \
+        return node; \
+    } \
+    \
+    static inline bool function_prefix ## _get(type_name* tree, key_type key, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_node(tree, key); \
+        if(!node) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+ \
+        return true; \
+    } \
+    \
+    static inline bool function_prefix ## _get_min(type_name* tree, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_min_node(tree); \
+        if(!node) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+ \
+        return true; \
+    } \
+    \
+    static inline bool function_prefix ## _get_max(type_name* tree, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_max_node(tree); \
+        if(!node) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+ \
+        return true; \
+    } \
+    \
+    static inline bool function_prefix ## _remove(type_name* tree, key_type key, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_node(tree, key); \
+        if(node == NULL) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+        function_prefix ## _remove_node(tree, node); \
+        free(node); \
+        return true; \
+    } \
+    \
+    static inline bool function_prefix ## _remove_min(type_name* tree, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_min_node(tree); \
+        if(!node) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+        function_prefix ## _remove_node(tree, node); \
+        free(node); \
+        return true; \
+    } \
+    \
+    static inline bool function_prefix ## _remove_max(type_name* tree, value_type* out_value) { \
+        type_name ## Node* node = function_prefix ## _get_max_node(tree); \
+        if(!node) \
+            return false; \
+ \
+        if(out_value != NULL) *out_value = node->value; \
+        function_prefix ## _remove_node(tree, node); \
+        free(node); \
+        return true; \
+    } \
+    \
+    static inline type_name ## Node* function_prefix ## _get_min_node(type_name* tree) { \
+        if(tree->root == NULL) \
+            return NULL; \
+        type_name ## Node* node = tree->root; \
+        while(node->left) \
+            node = node->left; \
+        return node; \
+    } \
+    \
+    static inline type_name ## Node* function_prefix ## _get_max_node(type_name* tree) { \
+        if(tree->root == NULL) \
+            return NULL; \
+        type_name ## Node* node = tree->root; \
+        while(node->right) \
+            node = node->right; \
+        return node; \
+    } \
+    \
+    static inline type_name ## Node* function_prefix ## _remove_min_node(type_name* tree) { \
+        type_name ## Node* node = function_prefix ## _get_min_node(tree); \
+        if(!node) \
+            return NULL; \
+ \
+        function_prefix ## _remove_node(tree, node); \
+        return node; \
+    } \
+    \
+    static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree) { \
+        type_name ## Node* node = function_prefix ## _get_max_node(tree); \
+        if(!node) \
+            return NULL; \
+ \
+        function_prefix ## _remove_node(tree, node); \
+        return node; \
+    } \
 
-#define RBTREE_DEFINE_C(type_name, function_prefix, key_type, value_type, compare_fn, default_value) \
+
+#define RBTREE_DEFINE_C(type_name, function_prefix, key_type, value_type, compare_fn) \
     static inline type_name ## Node* function_prefix ## _parent(type_name ## Node* node) { \
         return node->parent; \
     } \
@@ -86,21 +223,7 @@ typedef enum RBColor {
         return node == NULL ? RB_BLACK : node->color; \
     } \
     \
-    static inline type_name ## Node* function_prefix ## _max_node(type_name ## Node* node) { \
-        while(node->right != NULL) \
-            node = node->right; \
-        \
-        return node; \
-    } \
-    \
-    static inline type_name ## Node* function_prefix ## _min_node(type_name ## Node* node) { \
-        while(node->left != NULL) \
-            node = node->left; \
-        \
-        return node; \
-    } \
-    \
-    static type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key) { \
+    type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key) { \
         type_name ## Node* node = tree->root; \
         while(node != NULL) { \
             int result = compare_fn(key, node->key); \
@@ -112,26 +235,6 @@ typedef enum RBColor {
                 node = node->right; \
         } \
         return NULL; \
-    } \
-    \
-    value_type function_prefix ## _get(type_name* tree, key_type key) { \
-        type_name ## Node* node = function_prefix ## _get_node(tree, key); \
-        if(node != NULL) \
-            return node->value; \
-         \
-        return default_value; \
-    } \
-    \
-    value_type function_prefix ## _get_min(type_name* tree) { \
-        if(tree->root == NULL) \
-            return default_value; \
-        return function_prefix ## _min_node(tree->root)->value; \
-    } \
-    \
-    value_type function_prefix ## _get_max(type_name* tree) { \
-        if(tree->root == NULL) \
-            return default_value; \
-        return function_prefix ## _max_node(tree->root)->value; \
     } \
     \
     static void function_prefix ## _insert_repair_tree(type_name* tree, type_name ## Node* node); \
@@ -167,28 +270,6 @@ typedef enum RBColor {
             left->right->parent = node; \
         left->right = node; \
         node->parent = left; \
-    } \
-    \
-    static void function_prefix ## _rotate_left_(type_name* tree, type_name ## Node* node) { \
-        type_name ## Node* right = node->right; \
-        type_name ## Node* parent = function_prefix ## _parent(node); \
-        node->right = right->left; \
-        right->left = node; \
-        node->parent = right; \
-        if(node->right != NULL) \
-            node->right->parent = node; \
-        function_prefix ## _replace_node(tree, node, right); \
-    } \
-    \
-    static void function_prefix ## _rotate_right_(type_name* tree, type_name ## Node* node) { \
-        type_name ## Node* left = node->left; \
-        type_name ## Node* parent = function_prefix ## _parent(node); \
-        node->left = left->right; \
-        left->right = node; \
-        node->parent = left; \
-        if(node->left != NULL) \
-            node->left->parent = node; \
-        function_prefix ## _replace_node(tree, node, left); \
     } \
     \
     static inline void function_prefix ## _insert_case1(type_name ## Node* node) { \
@@ -237,39 +318,20 @@ typedef enum RBColor {
             function_prefix ## _insert_case4(tree, node); \
     } \
     \
-    static type_name ## Node* function_prefix ## _new_node(key_type key, value_type value, RBColor color, type_name ## Node* left, type_name ## Node* right) { \
-        type_name ## Node* node = malloc(sizeof(struct type_name ## Node)); \
-        node->key = key; \
-        node->value = value; \
-        node->color = color; \
-        node->left = left; \
-        node->right = right; \
-        if(left != NULL) \
-            left->parent = node; \
-        if(right != NULL) \
-            right->parent = node; \
-        node->parent = NULL; \
-        return node; \
-    } \
-    \
-    void function_prefix ## _add(type_name* tree, key_type key, value_type value) { \
-        type_name ## Node* node = malloc(sizeof(type_name ## Node)); \
-        assert(node); \
-        node->key = key; \
-        node->value = value; \
+    void function_prefix ## _add_node(type_name* tree, type_name ## Node* node) { \
         node->color = RB_RED; \
         node->parent = NULL; \
         node->left = NULL; \
         node->right = NULL; \
-        if(tree->root == NULL) \
+        if(tree->root == NULL) { \
             tree->root = node; \
-        else { \
+        } else { \
             type_name ## Node* parent = NULL; \
             type_name ## Node* current = tree->root; \
             while(current != NULL) { \
                 parent = current; \
                 \
-                if(compare_fn(key, current->key) < 0) \
+                if(compare_fn(node->key, current->key) < 0) \
                     current = current->left; \
                 else \
                     current = current->right; \
@@ -277,7 +339,7 @@ typedef enum RBColor {
             \
             node->parent = parent; \
             \
-            if(compare_fn(key, parent->key) < 0) \
+            if(compare_fn(node->key, parent->key) < 0) \
                 parent->left = node; \
             else \
                 parent->right = node; \
@@ -372,9 +434,11 @@ typedef enum RBColor {
         } \
     } \
     \
-    static void function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
+    void function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
         if(node->left != NULL && node->right != NULL) { \
-            type_name ## Node* pred = function_prefix ## _max_node(node->left); \
+            type_name ## Node* pred = node->left; \
+            while(pred->right) \
+                pred = pred->right; \
             node->key = pred->key; \
             node->value = pred->value; \
             node = pred; \
@@ -389,36 +453,7 @@ typedef enum RBColor {
         if(node->parent == NULL && child != NULL) \
             child->color = RB_BLACK; \
         \
-        free(node); \
-        \
         tree->count--; \
-    } \
-    \
-    value_type function_prefix ## _remove(type_name* tree, key_type key) { \
-        type_name ## Node* node = function_prefix ## _get_node(tree, key); \
-        if(node == NULL) \
-            return default_value; \
-        value_type result = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        return result; \
-    } \
-    \
-    value_type function_prefix ## _remove_min(type_name* tree) { \
-        if(tree->root == NULL) \
-            return default_value; \
-        type_name ## Node* node = function_prefix ## _min_node(tree->root); \
-        value_type result = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        return result; \
-    } \
-    \
-    value_type function_prefix ## _remove_max(type_name* tree) { \
-        if(tree->root == NULL) \
-            return default_value; \
-        type_name ## Node* node = function_prefix ## _max_node(tree->root); \
-        value_type result = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        return result; \
     } \
     \
     void function_prefix ## _free_resources(type_name* tree) { \
