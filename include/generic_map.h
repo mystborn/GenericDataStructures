@@ -33,7 +33,9 @@
     bool function_prefix ## _add(type_name* map, key_type key, value_type value); \
     void function_prefix ## _set(type_name* map, key_type key, value_type value); \
     value_type function_prefix ## _get(type_name* map, key_type key); \
-    bool function_prefix ## _remove(type_name* map, key_type key);
+    bool function_prefix ## _remove(type_name* map, key_type key); \
+    bool function_prefix ## _get_and_remove(type_name* map, key_type key, key_type* out_key, value_type* out_value); \
+
 
 #define MAP_DEFINE_C(type_name, function_prefix, key_type, value_type, hash_fn, compare_fn, default_value) \
     type_name* function_prefix ## _create(void) { \
@@ -145,24 +147,10 @@
         return default_value; \
     } \
  \
-    bool function_prefix ## _remove(type_name* map, key_type key) { \
-        int last = -1; \
-        uint32_t start, cell, hash; \
+    static inline void function_prefix ## _replace_cell(type_name* map, uint32_t cell, uint32_t hash) { \
+        uint32_t start = cell; \
+        int64_t last = -1; \
  \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
- \
-        while(true) { \
-            if(!map->cells[cell].active) \
-                return false; \
- \
-            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
-                break; \
- \
-            if(++cell == map->capacity) \
-                cell = 0; \
-        } \
- \
-        start = cell; \
         while(true) { \
             if(++cell == map->capacity) \
                 cell = 0; \
@@ -177,8 +165,53 @@
         if(last != -1) { \
             map->cells[start] = map->cells[last]; \
             map->cells[last].active = false; \
-        } else \
+        } else  \
             map->cells[start].active = false; \
+    } \
+ \
+    bool function_prefix ## _remove(type_name* map, key_type key) { \
+        uint32_t cell, hash; \
+ \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
+ \
+        while(true) { \
+            if(!map->cells[cell].active) \
+                return false; \
+ \
+            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
+                break; \
+ \
+            if(++cell == map->capacity) \
+                cell = 0; \
+        } \
+ \
+        function_prefix ## _replace_cell(map, cell, hash); \
+        map->count--; \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _get_and_remove(type_name* map, key_type key, key_type* out_key, value_type* out_value) { \
+        uint32_t cell, hash; \
+ \
+        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
+ \
+        while(true) { \
+            if(!map->cells[cell].active) \
+                return false; \
+ \
+            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
+                break; \
+ \
+            if(++cell == map->capacity) \
+                cell = 0; \
+        } \
+ \
+        if(out_key != NULL) \
+            *out_key = map->cells[cell].key; \
+        if(out_value != NULL) \
+            *out_value = map->cells[cell].value; \
+ \
+        function_prefix ## _replace_cell(map, cell, hash); \
         map->count--; \
         return true; \
     }
