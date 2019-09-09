@@ -29,7 +29,7 @@
     static void function_prefix ## _free(type_name* map) { free(map->cells); free(map); } \
     static void function_prefix ## _free_resources(type_name* map) { free(map->cells); } \
     type_name* function_prefix ## _create(void); \
-    void* function_prefix ## _init(type_name* map); \
+    bool function_prefix ## _init(type_name* map); \
     bool function_prefix ## _add(type_name* map, key_type key, value_type value); \
     void function_prefix ## _set(type_name* map, key_type key, value_type value); \
     value_type function_prefix ## _get(type_name* map, key_type key); \
@@ -49,12 +49,12 @@
         return map; \
     } \
     \
-    void* function_prefix ## _init(type_name* map) { \
+    bool function_prefix ## _init(type_name* map) { \
         map->shift = 29; \
         map->capacity = 8; \
         map->count = 0; \
         map->load_factor = 4; \
-        return (map->cells = calloc(8, sizeof(type_name ## Cell))); \
+        return (map->cells = calloc(8, sizeof(type_name ## Cell))) != NULL; \
     } \
  \
     static void function_prefix ## _resize(type_name* map) { \
