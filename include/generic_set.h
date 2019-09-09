@@ -2,11 +2,12 @@
 #define GENERIC_DATA_STRUCTURES_SET_H
 
 /*
- *  Defines a generic set of unique values, implemented using
- *  an associative array.
+    Defines a generic set of unique values, implemented using
+    an associative array.
  */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "hash_utils.h"
@@ -31,24 +32,27 @@
     static inline void function_prefix ## _free_resources(type_name* set) { free(set->cells); } \
  \
     type_name* function_prefix ## _create(void); \
-    void* function_prefix ## _init(type_name* set); \
+    bool function_prefix ## _init(type_name* set); \
     bool function_prefix ## _add(type_name* set, value_type value); \
-    value_type function_prefix ## _contains(type_name* set); \
+    bool function_prefix ## _contains(type_name* set, value_type value); \
     bool function_prefix ## _remove(type_name* set, value_type value); \
+
 
 #define SET_DEFINE_C(type_name, function_prefix, value_type, hash_fn, compare_fn) \
     type_name* function_prefix ## _create(void) { \
         type_name* set = malloc(sizeof(type_name)); \
+        if(!set) \
+            return NULL; \
         function_prefix ## _init(set); \
         return set; \
     } \
  \
-    void* function_prefix ## _init(type_name* set) { \
+    bool function_prefix ## _init(type_name* set) { \
         set->shift = 29; \
         set->capacity = 8; \
         set->count = 0; \
         set->load_factor = 4; \
-        return (set->cells = calloc(8, sizeof(type_name ## Cell))); \
+        return (set->cells = calloc(8, sizeof(type_name ## Cell))) != NULL; \
     } \
  \
     static void function_prefix ## _resize(type_name* set) { \
