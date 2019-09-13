@@ -2,6 +2,7 @@
 #define GENERIC_DATA_STRUCTURES_GRID_H
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #define GRID_DEFINE_H(type_name, function_prefix, value_type) \
@@ -11,8 +12,8 @@
         unsigned int height; \
     } type_name; \
  \
-    void function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height); \
     type_name* function_prefix ## _create(unsigned int width, unsigned int height); \
+    bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height); \
     void function_prefix ## _free(type_name* grid); \
     void function_prefix ## _free_resources(type_name* grid); \
     void function_prefix ## _clear(type_name* grid, value_type default_value); \
@@ -38,19 +39,17 @@
     } \
 
 #define GRID_DEFINE_C(type_name, function_prefix, value_type) \
-    void function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
+    bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
         grid->width = width; \
         grid->height = height; \
-        grid->grid = malloc(width * height * sizeof(value_type)); \
+        return (grid->grid = malloc(width * height * sizeof(value_type))) != NULL; \
     } \
  \
     type_name* function_prefix ## _create(unsigned int width, unsigned int height) { \
         type_name* grid = malloc(sizeof(type_name)); \
         if(!grid) \
             return NULL; \
-        grid->width = width; \
-        grid->height = height; \
-        if(!(grid->grid = malloc(width * height * sizeof(value_type)))) { \
+        if(!function_prefix ## _init(grid, width, height)) { \
             free(grid); \
             return NULL; \
         } \
