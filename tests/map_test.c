@@ -8,7 +8,7 @@
 
 MAP_DEFINE_H(StringMap, string_map, char*, char*)
 
-MAP_DEFINE_C(StringMap, string_map, char*, char*, fnv32, strcmp, NULL)
+MAP_DEFINE_C(StringMap, string_map, char*, char*, gds_fnv32, strcmp)
 
 static StringMap* map;
 
@@ -24,7 +24,7 @@ void map_reset(void) {
 
 START_TEST(map_allocate_and_deallocate) {
     StringMap temp;
-    ck_assert(string_map_init(&temp) != NULL);
+    ck_assert(string_map_init(&temp));
     string_map_free_resources(&temp);
 }
 END_TEST

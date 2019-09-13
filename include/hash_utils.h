@@ -20,7 +20,7 @@ static inline uint32_t ___fib_hash(uint32_t hash, uint32_t shift) {
 #define FNV_PRIME_32 0x01000193
 #define FNV_OFFSET_32 0x811c9dc5
 
-static uint32_t fnv32(const char* data) {
+static uint32_t gds_fnv32(const char* data) {
     uint32_t hash = FNV_OFFSET_32;
     while(*data != 0)
         hash = (*data++ ^ hash) * FNV_PRIME_32;

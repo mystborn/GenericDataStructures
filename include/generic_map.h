@@ -33,11 +33,13 @@
     bool function_prefix ## _add(type_name* map, key_type key, value_type value); \
     void function_prefix ## _set(type_name* map, key_type key, value_type value); \
     value_type function_prefix ## _get(type_name* map, key_type key); \
+    bool function_prefix ## _try_get(type_name* map, key_type key, value_type* out_value); \
     bool function_prefix ## _remove(type_name* map, key_type key); \
     bool function_prefix ## _get_and_remove(type_name* map, key_type key, key_type* out_key, value_type* out_value); \
 
+// TODO: Add more safety in case the map fails to resize.
 
-#define MAP_DEFINE_C(type_name, function_prefix, key_type, value_type, hash_fn, compare_fn, default_value) \
+#define MAP_DEFINE_C(type_name, function_prefix, key_type, value_type, hash_fn, compare_fn) \
     type_name* function_prefix ## _create(void) { \
         type_name* map = malloc(sizeof(type_name)); \
         if(!map) \
@@ -129,22 +131,42 @@
         } \
     } \
  \
-    value_type function_prefix ## _get(type_name* map, key_type key) { \
-        uint32_t cell, hash; \
+    static inline bool function_prefix ## _find_cell(type_name* map, key_type key, uint32_t* out_hash, uint32_t* out_cell) { \
+        uint32_t hash, cell; \
         hash = cell = ___fib_hash(hash_fn(key), map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) \
-                break; \
+                return false; \
  \
-            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
-                return map->cells[cell].value; \
+            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) { \
+                *out_hash = hash; \
+                *out_cell = cell; \
+                return true; \
+            } \
  \
             if(++cell == map->capacity) \
                 cell = 0; \
         } \
+    } \
  \
-        return default_value; \
+    value_type function_prefix ## _get(type_name* map, key_type key) { \
+        uint32_t cell, hash; \
+        if(function_prefix ## _find_cell(map, key, &hash, &cell)) \
+            return map->cells[cell].value; \
+        else \
+            return (value_type){0}; \
+    } \
+ \
+    bool function_prefix ## _try_get(type_name* map, key_type key, value_type* out_value) { \
+        uint32_t cell, hash; \
+        if(function_prefix ## _find_cell(map, key, &hash, &cell)) { \
+            if(out_value != NULL) \
+                *out_value = map->cells[cell].value; \
+            return true; \
+        } else { \
+            return false; \
+        } \
     } \
  \
     static inline void function_prefix ## _replace_cell(type_name* map, uint32_t cell, uint32_t hash) { \
@@ -171,19 +193,8 @@
  \
     bool function_prefix ## _remove(type_name* map, key_type key) { \
         uint32_t cell, hash; \
- \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
- \
-        while(true) { \
-            if(!map->cells[cell].active) \
-                return false; \
- \
-            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
-                break; \
- \
-            if(++cell == map->capacity) \
-                cell = 0; \
-        } \
+        if(!function_prefix ## _find_cell(map, key, &hash, &cell)) \
+            return false; \
  \
         function_prefix ## _replace_cell(map, cell, hash); \
         map->count--; \
@@ -192,19 +203,8 @@
  \
     bool function_prefix ## _get_and_remove(type_name* map, key_type key, key_type* out_key, value_type* out_value) { \
         uint32_t cell, hash; \
- \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
- \
-        while(true) { \
-            if(!map->cells[cell].active) \
-                return false; \
- \
-            if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
-                break; \
- \
-            if(++cell == map->capacity) \
-                cell = 0; \
-        } \
+        if(!function_prefix ## _find_cell(map, key, &hash, &cell)) \
+            return false; \
  \
         if(out_key != NULL) \
             *out_key = map->cells[cell].key; \
