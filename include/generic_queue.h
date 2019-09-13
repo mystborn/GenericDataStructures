@@ -2,6 +2,7 @@
 #define GENERIC_DATA_STRUCTURES_QUEUE_H
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,10 +20,10 @@
     \
     type_name* function_prefix ## _create(void); \
     type_name* function_prefix ## _create_capacity(unsigned int capacity); \
-    void* function_prefix ## _init(type_name* queue); \
-    void* function_prefix ## _init_capacity(type_name* queue, unsigned int capacity); \
+    bool function_prefix ## _init(type_name* queue); \
+    bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity); \
     void function_prefix ## _clear(type_name* queue); \
-    void function_prefix ## _enqueue(type_name* queue, value_type value); \
+    bool function_prefix ## _enqueue(type_name* queue, value_type value); \
     value_type function_prefix ## _dequeue(type_name* queue); \
     static inline value_type function_prefix ## _peek(type_name* queue) { \
         assert(queue->count); \
@@ -36,31 +37,40 @@
     /* todo: inline the create functions. */ \
     type_name* function_prefix ## _create(void) { \
         type_name* queue = malloc(sizeof(type_name)); \
-        function_prefix ## _init(queue); \
+        if(!queue) \
+            return NULL; \
+        if(!function_prefix ## _init(queue)) { \
+            free(queue); \
+            return NULL; \
+        } \
         return queue; \
     } \
     \
     type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
         type_name* queue = malloc(sizeof(type_name)); \
-        function_prefix ## _init_capacity(queue, capacity); \
+        if(!queue) \
+            return NULL; \
+        if(!function_prefix ## _init_capacity(queue, capacity)) { \
+            free(queue); \
+            return NULL; \
+        } \
         return queue; \
     } \
     \
-    void* function_prefix ## _init(type_name* queue) { \
+    bool function_prefix ## _init(type_name* queue) { \
         queue->start = 0; \
         queue->end = 0; \
         queue->count = 0; \
         queue->capacity = 4; \
-        return queue->buffer = malloc(queue->capacity * sizeof(value_type)); \
+        return (queue->buffer = malloc(queue->capacity * sizeof(value_type))) != NULL; \
     } \
     \
-    void* function_prefix ## _init_capacity(type_name* queue, unsigned int capacity) { \
-        assert(capacity); \
+    bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity) { \
         queue->start = 0; \
         queue->end = 0; \
         queue->count = 0; \
-        queue->capacity = capacity; \
-        return queue->buffer = malloc(queue->capacity * sizeof(value_type)); \
+        queue->capacity = capacity == 0 ? 1 : capacity; \
+        return (queue->buffer = malloc(queue->capacity * sizeof(value_type))) != NULL; \
     } \
     \
     void function_prefix ## _clear(type_name* queue) { \
@@ -69,19 +79,24 @@
         queue->count = 0; \
     } \
     \
-    void function_prefix ## _enqueue(type_name* queue, value_type value) { \
+    bool function_prefix ## _enqueue(type_name* queue, value_type value) { \
         if(queue->end == queue->capacity) \
             queue->end = 0; \
         if(queue->count == queue->capacity) { \
             unsigned int offset = queue->capacity - queue->start;  \
             queue->capacity *= 2; \
-            queue->buffer = realloc(queue->buffer, queue->capacity * sizeof(value_type)); \
-            assert(queue->buffer); \
+            value_type* buffer = realloc(queue->buffer, queue->capacity * sizeof(value_type)); \
+            if(!buffer) { \
+                queue->capacity /= 2; \
+                return false; \
+            } \
+            queue->buffer = buffer; \
             memmove(queue->buffer + queue->capacity - offset, queue->buffer + queue->start, offset * sizeof(value_type)); \
             queue->start = queue->capacity - offset; \
         } \
         queue->buffer[queue->end++] = value; \
         queue->count++; \
+        return true; \
     } \
     \
     value_type function_prefix ## _dequeue(type_name* queue) { \
