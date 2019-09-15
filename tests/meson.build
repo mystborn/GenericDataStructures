@@ -33,6 +33,14 @@ map_test = executable(
     dependencies: deps
 )
 
+set_test = executable(
+    'set_test',
+    'set_test.c',
+    link_args: link_args,
+    include_directories: test_inc,
+    dependencies: deps
+)
+
 queue_test = executable(
     'queue_test',
     'queue_test.c',
@@ -59,6 +67,7 @@ grid_test = executable(
 
 test('RB Tree Test', rb_tree_test)
 test('Map Test', map_test)
+test('Set Test', set_test)
 test('Queue Test', queue_test)
 test('List Test', list_test)
 test('Grid Test', grid_test)

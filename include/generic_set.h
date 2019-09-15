@@ -2,8 +2,7 @@
 #define GENERIC_DATA_STRUCTURES_SET_H
 
 /*
-    Defines a generic set of unique values, implemented using
-    an associative array.
+    Defines a generic set of unique values.
  */
 
 #include <assert.h>
@@ -36,6 +35,8 @@
     bool function_prefix ## _add(type_name* set, value_type value); \
     bool function_prefix ## _contains(type_name* set, value_type value); \
     bool function_prefix ## _remove(type_name* set, value_type value); \
+    bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value); \
+    bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value); \
 
 
 #define SET_DEFINE_C(type_name, function_prefix, value_type, hash_fn, compare_fn) \
@@ -103,7 +104,7 @@
         return false; \
     } \
  \
-    bool function_prefix ## _contains(type_name* set, value_type value) { \
+    static inline bool function_prefix ## _find_cell(type_name* set, value_type value, uint32_t* out_hash, uint32_t* out_cell) { \
         uint32_t cell, hash; \
         hash = cell = ___fib_hash(hash_fn(value), set->shift); \
  \
@@ -111,38 +112,30 @@
             if(!set->cells[cell].active) \
                 return false; \
  \
-            if(set->cells[cell].hash == hash && compare_fn(set->cells[cell].value, value) == 0) \
+            if(set->cells[cell].hash == hash && compare_fn(set->cells[cell].value, value) == 0) { \
+                *out_hash = hash; \
+                *out_cell = cell; \
                 return true; \
+            } \
  \
             if(++cell == set->capacity) \
                 cell = 0; \
         } \
     } \
  \
-    bool function_prefix ## _remove(type_name* set, value_type value) { \
-        int last = -1; \
-        uint32_t start, cell, hash; \
- \
-        hash = cell = ___fib_hash(hash_fn(value), set->shift); \
+    static inline void function_prefix ## _replace_cell(type_name* set, uint32_t cell, uint32_t hash) { \
+        uint32_t start = cell; \
+        int64_t last = -1; \
  \
         while(true) { \
-            if(!set->cells[cell].active) \
-                return false; \
+            if(++cell == set->capacity) \
+                cell = 0; \
  \
-            if(set->cells[cell].hash == hash && compare_fn(set->cells[cell].value, value) == 0) \
+            if(!set->cells[cell].active) \
                 break; \
  \
-            if(++cell == set->capacity) \
-                cell = 0; \
-        } \
- \
-        start = cell++; \
-        while(set->cells[cell].active) { \
             if(set->cells[cell].hash <= hash) \
                 last = cell; \
- \
-            if(++cell == set->capacity) \
-                cell = 0; \
         } \
  \
         if(last != -1) { \
@@ -150,7 +143,38 @@
             set->cells[last].active = false; \
         } else \
             set->cells[start].active = false; \
+    } \
  \
+    bool function_prefix ## _contains(type_name* set, value_type value) { \
+        uint32_t cell, hash; \
+        return function_prefix ## _find_cell(set, value, &hash, &cell); \
+    } \
+ \
+    bool function_prefix ## _remove(type_name* set, value_type value) { \
+        uint32_t cell, hash; \
+        if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
+            return false; \
+ \
+        function_prefix ## _replace_cell(set, cell, hash); \
+        set->count--; \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value) { \
+        uint32_t cell, hash; \
+        if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
+            return false; \
+        *out_value = set->cells[cell].value; \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value) { \
+        uint32_t cell, hash; \
+        if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
+            return false; \
+        *out_value = set->cells[cell].value; \
+ \
+        function_prefix ## _replace_cell(set, cell, hash); \
         set->count--; \
         return true; \
     } \
