@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "hash_utils.h"
+#include "generic_hash_utils.h"
 
 #define SET_DEFINE_H(type_name, function_prefix, value_type) \
     typedef struct type_name ## Cell { \
