@@ -11,9 +11,9 @@
 
 #define MAP_DEFINE_H(type_name, function_prefix, key_type, value_type) \
     typedef struct type_name ## Cell { \
-        uint32_t hash; \
         key_type key; \
         value_type value; \
+        uint32_t hash; \
         bool active; \
     } type_name ## Cell; \
     \
@@ -68,8 +68,7 @@
  \
         for(int i = 0; i < capacity; i++) { \
             if(old[i].active) { \
-                uint32_t cell; \
-                old[i].hash = cell = ___fib_hash(hash_fn(old[i].key), map->shift); \
+                uint32_t cell = ___fib_hash(old[i].hash, map->shift); \
                 while(new[cell].active) { \
                     if(++cell > map->capacity) \
                         cell = 0; \
@@ -87,7 +86,8 @@
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
+        hash = hash_fn(key); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -112,7 +112,8 @@
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
+        hash = hash_fn(key); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -133,7 +134,8 @@
  \
     static inline bool function_prefix ## _find_cell(type_name* map, key_type key, uint32_t* out_hash, uint32_t* out_cell) { \
         uint32_t hash, cell; \
-        hash = cell = ___fib_hash(hash_fn(key), map->shift); \
+        hash = hash_fn(key); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) \

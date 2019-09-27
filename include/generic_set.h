@@ -65,8 +65,7 @@
  \
         for(uint32_t i = 0; i < capacity; i++) { \
             if(old[i].active) { \
-                uint32_t cell; \
-                old[i].hash = cell = ___fib_hash(hash_fn(old[i].value), set->shift); \
+                uint32_t cell = ___fib_hash(old[i].hash, set->shift); \
                 while(current[cell].active) { \
                     if(++cell > set->capacity) \
                         cell = 0; \
@@ -85,7 +84,8 @@
         if(set->count == set->load_factor) \
             function_prefix ## _resize(set); \
  \
-        hash = cell = ___fib_hash(hash_fn(value), set->shift); \
+        hash = hash_fn(value); \
+        cell = ___fib_hash(hash, set->shift); \
  \
         while(true) { \
             if(!set->cells[cell].active) { \
@@ -106,7 +106,8 @@
  \
     static inline bool function_prefix ## _find_cell(type_name* set, value_type value, uint32_t* out_hash, uint32_t* out_cell) { \
         uint32_t cell, hash; \
-        hash = cell = ___fib_hash(hash_fn(value), set->shift); \
+        hash = hash_fn(value); \
+        cell = ___fib_hash(hash, set->shift); \
  \
         while(true) { \
             if(!set->cells[cell].active) \
