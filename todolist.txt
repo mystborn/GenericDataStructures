@@ -5,6 +5,7 @@ Additional Data Structure:
   ☐ Trie @low
   ☐ Linked List @critical
   ☐ Pair @low
+  ☐ Deque @high
 
 Extra Utilities:
   
