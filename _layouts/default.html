@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    {% if page.title %}
+    <title>{{ page.title }} | {{ site.title }}</title>
+    {% else %}
+    <title>{{ site.title }}</title>
+    {% endif %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="{{site.baseurl}}/assets/css/styles.css">
+</head>
+<body>
+
+    <div class="container-fluid">
+        {{content}}
+    </div>
+
+<script src="{{site.baseurl}}/assets/js/jquery.min.js"></script>
+<script src="{{site.baseurl}}/assets/js/bootstrap.bundle.min.js"></script>
+<script src="{{site.baseurl}}/assets/js/sidenav.js"></script>
+
+</body>
+</html>

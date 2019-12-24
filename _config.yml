@@ -1,0 +1,25 @@
+permalink: pretty
+
+title: Generic Data Structures
+description: Generic data structures in C
+baseurl: ""
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  auto_ids: true
+  entity_output: as_char
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
+      start_line: 1
+
+author:
+  name: Chris Kramer
+  url: twitter.com/presicamento
+  email: ckramer017@gmail.com
