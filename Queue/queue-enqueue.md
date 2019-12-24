@@ -6,7 +6,7 @@ title: queue_enqueue
 <div class="col-md-3 side-nav text-light">
 <nav class="navbar-dark">
 <div class="d-inline-flex justify-content-between justify-content-md-center align-items-center w-100 py-2">
-<b><a href="{{site.baseurl}}/">Generic Data Structures</a></b>
+<b><a href="{{site.url}}/">Generic Data Structures</a></b>
 <button class="side-nav-button" type="button" data-toggle="collapse" data-target="#sidenav-container">
 <span class="side-nav-button-image"></span>
 </button>
@@ -18,260 +18,260 @@ title: queue_enqueue
 <ul id="search-results" style="display: hidden;"></ul>
 <ul id="nav-items">
 <li>
-<a href="{{site.baseurl}}/grid">Grid</a>
+<a href="{{site.url}}/grid">Grid</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/grid/grid-clear">grid_clear</a>
+<a href="{{site.url}}/grid/grid-clear">grid_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-create">grid_create</a>
+<a href="{{site.url}}/grid/grid-create">grid_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-free">grid_free</a>
+<a href="{{site.url}}/grid/grid-free">grid_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-free-resources">grid_free_resources</a>
+<a href="{{site.url}}/grid/grid-free-resources">grid_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-get">grid_get</a>
+<a href="{{site.url}}/grid/grid-get">grid_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-height">grid_height</a>
+<a href="{{site.url}}/grid/grid-height">grid_height</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-init">grid_init</a>
+<a href="{{site.url}}/grid/grid-init">grid_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-set">grid_set</a>
+<a href="{{site.url}}/grid/grid-set">grid_set</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/grid/grid-width">grid_width</a>
+<a href="{{site.url}}/grid/grid-width">grid_width</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/list">List</a>
+<a href="{{site.url}}/list">List</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/list/list-add">list_add</a>
+<a href="{{site.url}}/list/list-add">list_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-clear">list_clear</a>
+<a href="{{site.url}}/list/list-clear">list_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-count">list_count</a>
+<a href="{{site.url}}/list/list-count">list_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-create">list_create</a>
+<a href="{{site.url}}/list/list-create">list_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-free">list_free</a>
+<a href="{{site.url}}/list/list-free">list_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-free-resources">list_free_resources</a>
+<a href="{{site.url}}/list/list-free-resources">list_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-get">list_get</a>
+<a href="{{site.url}}/list/list-get">list_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-init">list_init</a>
+<a href="{{site.url}}/list/list-init">list_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-init-capacity">list_init_capacity</a>
+<a href="{{site.url}}/list/list-init-capacity">list_init_capacity</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-insert">list_insert</a>
+<a href="{{site.url}}/list/list-insert">list_insert</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-peek">list_peek</a>
+<a href="{{site.url}}/list/list-peek">list_peek</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-pop">list_pop</a>
+<a href="{{site.url}}/list/list-pop">list_pop</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-remove">list_remove</a>
+<a href="{{site.url}}/list/list-remove">list_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-set">list_set</a>
+<a href="{{site.url}}/list/list-set">list_set</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/list/list-shrink-to-fit">list_shrink_to_fit</a>
+<a href="{{site.url}}/list/list-shrink-to-fit">list_shrink_to_fit</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/map">Map</a>
+<a href="{{site.url}}/map">Map</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/map/map-add">map_add</a>
+<a href="{{site.url}}/map/map-add">map_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-count">map_count</a>
+<a href="{{site.url}}/map/map-count">map_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-create">map_create</a>
+<a href="{{site.url}}/map/map-create">map_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-free">map_free</a>
+<a href="{{site.url}}/map/map-free">map_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-free-resources">map_free_resources</a>
+<a href="{{site.url}}/map/map-free-resources">map_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-get">map_get</a>
+<a href="{{site.url}}/map/map-get">map_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-get-and-remove">map_get_and_remove</a>
+<a href="{{site.url}}/map/map-get-and-remove">map_get_and_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-init">map_init</a>
+<a href="{{site.url}}/map/map-init">map_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-remove">map_remove</a>
+<a href="{{site.url}}/map/map-remove">map_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-set">map_set</a>
+<a href="{{site.url}}/map/map-set">map_set</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/map/map-try-get">map_try_get</a>
+<a href="{{site.url}}/map/map-try-get">map_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue">Queue</a>
+<a href="{{site.url}}/queue">Queue</a>
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/queue/queue-clear">queue_clear</a>
+<a href="{{site.url}}/queue/queue-clear">queue_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-count">queue_count</a>
+<a href="{{site.url}}/queue/queue-count">queue_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-create">queue_create</a>
+<a href="{{site.url}}/queue/queue-create">queue_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-create-capacity">queue_create_capacity</a>
+<a href="{{site.url}}/queue/queue-create-capacity">queue_create_capacity</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-dequeue">queue_dequeue</a>
+<a href="{{site.url}}/queue/queue-dequeue">queue_dequeue</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-enqueue">queue_enqueue</a>
+<a href="{{site.url}}/queue/queue-enqueue">queue_enqueue</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-free">queue_free</a>
+<a href="{{site.url}}/queue/queue-free">queue_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-free-resources">queue_free_resources</a>
+<a href="{{site.url}}/queue/queue-free-resources">queue_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-init">queue_init</a>
+<a href="{{site.url}}/queue/queue-init">queue_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-init-capacity">queue_init_capacity</a>
+<a href="{{site.url}}/queue/queue-init-capacity">queue_init_capacity</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/queue/queue-peek">queue_peek</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree">RedBlackTree</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-add">rbtree_add</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-add-node">rbtree_add_node</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-count">rbtree_count</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-create">rbtree_create</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-free">rbtree_free</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-free-resources">rbtree_free_resources</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-get">rbtree_get</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-get-max">rbtree_get_max</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-get-min">rbtree_get_min</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-get-node">rbtree_get_node</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-init">rbtree_init</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove">rbtree_remove</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove-max">rbtree_remove_max</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove-max-node">rbtree_remove_max_node</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove-min">rbtree_remove_min</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove-min-node">rbtree_remove_min_node</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-remove-node">rbtree_remove_node</a>
-</li>
-<li>
-<a href="{{site.baseurl}}/redblacktree/rbtree-root">rbtree_root</a>
+<a href="{{site.url}}/queue/queue-peek">queue_peek</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/set">Set</a>
+<a href="{{site.url}}/redblacktree">RedBlackTree</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/set/set-add">set_add</a>
+<a href="{{site.url}}/redblacktree/rbtree-add">rbtree_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-contains">set_contains</a>
+<a href="{{site.url}}/redblacktree/rbtree-add-node">rbtree_add_node</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-count">set_count</a>
+<a href="{{site.url}}/redblacktree/rbtree-count">rbtree_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-create">set_create</a>
+<a href="{{site.url}}/redblacktree/rbtree-create">rbtree_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-free">set_free</a>
+<a href="{{site.url}}/redblacktree/rbtree-free">rbtree_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-free-resources">set_free_resources</a>
+<a href="{{site.url}}/redblacktree/rbtree-free-resources">rbtree_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-get">set_get</a>
+<a href="{{site.url}}/redblacktree/rbtree-get">rbtree_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-get-and-remove">set_get_and_remove</a>
+<a href="{{site.url}}/redblacktree/rbtree-get-max">rbtree_get_max</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-init">set_init</a>
+<a href="{{site.url}}/redblacktree/rbtree-get-min">rbtree_get_min</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/set/set-remove">set_remove</a>
+<a href="{{site.url}}/redblacktree/rbtree-get-node">rbtree_get_node</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-init">rbtree_init</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove">rbtree_remove</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove-max">rbtree_remove_max</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove-max-node">rbtree_remove_max_node</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove-min">rbtree_remove_min</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove-min-node">rbtree_remove_min_node</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-remove-node">rbtree_remove_node</a>
+</li>
+<li>
+<a href="{{site.url}}/redblacktree/rbtree-root">rbtree_root</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="{{site.url}}/set">Set</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.url}}/set/set-add">set_add</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-contains">set_contains</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-count">set_count</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-create">set_create</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-free">set_free</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-free-resources">set_free_resources</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-get">set_get</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-get-and-remove">set_get_and_remove</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-init">set_init</a>
+</li>
+<li>
+<a href="{{site.url}}/set/set-remove">set_remove</a>
 </li>
 </ul>
 </li>
