@@ -394,6 +394,8 @@ queue_iter_start(queue, value) {
 } 
 queue_iter_end // End the iteration
 
+str_queue_free(queue);
+
 // Output:
 // one
 // two

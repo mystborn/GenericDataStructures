@@ -343,6 +343,8 @@ for(int i = 0; i < string_list_count(&list); i++) {
 }
 printf("\n");
 
+string_list_free_resources(&list);
+
 // Output
 // Hello World!
 ```
@@ -374,6 +376,8 @@ list_iter_start(list, out_value) {
     printf("%d\n", out_value);
 }
 list_iter_end // This needs to be placed after each loop end.
+
+int_list_free(list);
 
 // Output:
 // First five squares:

@@ -344,6 +344,8 @@ int right = 4;
 int times = int_grid_get(grid, left, right);
 
 assert(times == left * right);
+
+int_grid_free(grid);
 ```
 
 {% include footer.html %}
