@@ -430,6 +430,8 @@ typedef enum RBColor {
     } \
     \
     type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
+        key_type temp_key = node->key; \
+        value_type temp_value = node->value; \
         if(node->left != NULL && node->right != NULL) { \
             type_name ## Node* pred = node->left; \
             while(pred->right) \
@@ -449,6 +451,8 @@ typedef enum RBColor {
             child->color = RB_BLACK; \
         \
         tree->count--; \
+        node->key = temp_key; \
+        node->value = temp_value; \
         return node; \
     } \
     \
