@@ -180,7 +180,7 @@ title: list_create
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/redblacktree">RedBlackTree</a>
+<a href="{{site.baseurl}}/redblacktree">Red Black Tree</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
@@ -247,6 +247,9 @@ title: list_create
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/set/set-complement">set_complement</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/set/set-contains">set_contains</a>
 </li>
 <li>
@@ -271,7 +274,16 @@ title: list_create
 <a href="{{site.baseurl}}/set/set-init">set_init</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/set/set-intersect">set_intersect</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-is-superset">set_is_superset</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/set/set-remove">set_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-union">set_union</a>
 </li>
 </ul>
 </li>
@@ -317,6 +329,12 @@ string_list_free(list);
 </li>
 <li class="list-inline-item">
 <a class="footer-link" href="https://github.com/mystborn">Github</a>
+</li>
+<li class="list-inline-item">
+<a class="footer-link" href="https://discord.gg/9Sy9DnD">Discord Server</a>
+</li>
+<li class="list-inline-item">
+mystborn#0264
 </li>
 <li class="list-inline-item">
 <a class="footer-link" href="mailto:precisamento@gmail.com">Email</a>

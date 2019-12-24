@@ -180,7 +180,7 @@ title: Map
 </ul>
 </li>
 <li>
-<a href="{{site.baseurl}}/redblacktree">RedBlackTree</a>
+<a href="{{site.baseurl}}/redblacktree">Red Black Tree</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
@@ -247,6 +247,9 @@ title: Map
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/set/set-complement">set_complement</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/set/set-contains">set_contains</a>
 </li>
 <li>
@@ -271,7 +274,16 @@ title: Map
 <a href="{{site.baseurl}}/set/set-init">set_init</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/set/set-intersect">set_intersect</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-is-superset">set_is_superset</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/set/set-remove">set_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-union">set_union</a>
 </li>
 </ul>
 </li>
@@ -333,7 +345,7 @@ __Map:__
 
 | Name | Type | Description |
 | --- | --- | --- |
-| cells | &lt;type_name&gt;Cell* | An array of cells. |
+| cells | MapCell* | An array of cells. |
 | count | uint32_t | The number of items in the map. |
 | capacity | uint32_t | The number of allocated cells. |
 | load_factor | uint32_t | The number of active cells that can be held by the map before resizing. |
@@ -487,6 +499,12 @@ Is it __not__ safe to add or remove items from a map while iterating. It is unde
 </li>
 <li class="list-inline-item">
 <a class="footer-link" href="https://github.com/mystborn">Github</a>
+</li>
+<li class="list-inline-item">
+<a class="footer-link" href="https://discord.gg/9Sy9DnD">Discord Server</a>
+</li>
+<li class="list-inline-item">
+mystborn#0264
 </li>
 <li class="list-inline-item">
 <a class="footer-link" href="mailto:precisamento@gmail.com">Email</a>

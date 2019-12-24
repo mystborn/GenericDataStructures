@@ -1,6 +1,6 @@
 ---
 layout: default
-title: rbtree_remove_node
+title: set_union
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -181,8 +181,8 @@ title: rbtree_remove_node
 </li>
 <li>
 <a href="{{site.baseurl}}/redblacktree">Red Black Tree</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/redblacktree/rbtree-add">rbtree_add</a>
 </li>
@@ -241,8 +241,8 @@ title: rbtree_remove_node
 </li>
 <li>
 <a href="{{site.baseurl}}/set">Set</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
@@ -294,60 +294,49 @@ title: rbtree_remove_node
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# rbtree_remove_node
+# set_union
 
-Removes the specified node from the tree.
+Gets the [union](https://en.wikipedia.org/wiki/Set_%28mathematics%29#Unions) of two sets.
 
 ## Syntax
 
 ```c
-RBTreeNode* rbtree_remove_node(RBTree* tree, RBTreeNode* node);
+bool set_union(Set* left, Set* right, Set* result);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| tree | RBTree* | A pointer to the tree. |
-| node | RBTreeNode* | The node to remove. |
+| left | Set* | A pointer to the left set. |
+| right | Set* | A pointer to the right set. |
+| result | Set* | A pointer to the result set. |
 
-**Returns:** The node that was removed.
+**Returns:** `true` if none of the sets were `NULL`, false otherwise.
 
 ## Remarks
 
-Take extreme care to make sure the tree used by the function actually owns the node. It is never checked, and assumes that the it is.
-
-In addition, the actual node that was removed might not be the node that was passed to the function. In these cases, make sure to use the return value, not the parameter in further operations to the removed node (i.e. freeing it or reusing it).
-
-As with the other rbtree_*_node functions, this rarely needs to be used directly.
+This function gets the union of the left and right sets and stores the values in the result set. The result set __cannot__ be the same as the left or right sets.
 
 ## Example
 
 ```c
-RBTREE_DEFINE_H(ISTree, is_tree, int, char*)
-RBTREE_DEFINE_C(ISTree, is_tree, int, char*, int_cmp) // The definition of int_cmp can be found in the RedBlackTree main page.
+SET_DEFINE_H(StringSet, str_set, char*)
+SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
 
-ISTree tree;
-is_tree_init(&tree);
+StringSet* left = str_set_create();
+StringSet* right = str_set_create();
+StringSet* result = str_set_create();
 
-ISTreeNode zero = { .key = 0, .value = "zero" };
-ISTreeNode one = { .key = 0, .value = "one" };
-ISTreeNode negative_one = { .key = -1, .value = "negative_one" };
+str_set_add(left, "moo");
+str_set_add(right, "caw");
 
-is_tree_add_node(&tree, &zero);
-is_tree_add_node(&tree, &one);
-is_tree_add_node(&tree, &negative_one);
+str_set_union(left, right, result);
 
-// Wait a second...
-// We actually only want positive values.
-// Remove negative_one from the tree using it's node.
+printf("%d\n", str_set_contains(result, "moo"));
+printf("%d\n", str_set_contains(result, "caw"));
 
-is_tree_remove_node(&tree, &negative_one);
-
-// Use the tree...
-
-// At the end of the scope, don't call any free function.
-// The tree value itself doesn't need to be freed, and neither
-// do any of the nodes, so we can just let them get cleaned up
-// with the rest of the stack frame.
+// Output:
+// 1
+// 1
 ```
 
 <div class="py-2 border-top">
