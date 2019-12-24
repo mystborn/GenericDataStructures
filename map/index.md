@@ -49,7 +49,7 @@ __Map:__
 
 | Name | Type | Description |
 | --- | --- | --- |
-| cells | &lt;type_name&gt;Cell* | An array of cells. |
+| cells | MapCell* | An array of cells. |
 | count | uint32_t | The number of items in the map. |
 | capacity | uint32_t | The number of allocated cells. |
 | load_factor | uint32_t | The number of active cells that can be held by the map before resizing. |
