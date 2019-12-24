@@ -73,6 +73,88 @@ START_TEST(set_remove_missing_key_returns_false) {
 }
 END_TEST
 
+START_TEST(set_union_contains_left_and_right) {
+    StringSet* left = str_set_create();
+    StringSet* right = str_set_create();
+    StringSet* result = str_set_create();
+
+    str_set_add(left, "cow");
+    str_set_add(right, "pig");
+
+    ck_assert(str_set_union(left, right, result));
+    ck_assert(str_set_count(result) == 2);
+    ck_assert(str_set_contains(result, "cow"));
+    ck_assert(str_set_contains(result, "pig"));
+    ck_assert(!str_set_contains(result, "raven"));
+
+    str_set_free(left);
+    str_set_free(right);
+    str_set_free(result);
+}
+END_TEST
+
+START_TEST(set_intersect_contains_left_and_right_shared) {
+    StringSet* left = str_set_create();
+    StringSet* right = str_set_create();
+    StringSet* result = str_set_create();
+
+    str_set_add(left, "cow");
+    str_set_add(left, "raven");
+    str_set_add(right, "pig");
+    str_set_add(right, "raven");
+
+    ck_assert(str_set_intersect(left, right, result));
+    ck_assert(str_set_count(result) == 1);
+    ck_assert(!str_set_contains(result, "cow"));
+    ck_assert(str_set_contains(result, "raven"));
+    ck_assert(!str_set_contains(result, "pig"));
+
+    str_set_free(left);
+    str_set_free(right);
+    str_set_free(result);
+}
+END_TEST
+
+START_TEST(set_complement_contains_left_only) {
+    StringSet* left = str_set_create();
+    StringSet* right = str_set_create();
+    StringSet* result = str_set_create();
+
+    str_set_add(left, "cow");
+    str_set_add(left, "raven");
+    str_set_add(right, "pig");
+    str_set_add(right, "cow");
+
+    ck_assert(str_set_complement(left, right, result));
+    ck_assert(str_set_count(result) == 1);
+    ck_assert(!str_set_contains(result, "cow"));
+    ck_assert(str_set_contains(result, "raven"));
+    ck_assert(!str_set_contains(result, "pig"));
+
+    str_set_free(left);
+    str_set_free(right);
+    str_set_free(result);
+}
+END_TEST
+
+START_TEST(set_is_superset_left_is_superset) {
+    StringSet* left = str_set_create();
+    StringSet* right = str_set_create();
+
+    str_set_add(left, "cow");
+    str_set_add(left, "raven");
+    str_set_add(left, "pig");
+    str_set_add(right, "pig");
+    str_set_add(right, "cow");
+
+    ck_assert(str_set_is_superset(left, right));
+    ck_assert(!str_set_is_superset(right, left));
+
+    str_set_free(left);
+    str_set_free(right);
+}
+END_TEST
+
 START_TEST(set_resizes_when_load_factor_is_reached) {
     char* ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     ck_assert(set->load_factor < strlen(ALPHABET));
@@ -162,6 +244,10 @@ int main(void) {
     tcase_add_test(tc, set_doesnt_contain_missing_key);
     tcase_add_test(tc, set_remove_existing_key_removes);
     tcase_add_test(tc, set_remove_missing_key_returns_false);
+    tcase_add_test(tc, set_union_contains_left_and_right);
+    tcase_add_test(tc, set_intersect_contains_left_and_right_shared);
+    tcase_add_test(tc, set_complement_contains_left_only);
+    tcase_add_test(tc, set_is_superset_left_is_superset);
     tcase_add_test(tc, set_resizes_when_load_factor_is_reached);
     tcase_add_test(tc, set_iter_all);
     tcase_add_test(tc, set_iter_some);

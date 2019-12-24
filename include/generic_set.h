@@ -37,6 +37,10 @@
     bool function_prefix ## _remove(type_name* set, value_type value); \
     bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value); \
     bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value); \
+    bool function_prefix ## _union(type_name* left, type_name* right, type_name* result); \
+    bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result); \
+    bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result); \
+    bool function_prefix ## _is_superset(type_name* superset, type_name* subset); \
 
 
 #define SET_DEFINE_C(type_name, function_prefix, value_type, hash_fn, compare_fn) \
@@ -177,6 +181,67 @@
  \
         function_prefix ## _replace_cell(set, cell, hash); \
         set->count--; \
+        return true; \
+    } \
+    \
+    bool function_prefix ## _union(type_name* left, type_name* right, type_name* result) { \
+        if(!left || !right || !result) \
+            return false; \
+ \
+        for(int i = 0; i < left->capacity; i++) {  \
+            if(!left->cells[i].active) \
+                continue; \
+            function_prefix ## _add(result, left->cells[i].value); \
+        } \
+ \
+        for(int i = 0; i < right->capacity; i++) {  \
+            if(!right->cells[i].active) \
+                continue; \
+            function_prefix ## _add(result, right->cells[i].value); \
+        } \
+ \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result) { \
+        if(!left || !right || !result) \
+            return false; \
+ \
+        for(int i = 0; i < left->capacity; i++) {  \
+            if(!left->cells[i].active) \
+                continue; \
+            if(function_prefix ## _contains(right, left->cells[i].value)) \
+                function_prefix ## _add(result, left->cells[i].value); \
+        } \
+ \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result) { \
+        if(!left || !right || !result) \
+            return false; \
+ \
+        for(int i = 0; i < left->capacity; i++) {  \
+            if(!left->cells[i].active) \
+                continue; \
+            if(!function_prefix ## _contains(right, left->cells[i].value)) \
+                function_prefix ## _add(result, left->cells[i].value); \
+        } \
+ \
+        return true; \
+    } \
+ \
+    bool function_prefix ## _is_superset(type_name* superset, type_name* subset) { \
+        if(!superset || !subset) \
+            return false; \
+ \
+        for(int i = 0; i < subset->capacity; i++) {  \
+            if(!subset->cells[i].active) \
+                continue; \
+            if(!function_prefix ## _contains(superset, subset->cells[i].value)) \
+                return false; \
+        } \
+ \
         return true; \
     } \
 
