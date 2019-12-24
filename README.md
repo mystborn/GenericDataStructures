@@ -24,6 +24,11 @@ Here's an example that creates and uses a list of ints:
 // main.h
 #include <generic_list.h>
 
+// The first argument is the name of the generated data structure,
+// the second argument is a name to prefix each function with,
+// and the final argument is the value stored by the list, in this
+// case int.
+
 LIST_DEFINE_H(IntList, int_list, int)
 
 
