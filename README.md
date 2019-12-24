@@ -1,3 +1,1 @@
-The markdown files found in this folder and all subsequent subfolders will be used to generate the webpages on the official documentation website when it's ready, but the files can be browsed for now to get a full understanding of the implemented data structures. 
-
-To find information for the whole project or each individual data structure, check out the `index.md` file in its respective folder.
+The other files in this branch are used to generate the [documentation website](https://mystborn.github.io/GenericDataStructures/) for this repo. If you want to make modifications to the documentation, please do so in this repo and the changes will be pushed to the website eventually.
