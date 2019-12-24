@@ -1,5 +1,5 @@
 permalink: pretty
-exclude: README.md
+exclude: [ README.md ]
 
 title: Generic Data Structures
 description: Generic data structures in C

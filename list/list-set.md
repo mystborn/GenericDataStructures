@@ -331,26 +331,7 @@ for(int i = 0; i < string_list_count(list); i++)
 // caw caw
 ```
 
-<div class="py-2 border-top">
-<div class="col-sm">
-<ul class="list-inline">
-<li class="list-inline-item">
-&copy; 2019 Precisamento LLC
-</li>
-<li class="list-inline-item">
-<a class="footer-link" href="https://github.com/mystborn">Github</a>
-</li>
-<li class="list-inline-item">
-<a class="footer-link" href="https://discord.gg/9Sy9DnD">Discord Server</a>
-</li>
-<li class="list-inline-item">
-mystborn#0264
-</li>
-<li class="list-inline-item">
-<a class="footer-link" href="mailto:precisamento@gmail.com">Email</a>
-</li>
-</ul>
-</div>
-</div>
+{% include footer.html %}
+
 </div>
 </div>
