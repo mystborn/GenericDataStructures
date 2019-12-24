@@ -15,7 +15,6 @@
     typedef struct type_name ## Cell { \
         value_type value; \
         uint32_t hash; \
-        uint32_t adjusted_hash; \
         bool active; \
     } type_name ## Cell; \
  \
@@ -71,7 +70,6 @@
         for(uint32_t i = 0; i < capacity; i++) { \
             if(old[i].active) { \
                 uint32_t cell = ___fib_hash(old[i].hash, set->shift); \
-                old[i].adjusted_hash = cell; \
                 while(current[cell].active) { \
                     if(++cell > set->capacity) \
                         cell = 0; \
@@ -85,20 +83,19 @@
     } \
  \
     bool function_prefix ## _add(type_name* set, value_type value) { \
-        uint32_t hash, adjusted_hash, cell; \
+        uint32_t hash, cell; \
  \
         if(set->count == set->load_factor) \
             function_prefix ## _resize(set); \
  \
         hash = hash_fn(value); \
-        adjusted_hash = cell = ___fib_hash(hash, set->shift); \
+        cell = ___fib_hash(hash, set->shift); \
  \
         while(true) { \
             if(!set->cells[cell].active) { \
                 set->cells[cell].active = true; \
                 set->cells[cell].value = value; \
                 set->cells[cell].hash = hash; \
-                set->cells[cell].adjusted_hash = adjusted_hash; \
                 set->count++; \
                 return true; \
             } else if(set->cells[cell].hash == hash && compare_fn(set->cells[cell].value, value) == 0) \
@@ -111,16 +108,17 @@
         return false; \
     } \
  \
-    static inline bool function_prefix ## _find_cell(type_name* set, value_type value, uint32_t* out_adj_hash, uint32_t* out_cell) { \
+    static inline bool function_prefix ## _find_cell(type_name* set, value_type value, uint32_t* out_hash, uint32_t* out_cell) { \
         uint32_t cell, hash; \
         hash = hash_fn(value); \
-        *out_adj_hash = cell = ___fib_hash(hash, set->shift); \
+        cell = ___fib_hash(hash, set->shift); \
  \
         while(true) { \
             if(!set->cells[cell].active) \
                 return false; \
  \
             if(set->cells[cell].hash == hash && compare_fn(set->cells[cell].value, value) == 0) { \
+                *out_hash = hash; \
                 *out_cell = cell; \
                 return true; \
             } \
@@ -130,7 +128,7 @@
         } \
     } \
  \
-    static inline void function_prefix ## _replace_cell(type_name* set, uint32_t cell, uint32_t adjusted_hash) { \
+    static inline void function_prefix ## _replace_cell(type_name* set, uint32_t cell, uint32_t hash) { \
         uint32_t start = cell; \
         uint32_t last = start; \
  \
@@ -141,7 +139,7 @@
             if(!set->cells[cell].active) \
                 break; \
  \
-            if(set->cells[cell].adjusted_hash <= adjusted_hash) \
+            if(___fib_hash(set->cells[cell].hash, set->shift) <= cell) \
                 last = cell; \
         } \
  \

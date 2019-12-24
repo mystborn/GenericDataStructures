@@ -14,7 +14,6 @@
         key_type key; \
         value_type value; \
         uint32_t hash; \
-        uint32_t adjusted_hash; \
         bool active; \
     } type_name ## Cell; \
     \
@@ -70,7 +69,6 @@
         for(int i = 0; i < capacity; i++) { \
             if(old[i].active) { \
                 uint32_t cell = ___fib_hash(old[i].hash, map->shift); \
-                old[i].adjusted_hash = cell; \
                 while(new[cell].active) { \
                     cell = (cell + 1) % map->capacity; \
                 } \
@@ -82,13 +80,13 @@
     } \
  \
     bool function_prefix ## _add(type_name* map, key_type key, value_type value) { \
-        uint32_t hash, adjusted_hash, cell; \
+        uint32_t hash, cell; \
  \
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
         hash = hash_fn(key); \
-        adjusted_hash = cell = ___fib_hash(hash, map->shift); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -96,7 +94,6 @@
                 map->cells[cell].key = key; \
                 map->cells[cell].value = value; \
                 map->cells[cell].hash = hash; \
-                map->cells[cell].adjusted_hash = adjusted_hash; \
                 map->count++; \
                 return true; \
             } else if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) \
@@ -109,13 +106,13 @@
     } \
  \
     void function_prefix ## _set(type_name* map, key_type key, value_type value) { \
-        uint32_t hash, adjusted, cell; \
+        uint32_t hash, cell; \
  \
         if(map->count == map->load_factor) \
             function_prefix ## _resize(map); \
  \
         hash = hash_fn(key); \
-        adjusted = cell = ___fib_hash(hash, map->shift); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) { \
@@ -123,7 +120,6 @@
                 map->cells[cell].key = key; \
                 map->cells[cell].value = value; \
                 map->cells[cell].hash = hash; \
-                map->cells[cell].adjusted_hash = adjusted; \
                 map->count++; \
                 break; \
             } else if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) { \
@@ -135,16 +131,17 @@
         } \
     } \
  \
-    static inline bool function_prefix ## _find_cell(type_name* map, key_type key, uint32_t* out_adj_hash, uint32_t* out_cell) { \
+    static inline bool function_prefix ## _find_cell(type_name* map, key_type key, uint32_t* out_hash, uint32_t* out_cell) { \
         uint32_t hash, cell; \
         hash = hash_fn(key); \
-        *out_adj_hash = cell = ___fib_hash(hash, map->shift); \
+        cell = ___fib_hash(hash, map->shift); \
  \
         while(true) { \
             if(!map->cells[cell].active) \
                 return false; \
  \
             if(map->cells[cell].hash == hash && compare_fn(map->cells[cell].key, key) == 0) { \
+                *out_hash = hash; \
                 *out_cell = cell; \
                 return true; \
             } \
@@ -172,7 +169,7 @@
         } \
     } \
  \
-    static inline void function_prefix ## _replace_cell(type_name* map, uint32_t cell, uint32_t adjusted_hash) { \
+    static inline void function_prefix ## _replace_cell(type_name* map, uint32_t cell, uint32_t hash) { \
         uint32_t start = cell; \
         uint32_t last = start; \
  \
@@ -182,7 +179,9 @@
             if(!map->cells[cell].active) \
                 break; \
  \
-            if(map->cells[cell].adjusted_hash <= adjusted_hash) \
+            /* Only get cells whose adjusted hash (i.e. their preferred cell) */ \
+            /* are less than or equal to the starting cell. */ \
+            if(___fib_hash(map->cells[cell].hash, map->shift) <= start) \
                 last = cell; \
         } \
  \
