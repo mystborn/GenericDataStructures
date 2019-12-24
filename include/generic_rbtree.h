@@ -47,7 +47,7 @@ typedef enum RBColor {
                   type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key); \
     static inline type_name ## Node* function_prefix ## _get_min_node(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _get_max_node(type_name* tree); \
-                  void function_prefix ## _remove_node(type_name* tree, type_name ## Node* node); \
+                  type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node); \
     static inline type_name ## Node* function_prefix ## _remove_min_node(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree); \
     \
@@ -125,8 +125,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        free(node); \
+        free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -136,8 +135,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        free(node); \
+        free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -147,8 +145,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        function_prefix ## _remove_node(tree, node); \
-        free(node); \
+        free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -175,8 +172,7 @@ typedef enum RBColor {
         if(!node) \
             return NULL; \
  \
-        function_prefix ## _remove_node(tree, node); \
-        return node; \
+        return function_prefix ## _remove_node(tree, node); \
     } \
     \
     static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree) { \
@@ -184,8 +180,7 @@ typedef enum RBColor {
         if(!node) \
             return NULL; \
  \
-        function_prefix ## _remove_node(tree, node); \
-        return node; \
+        return function_prefix ## _remove_node(tree, node); \
     } \
 
 
@@ -434,7 +429,7 @@ typedef enum RBColor {
         } \
     } \
     \
-    void function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
+    type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
         if(node->left != NULL && node->right != NULL) { \
             type_name ## Node* pred = node->left; \
             while(pred->right) \
@@ -454,6 +449,7 @@ typedef enum RBColor {
             child->color = RB_BLACK; \
         \
         tree->count--; \
+        return node; \
     } \
     \
     void function_prefix ## _free_resources(type_name* tree) { \

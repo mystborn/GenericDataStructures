@@ -14,6 +14,7 @@ RBTREE_DEFINE_H(IITree, iitree, int, int)
 RBTREE_DEFINE_C(IITree, iitree, int, int, int_cmp)
 
 static IITree* tree;
+static int test_num = 0;
 
 void tree_start(void) {
     tree = iitree_create();
@@ -113,6 +114,7 @@ START_TEST(tree_adds_items_in_order_complex) {
             value++;
         }
         node = node->right;
+
     }
     free(stack);
 }
@@ -126,7 +128,7 @@ START_TEST(tree_remove_root) {
     ck_assert(iitree_root(tree) != NULL);
     ck_assert(iitree_count(tree) == 1);
 
-    iitree_remove(tree, 1, NULL);
+    ck_assert(iitree_remove(tree, 1, NULL));
 
     ck_assert(iitree_root(tree) == NULL);
     ck_assert(iitree_count(tree) == 0);
@@ -136,14 +138,15 @@ END_TEST
 START_TEST(tree_remove_preserves_order) {
     int values[] = { 0, 1, 2, 4, 5 };
 
-    for(int i = 0; i < 6; i++)
+    for(int i = 0; i < 6; i++) {
         iitree_add(tree, i, i);
+    }
 
     iitree_remove(tree, 3, NULL);
 
     int value = 0;
     int index = 0;
-    IITreeNode** stack = malloc(sizeof(IITreeNode*));
+    IITreeNode** stack = malloc(sizeof(IITreeNode*) * iitree_count(tree));
     IITreeNode* node = iitree_root(tree);
     while(node != NULL) {
         while(node->left != NULL) {
@@ -159,6 +162,7 @@ START_TEST(tree_remove_preserves_order) {
         }
         node = node->right;
     }
+
     free(stack);
 }
 END_TEST
