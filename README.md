@@ -3,7 +3,7 @@
 Generic Data Structures is a header-only project in C that can be used to generate strongly typed Data Structures, mostly various collection types. It works similar to c++ templates.
 
 The following collections are currently implemented:
-* [List](https://mystborn.github.io/GenericDataStructures/list/)
+* [List + Stack](https://mystborn.github.io/GenericDataStructures/list/)
 * [Map](https://mystborn.github.io/GenericDataStructures/map/)
 * [Queue](https://mystborn.github.io/GenericDataStructures/queue/)
 * [Red Black Tree](https://mystborn.github.io/GenericDataStructures/redblacktree/)
