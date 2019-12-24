@@ -1,1 +1,1 @@
-The other files in this branch are used to generate the [documentation website](https://mystborn.github.io/GenericDataStructures/) for this repo. If you want to make modifications to the documentation, please do so in this repo and the changes will be pushed to the website eventually.
+The other files in this branch are used to generate the [documentation website](https://mystborn.github.io/GenericDataStructures/) for this repo. If you want to make modifications to the documentation, please do so here and the changes will be pushed to the website eventually.
