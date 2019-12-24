@@ -2,7 +2,7 @@ permalink: pretty
 
 title: Generic Data Structures
 description: Generic data structures in C
-baseurl: ""
+baseurl: "GenericDataStructures"
 
 markdown: kramdown
 highlighter: rouge
