@@ -14,7 +14,7 @@
 // http://book.huihoo.com/data-structures-and-algorithms-with-object-oriented-design-patterns-in-c++/html/page214.html
 
 static inline uint32_t ___fib_hash(uint32_t hash, uint32_t shift) {
-    return (hash * 2654435769) >> shift;
+    return (hash * 2654435769U) >> shift;
 }
 
 #define FNV_PRIME_32 0x01000193
@@ -22,8 +22,8 @@ static inline uint32_t ___fib_hash(uint32_t hash, uint32_t shift) {
 
 static uint32_t gds_fnv32(const char* data) {
     uint32_t hash = FNV_OFFSET_32;
-    while(*data != 0)
-        hash = (*data++ ^ hash) * FNV_PRIME_32;
+    while(*(unsigned char*)data != 0)
+        hash = (*(unsigned char*)data++ ^ hash) * FNV_PRIME_32;
 
     return hash;
 }
