@@ -139,15 +139,13 @@
             if(!set->cells[cell].active) \
                 break; \
  \
-            if(___fib_hash(set->cells[cell].hash, set->shift) <= cell) \
-                last = cell; \
+            uint32_t preferred_cell = ___fib_hash(set->cells[cell].hash, set->shift); \
+            if(preferred_cell <= start || preferred_cell > cell) { \
+                set->cells[start] = set->cells[cell]; \
+                start = cell; \
+            } \
         } \
- \
-        if(last != start) { \
-            set->cells[start] = set->cells[last]; \
-            set->cells[last].active = false; \
-        } else \
-            set->cells[start].active = false; \
+        set->cells[start].active = false; \
     } \
  \
     bool function_prefix ## _contains(type_name* set, value_type value) { \
