@@ -171,7 +171,6 @@
  \
     static inline void function_prefix ## _replace_cell(type_name* map, uint32_t cell, uint32_t hash) { \
         uint32_t start = cell; \
-        uint32_t last = start; \
  \
         while(true) { \
             cell = (cell + 1) % map->capacity; \
@@ -179,17 +178,13 @@
             if(!map->cells[cell].active) \
                 break; \
  \
-            /* Only get cells whose adjusted hash (i.e. their preferred cell) */ \
-            /* are less than or equal to the starting cell. */ \
-            if(___fib_hash(map->cells[cell].hash, map->shift) <= start) \
-                last = cell; \
+            uint32_t preferred_cell = ___fib_hash(map->cells[cell].hash, map->shift); \
+            if(preferred_cell <= start || preferred_cell > cell) { \
+                map->cells[start] = map->cells[cell]; \
+                start = cell; \
+            } \
         } \
- \
-        if(last != start) { \
-            map->cells[start] = map->cells[last]; \
-            map->cells[last].active = false; \
-        } else  \
-            map->cells[start].active = false; \
+        map->cells[start].active = false; \
     } \
  \
     bool function_prefix ## _remove(type_name* map, key_type key) { \
