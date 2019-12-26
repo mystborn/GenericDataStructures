@@ -12,7 +12,7 @@ if check_location != ''
     test_inc = include_directories(include_files + [check_location + '/include'])
 endif
 
-if check_location != ''
+if check_location != '' or c_comp.has_header('check.h')
     subdir('tests')
 endif
 

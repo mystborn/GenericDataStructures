@@ -1,16 +1,23 @@
-check_lib = check_location + '/lib'
+if check_location != ''
+    check_lib = check_location + '/lib'
+    
+    compat = c_comp.find_library(
+        'compat',
+        required: true,
+        dirs: check_lib)
+    
+    check = c_comp.find_library(
+        'check',
+        required: true,
+        dirs: check_lib)
+    
+    deps = [compat, check]
+else
+    check = c_comp.find_library('check', required: true)
+    test_inc = inc
+    deps = [check]
+endif
 
-compat = c_comp.find_library(
-    'compat',
-    required: true,
-    dirs: check_lib)
-
-check = c_comp.find_library(
-    'check',
-    required: true,
-    dirs: check_lib)
-
-deps = [compat, check]
 link_args = []
 
 if c_comp.get_id() == 'msvc' and get_option('buildtype') == 'release'
