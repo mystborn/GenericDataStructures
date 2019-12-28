@@ -14,9 +14,9 @@ uint32_t set_allocated(Set* map);
 
 ## Remarks
 
-This is not the same as the number of elements a set can hold without resizing (for that, check out [set_capacity]({{site.baseurl/set/set_capacity}})). Rather this is the number of cells allocated for the set. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * set_allocated(set)`.
+This is not the same as the number of elements a set can hold without resizing (for that, check out [set_capacity]({{site.baseurl/set/set-capacity}})). Rather this is the number of cells allocated for the set. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * set_allocated(set)`.
 
-Generally this function is used to determine if you want to reset the capacity when using [set_clear]({{site.baseurl}}/set/set_clear).
+Generally this function is used to determine if you want to reset the capacity when using [set_clear]({{site.baseurl}}/set/set-clear).
 
 ## Example
 

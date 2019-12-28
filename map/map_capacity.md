@@ -14,7 +14,7 @@ uint32_t map_capacity(Map* map);
 
 ## Remarks
 
-This is not the same as the allocated size of the maps internal buffer. To get that, see [map_allocated]({{site.baseurl}}/map/map_allocated).
+This is not the same as the allocated size of the maps internal buffer. To get that, see [map_allocated]({{site.baseurl}}/map/map-allocated).
 
 ## Example
 
