@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: set_clear
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -312,21 +312,24 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# set_clear
 
-Gets the number of items in a set.
+Clears all elements from the set.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+void set_clear(Set* set, bool reset_capacity);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | set | Set* | A pointer to the set. |
+| reset_capacity | bool | Determines whether to reset the internal size of the set or leave it as is. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+Resetting the capacity of the set can create more space for the application, but leaving it as is will make it faster (no need to resize, less likely hash collisions).
 
 ## Example
 
@@ -336,13 +339,12 @@ SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
 
 StringSet* set = str_set_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+si_map_add(set, "one");
+si_map_add(set, "two");
+si_map_add(set, "three");
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
-
-str_set_free(set);
+// Clears the values in the set without resetting it's internal storage.
+str_set_clear(set, false);
 ```
 
 {% include footer.html %}

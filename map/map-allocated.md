@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: map_allocated
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -103,8 +103,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/map">Map</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/map/map-add">map_add</a>
 </li>
@@ -250,8 +250,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/set">Set</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
@@ -312,37 +312,47 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# map_allocated
 
-Gets the number of items in a set.
+Gets the number of allocated elements in the maps internal buffer.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+uint32_t map_allocated(Map* map);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| set | Set* | A pointer to the set. |
+| map | Map* | A pointer to the map. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+This is not the same as the number of elements a map can hold without resizing (for that, check out [map_capacity]({{site.baseurl/map/map_capacity}})). Rather this is the number of cells allocated for the map. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * map_allocated(map)`.
+
+Generally this function is used to determine if you want to reset the capacity when using [map_clear]({{site.baseurl}}/map/map_clear).
 
 ## Example
 
 ```c
-SET_DEFINE_H(StringSet, str_set, char*)
-SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
+MAP_DEFINE_H(SIMap, si_map, char*, int)
+MAP_DEFINE_C(SIMap, si_map, char*, int, gds_fnv32, strcmp)
 
-StringSet* set = str_set_create();
+SIMap* map = si_map_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+uint32_t cells = si_map_allocated(map);
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
+printf("# of Cells: %u\n", cells);
+printf("# of Bytes: %u\n", sizeof(SIMapCell) * cells);
 
-str_set_free(set);
+si_map_free(map);
+
+// The output depends on the size of various elements +
+// struct padding, so assume sizeof(SIMapCell) is 24.
+
+// Output:
+// # of Cells: 8
+// # of Bytes: 192
 ```
 
 {% include footer.html %}

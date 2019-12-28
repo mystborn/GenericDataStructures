@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: set_capacity
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -312,21 +312,23 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# set_capacity
 
-Gets the number of items in a set.
+Gets the number of elements a set can hold without resizing.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+uint32_t set_capacity(Set* set);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | set | Set* | A pointer to the set. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+This is not the same as the allocated size of the sets internal buffer. To get that, see [set_allocated]({{site.baseurl}}/set/set_allocated).
 
 ## Example
 
@@ -336,13 +338,14 @@ SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
 
 StringSet* set = str_set_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+uint32_t capacity = str_set_capacity(set);
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
+printf("Capacity: %u\n", capacity);
 
 str_set_free(set);
+
+// Output:
+// Capacity: 4
 ```
 
 {% include footer.html %}

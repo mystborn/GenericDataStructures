@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: map_clear
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -103,8 +103,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/map">Map</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/map/map-add">map_add</a>
 </li>
@@ -250,8 +250,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/set">Set</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
@@ -312,37 +312,39 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# map_clear
 
-Gets the number of items in a set.
+Clears all elements from the map.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+void map_clear(Map* map, bool reset_capacity);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| set | Set* | A pointer to the set. |
+| map | Map* | A pointer to the map. |
+| reset_capacity | bool | Determines whether to reset the internal size of the map or leave it as is. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+Resetting the capacity of the map can create more space for the application, but leaving it as is will make it faster (no need to resize, less likely hash collisions).
 
 ## Example
 
 ```c
-SET_DEFINE_H(StringSet, str_set, char*)
-SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
+MAP_DEFINE_H(SIMap, si_map, char*, int)
+MAP_DEFINE_C(SIMap, si_map, char*, int, gds_fnv32, strcmp)
 
-StringSet* set = str_set_create();
+SIMap* map = si_map_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+si_map_add(map, "one", 1);
+si_map_add(map, "two", 2);
+si_map_add(map, "three", 3);
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
-
-str_set_free(set);
+// Clears the values in the map without resetting it's internal storage.
+si_map_clear(map, false);
 ```
 
 {% include footer.html %}

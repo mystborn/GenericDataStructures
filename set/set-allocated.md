@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: set_allocated
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -312,21 +312,25 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# set_allocated
 
-Gets the number of items in a set.
+Gets the number of allocated elements in the sets internal buffer.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+uint32_t set_allocated(Set* map);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| set | Set* | A pointer to the set. |
+| set | Set* | A pointer to the map. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+This is not the same as the number of elements a set can hold without resizing (for that, check out [set_capacity]({{site.baseurl/set/set_capacity}})). Rather this is the number of cells allocated for the set. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * set_allocated(set)`.
+
+Generally this function is used to determine if you want to reset the capacity when using [set_clear]({{site.baseurl}}/set/set_clear).
 
 ## Example
 
@@ -336,13 +340,19 @@ SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
 
 StringSet* set = str_set_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+uint32_t cells = str_set_allocated(set);
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
+printf("# of Cells: %u\n", cells);
+printf("# of Bytes: %u\n", sizeof(StringSetCell) * cells);
 
 str_set_free(set);
+
+// The output depends on the size of various elements +
+// struct padding, so assume sizeof(StringSetCell) is 16.
+
+// Output:
+// # of Cells: 8
+// # of Bytes: 128
 ```
 
 {% include footer.html %}

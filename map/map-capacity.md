@@ -1,6 +1,6 @@
 ---
 layout: default
-title: set_count
+title: map_capacity
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -103,8 +103,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/map">Map</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/map/map-add">map_add</a>
 </li>
@@ -250,8 +250,8 @@ title: set_count
 </li>
 <li>
 <a href="{{site.baseurl}}/set">Set</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
 </li>
@@ -312,37 +312,40 @@ title: set_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# set_count
+# map_capacity
 
-Gets the number of items in a set.
+Gets the number of elements a map can hold without resizing.
 
 ## Syntax
 
 ```c
-uint32_t set_count(Set* set);
+uint32_t map_capacity(Map* map);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| set | Set* | A pointer to the set. |
+| map | Map* | A pointer to the map. |
 
-**Returns:** The number of items in the set.
+## Remarks
+
+This is not the same as the allocated size of the maps internal buffer. To get that, see [map_allocated]({{site.baseurl}}/map/map_allocated).
 
 ## Example
 
 ```c
-SET_DEFINE_H(StringSet, str_set, char*)
-SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
+MAP_DEFINE_H(SIMap, si_map, char*, int)
+MAP_DEFINE_C(SIMap, si_map, char*, int, gds_fnv32, strcmp)
 
-StringSet* set = str_set_create();
+SIMap* map = si_map_create();
 
-str_set_add(set, "owl");
-str_set_add(set, "raven");
+uint32_t capacity = si_map_capacity(map);
 
-uint32_t count = str_set_count(set);
-assert(count == 2);
+printf("Capacity: %u\n", capacity);
 
-str_set_free(set);
+si_map_free(map);
+
+// Output:
+// Capacity: 4
 ```
 
 {% include footer.html %}

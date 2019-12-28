@@ -109,6 +109,15 @@ title: rbtree_root
 <a href="{{site.baseurl}}/map/map-add">map_add</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/map/map-allocated">map_allocated</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/map/map-capacity">map_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/map/map-clear">map_clear</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/map/map-count">map_count</a>
 </li>
 <li>
@@ -245,6 +254,15 @@ title: rbtree_root
 <ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/set/set-add">set_add</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-allocated">set_allocated</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-capacity">set_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/set/set-clear">set_clear</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/set/set-complement">set_complement</a>
