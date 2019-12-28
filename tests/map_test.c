@@ -12,7 +12,7 @@ MAP_DEFINE_C(StringMap, string_map, char*, char*, gds_fnv32, strcmp)
 
 static StringMap* map;
 
-static int test_number = 0;
+static char* ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void map_start(void) {
     map = string_map_create();
@@ -82,18 +82,37 @@ START_TEST(map_remove_missing_key_returns_false) {
 END_TEST
 
 START_TEST(map_resizes_when_load_factor_is_hit) {
-    string_map_add(map, "a", "a");
-    string_map_add(map, "b", "b");
-    string_map_add(map, "c", "c");
-    string_map_add(map, "d", "d");
-    ck_assert(map->load_factor == 4);
-    ck_assert(map->capacity == 8);
-    string_map_add(map, "e", "e");
-    ck_assert(map->load_factor == 8);
-    ck_assert(map->capacity == 16);
-    ck_assert(strcmp(string_map_get(map, "a"), "a") == 0);
-    ck_assert(strcmp(string_map_get(map, "b"), "b") == 0);
+    uint32_t capacity = map->capacity;
+    uint32_t load_factor = map->load_factor;
+    for(int i = 0; i <= load_factor; i++)
+        string_map_add(map, ALPHABET + i, ALPHABET + i);
+    ck_assert(map->capacity != capacity);
 }
+END_TEST
+
+START_TEST(map_clear_can_keeps_capacity) {
+    uint32_t load_factor = map->load_factor;
+
+    for(int i = 0; i <= load_factor; i++)
+        string_map_add(map, ALPHABET + i, ALPHABET + i);
+
+    uint32_t capacity = map->capacity;
+    string_map_clear(map, false);
+    ck_assert(map->capacity == capacity);
+    ck_assert(map->count == 0);
+} 
+END_TEST
+
+START_TEST(map_clear_can_reset_capacity) {
+    uint32_t load_factor = map->load_factor;
+
+    for(int i = 0; i <= load_factor; i++)
+        string_map_add(map, ALPHABET + i, ALPHABET + i);
+
+    string_map_clear(map, true);
+    ck_assert(map->capacity == 0);
+    ck_assert(map->count == 0);
+} 
 END_TEST
 
 START_TEST(map_iter_all) {

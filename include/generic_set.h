@@ -27,6 +27,8 @@
     } type_name; \
  \
     static inline uint32_t function_prefix ## _count(type_name* set) { return set->count; } \
+    static inline uint32_t function_prefix ## _capacity(type_name* set) { return set->load_factor; } \
+    static inline uint32_t function_prefix ## _allocated(type_name* set) { return set->capacity; } \
     static inline void function_prefix ## _free(type_name* set) { free(set->cells); free(set); } \
     static inline void function_prefix ## _free_resources(type_name* set) { free(set->cells); } \
  \
@@ -37,6 +39,7 @@
     bool function_prefix ## _remove(type_name* set, value_type value); \
     bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value); \
     bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value); \
+    void function_prefix ## _clear(type_name* set, bool reset_capacity); \
     bool function_prefix ## _union(type_name* left, type_name* right, type_name* result); \
     bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result); \
     bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result); \
@@ -181,7 +184,17 @@
         set->count--; \
         return true; \
     } \
-    \
+ \
+    void function_prefix ## _clear(type_name* set, bool reset_capacity) { \
+        if(reset_capacity) { \
+            free(set->cells); \
+            function_prefix ## _init(set); \
+        } else { \
+            for(uint32_t i = 0; i < set->capacity; i++) \
+                set->cells[i].active = false; \
+        } \
+    } \
+ \
     bool function_prefix ## _union(type_name* left, type_name* right, type_name* result) { \
         if(!left || !right || !result) \
             return false; \

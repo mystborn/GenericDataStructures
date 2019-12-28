@@ -16,7 +16,7 @@
         uint32_t hash; \
         bool active; \
     } type_name ## Cell; \
-    \
+ \
     typedef struct { \
         type_name ## Cell* cells; \
         uint32_t count; \
@@ -24,10 +24,13 @@
         uint32_t load_factor; \
         uint32_t shift; \
     } type_name;\
-    \
+ \
     static inline uint32_t function_prefix ## _count(type_name* map) { return map->count; } \
-    static void function_prefix ## _free(type_name* map) { free(map->cells); free(map); } \
-    static void function_prefix ## _free_resources(type_name* map) { free(map->cells); } \
+    static inline uint32_t function_prefix ## _capacity(type_name* map) { return map->load_factor; } \
+    static inline uint32_t function_prefix ## _allocated(type_name* map) { return map->capacity; } \
+    static inline void function_prefix ## _free(type_name* map) { free(map->cells); free(map); } \
+    static inline void function_prefix ## _free_resources(type_name* map) { free(map->cells); } \
+ \
     type_name* function_prefix ## _create(void); \
     bool function_prefix ## _init(type_name* map); \
     bool function_prefix ## _add(type_name* map, key_type key, value_type value); \
@@ -36,6 +39,8 @@
     bool function_prefix ## _try_get(type_name* map, key_type key, value_type* out_value); \
     bool function_prefix ## _remove(type_name* map, key_type key); \
     bool function_prefix ## _get_and_remove(type_name* map, key_type key, key_type* out_key, value_type* out_value); \
+    void function_prefix ## _clear(type_name* map, bool reset_capacity); \
+
 
 // TODO: Add more safety in case the map fails to resize.
 
@@ -50,7 +55,7 @@
         } \
         return map; \
     } \
-    \
+ \
     bool function_prefix ## _init(type_name* map) { \
         map->shift = 29; \
         map->capacity = 8; \
@@ -210,7 +215,18 @@
         function_prefix ## _replace_cell(map, cell, hash); \
         map->count--; \
         return true; \
-    }
+    } \
+ \
+    void function_prefix ## _clear(type_name* map, bool reset_capacity) { \
+        if(reset_capacity) { \
+            free(map->cells); \
+            function_prefix ## _init(map); \
+        } else { \
+            map->count = 0; \
+            for(uint32_t i = 0; i < map->capacity; i++) \
+                map->cells[i].active = false; \
+        } \
+    } \
 
 
 #endif //GENERIC_MAP_GENERIC_MAP_H

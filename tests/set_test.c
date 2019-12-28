@@ -10,6 +10,8 @@ SET_DEFINE_C(StringSet, str_set, char*, gds_fnv32, strcmp)
 
 static StringSet* set;
 
+static char* ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 void set_start(void) {
     set = str_set_create();
 }
@@ -70,6 +72,31 @@ END_TEST
 START_TEST(set_remove_missing_key_returns_false) {
     ck_assert(!str_set_remove(set, "owl"));
     ck_assert(!str_set_remove(set, "raven"));
+}
+END_TEST
+
+START_TEST(set_clear_can_keep_capacity) {
+    uint32_t load_factor = set->load_factor;
+
+    for(int i = 0; i <= load_factor; i++)
+        str_set_add(set, ALPHABET + i);
+
+    uint32_t capacity = set->capacity;
+    str_set_clear(set, false);
+    ck_assert(set->capacity == capacity);
+    ck_assert(set->count == 0);
+}
+END_TEST
+
+START_TEST(set_clear_can_reset_capacity) {
+    uint32_t load_factor = set->load_factor;
+
+    for(int i = 0; i <= load_factor; i++)
+        str_set_add(set, ALPHABET + i);
+
+    str_set_clear(set, true);
+    ck_assert(set->capacity == 0);
+    ck_assert(set->count == 0);
 }
 END_TEST
 
@@ -156,7 +183,6 @@ START_TEST(set_is_superset_left_is_superset) {
 END_TEST
 
 START_TEST(set_resizes_when_load_factor_is_reached) {
-    char* ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     ck_assert(set->load_factor < strlen(ALPHABET));
 
     uint32_t load_factor = set->load_factor;
