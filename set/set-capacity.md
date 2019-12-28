@@ -328,7 +328,7 @@ uint32_t set_capacity(Set* set);
 
 ## Remarks
 
-This is not the same as the allocated size of the sets internal buffer. To get that, see [set_allocated]({{site.baseurl}}/set/set_allocated).
+This is not the same as the allocated size of the sets internal buffer. To get that, see [set_allocated]({{site.baseurl}}/set/set-allocated).
 
 ## Example
 

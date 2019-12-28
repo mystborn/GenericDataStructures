@@ -328,9 +328,9 @@ uint32_t map_allocated(Map* map);
 
 ## Remarks
 
-This is not the same as the number of elements a map can hold without resizing (for that, check out [map_capacity]({{site.baseurl/map/map_capacity}})). Rather this is the number of cells allocated for the map. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * map_allocated(map)`.
+This is not the same as the number of elements a map can hold without resizing (for that, check out [map_capacity]({{site.baseurl/map/map-capacity}})). Rather this is the number of cells allocated for the map. To get the number of total bytes, use the expression `sizeof(<TypeName>Cell) * map_allocated(map)`.
 
-Generally this function is used to determine if you want to reset the capacity when using [map_clear]({{site.baseurl}}/map/map_clear).
+Generally this function is used to determine if you want to reset the capacity when using [map_clear]({{site.baseurl}}/map/map-clear).
 
 ## Example
 
