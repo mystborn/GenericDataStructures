@@ -18,6 +18,57 @@ title: Queue
 <ul id="search-results" style="display: hidden;"></ul>
 <ul id="nav-items">
 <li>
+<a href="{{site.baseurl}}/deque">Deque</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/deque/deque-capacity">deque_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-clear">deque_clear</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-count">deque_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-create">deque_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-create-capacity">deque_create_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-free">deque_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-free-resources">deque_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-init">deque_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-init-capacity">deque_init_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-peek-back">deque_peek_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-peek-front">deque_peek_front</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-pop-back">deque_pop_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-pop-front">deque_pop_front</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-push-back">deque_push_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-push-front">deque_push_front</a>
+</li>
+</ul>
+</li>
+<li>
 <a href="{{site.baseurl}}/grid">Grid</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
@@ -331,7 +382,7 @@ QUEUE_DEFINE_H(type_name, function_prefix, value_type)
 
 ## Fields
 
-The fields on this type should definitely not be modified except in very specific circumstances. If you need to iterate over the queue, please use the `generic_iterators/queue_iterator.h` header instead of doing it manually.
+The fields on this type generally should not be modified. If you need to iterate over the queue, please use the `generic_iterators/queue_iterator.h` header instead of doing it manually.
 
 | Name | Type | Description |
 | --- | --- | --- |
@@ -348,8 +399,8 @@ The fields on this type should definitely not be modified except in very specifi
 
 #include <generic_queue.h>
 
-QUEUE_DEFINE_H(StringQueue, str_queue, int)
-QUEUE_DEFINE_C(StringQueue, str_queue, int)
+QUEUE_DEFINE_H(StringQueue, str_queue, char*)
+QUEUE_DEFINE_C(StringQueue, str_queue, char*)
 
 StringQueue* queue = str_queue_create();
 
@@ -361,7 +412,7 @@ str_queue_enqueue(queue, "four");
 printf("Queue count: %d\n", str_queue_count(queue));
 printf("First item: %s\n", str_queue_peek(queue));
 
-while(queue_count(queue) > 0) {
+while(str_queue_count(queue) > 0) {
     printf("%s\n", str_queue_dequeue(queue));
 }
 

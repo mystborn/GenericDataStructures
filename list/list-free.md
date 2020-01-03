@@ -18,6 +18,57 @@ title: list_free
 <ul id="search-results" style="display: hidden;"></ul>
 <ul id="nav-items">
 <li>
+<a href="{{site.baseurl}}/deque">Deque</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/deque/deque-capacity">deque_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-clear">deque_clear</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-count">deque_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-create">deque_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-create-capacity">deque_create_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-free">deque_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-free-resources">deque_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-init">deque_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-init-capacity">deque_init_capacity</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-peek-back">deque_peek_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-peek-front">deque_peek_front</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-pop-back">deque_pop_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-pop-front">deque_pop_front</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-push-back">deque_push_back</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/deque/deque-push-front">deque_push_front</a>
+</li>
+</ul>
+</li>
+<li>
 <a href="{{site.baseurl}}/grid">Grid</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
