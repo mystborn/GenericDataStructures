@@ -17,7 +17,7 @@ QUEUE_DEFINE_H(type_name, function_prefix, value_type)
 
 ## Fields
 
-The fields on this type should definitely not be modified except in very specific circumstances. If you need to iterate over the queue, please use the `generic_iterators/queue_iterator.h` header instead of doing it manually.
+The fields on this type generally should not be modified. If you need to iterate over the queue, please use the `generic_iterators/queue_iterator.h` header instead of doing it manually.
 
 | Name | Type | Description |
 | --- | --- | --- |
@@ -34,8 +34,8 @@ The fields on this type should definitely not be modified except in very specifi
 
 #include <generic_queue.h>
 
-QUEUE_DEFINE_H(StringQueue, str_queue, int)
-QUEUE_DEFINE_C(StringQueue, str_queue, int)
+QUEUE_DEFINE_H(StringQueue, str_queue, char*)
+QUEUE_DEFINE_C(StringQueue, str_queue, char*)
 
 StringQueue* queue = str_queue_create();
 
@@ -47,7 +47,7 @@ str_queue_enqueue(queue, "four");
 printf("Queue count: %d\n", str_queue_count(queue));
 printf("First item: %s\n", str_queue_peek(queue));
 
-while(queue_count(queue) > 0) {
+while(str_queue_count(queue) > 0) {
     printf("%s\n", str_queue_dequeue(queue));
 }
 

@@ -2,8 +2,6 @@
 
 Gets the item that was first added to the queue without removing it.
 
-Count checking is done via `assert`, so if it's needed in a production environment, it will need to be handled by the caller. The behaviour is otherwise undefined if you try and dequeue from and empty queue.
-
 ## Syntax
 
 ```c
@@ -15,6 +13,10 @@ value_type queue_peek(Queue* queue);
 | queue | Queue* | A pointer to the queue. |
 
 **Returns:** The item that was first added to the queue.
+
+## Remarks
+
+Count checking is done via `assert`, so if it's needed in a production environment, it will need to be handled by the caller. The behaviour is otherwise undefined if you try and get an item from an empty queue.
 
 ## Example
 

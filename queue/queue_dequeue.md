@@ -2,8 +2,6 @@
 
 Removes the item that was first added to the queue.
 
-Count checking is done via `assert`, so if it's needed in a production environment, it will need to be handled by the caller. The behaviour is otherwise undefined if you try and dequeue from and empty queue.
-
 ## Syntax
 
 ```c
@@ -15,6 +13,10 @@ value_type queue_dequeue(Queue* queue);
 | queue | Queue* | A pointer to the queue. |
 
 **Returns:** The value that was most recently added to the queue.
+
+## Remarks
+
+Count checking is done via `assert`, so if it's needed in a production environment, it will need to be handled by the caller. The behaviour is otherwise undefined if you try and dequeue from an empty queue.
 
 ## Example
 
