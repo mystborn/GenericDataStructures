@@ -80,6 +80,14 @@ grid_test = executable(
     dependencies: deps
 )
 
+trie_test = executable(
+    'trie_test',
+    'trie_test.c',
+    link_args: link_args,
+    include_directories: test_inc,
+    dependencies: deps
+)
+
 test('RB Tree Test', rb_tree_test)
 test('Map Test', map_test)
 test('Set Test', set_test)
@@ -87,3 +95,4 @@ test('Queue Test', queue_test)
 test('Deque Test', deque_test)
 test('List Test', list_test)
 test('Grid Test', grid_test)
+test('Trie Test', trie_test)

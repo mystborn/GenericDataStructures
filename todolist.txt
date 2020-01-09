@@ -5,13 +5,16 @@ Additional Data Structure:
   ☐ Trie @low
   ☐ Linked List @critical
   ☐ Pair @low
-  ☐ Deque @high
 
 Extra Utilities:
-  
+  ☐ [generic_map.h] map (create and init)_capacity functions
+
+Bugs:
+  ☐ [generic_iterators/trie_iterator.h] Trie iterator tries to return the same value twice in a row sometimes. Currently works with bandaid.
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Deque @high @done (20-01-07 14:13) @project(Additional Data Structure)
  ✔ create and destroy functions - These will allocate and free the actual data structures themselves, not just the fields. @high @done (19-09-08 19:36) @project(Extra Utilities)
  ✔ map - get_and_remove function - A function that gets both the key and value from the map, then removes the associated cell. The user can then free or otherwise manipulate the left over key and value data. @high @done (19-09-08 19:35) @project(Extra Utilities)
  ✔ Grid @low @done (19-09-05 13:44) @project(Additional Data Structure)
