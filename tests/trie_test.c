@@ -288,6 +288,254 @@ START_TEST(trie_set_complex_add_and_remove) {
 }
 END_TEST
 
+START_TEST(trie_set_simple_children_count) {
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++)
+        ck_assert(str_trie_add(trie_set, simple_words[i]));
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++) {
+        if(simple_words[i][0] == 'c')
+            starts_with++;
+    }
+
+    unsigned int count = str_trie_children_count(trie_set, "c", 20);
+    ck_assert(count == starts_with);
+}
+END_TEST
+
+START_TEST(trie_set_complex_children_count) {
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++)
+        ck_assert(str_trie_add(trie_set, complex_words[i]));
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++) {
+        if(complex_words[i][0] == 'c')
+            starts_with++;
+    }
+
+    unsigned int count = str_trie_children_count(trie_set, "c", 20);
+    ck_assert(count == starts_with);
+}
+END_TEST
+
+START_TEST(trie_set_large_children_count) {
+    char words[271][4];
+    words[0][0] = 'a';
+    words[0][1] = 0;
+    int index = 1;
+    for(int i = 0; i < 10; i++) {
+        words[index][0] = 'a';
+        words[index][1] = 'a' + i;
+        words[index][2] = 0;
+        index++;
+        for(int j = 0; j < 26; j++, index++) {
+            words[index][0] = 'a';
+            words[index][1] = 'a' + i;
+            words[index][2] = 'a' + j;
+            words[index][3] = 0;
+        }
+    }
+
+    for(int i = 0; i < 271; i++)
+        str_trie_add(trie_set, words[i]);
+
+    unsigned int count = str_trie_children_count(trie_set, "a", 5);
+    ck_assert(count == 270);
+    count = str_trie_children_count(trie_set, "aa", 4);
+    ck_assert(count == 26);
+}
+END_TEST
+
+START_TEST(trie_set_simple_children_all_alloc) {
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++)
+        ck_assert(str_trie_add(trie_set, simple_words[i]));
+
+    trie_map = si_trie_create();
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++) {
+        if(simple_words[i][0] == 'c') {
+            si_trie_add(trie_map, simple_words[i], starts_with);
+            starts_with++;
+        }
+    }
+
+
+    char** values = calloc(starts_with, sizeof(*values));
+    int* word_count = calloc(starts_with, sizeof(*word_count));
+
+    unsigned int count = str_trie_children(trie_set, "c", values, starts_with, 10, true);
+    ck_assert(count == starts_with);
+
+    for(int i = 0; i < count; i++) {
+        int index;
+        ck_assert(si_trie_try_get(trie_map, values[i], &index));
+        word_count[index]++;
+    }
+
+    for(int i = 0; i < count; i++) {
+        free(values[i]);
+        ck_assert(word_count[i] == 1);
+    }
+
+    free(values);
+    free(word_count);
+    si_trie_free(trie_map);
+}
+END_TEST
+
+START_TEST(trie_set_simple_children_all_no_alloc) {
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++)
+        ck_assert(str_trie_add(trie_set, simple_words[i]));
+
+    trie_map = si_trie_create();
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++) {
+        if(simple_words[i][0] == 'c') {
+            si_trie_add(trie_map, simple_words[i], starts_with);
+            starts_with++;
+        }
+    }
+
+    const int max_length = 10;
+
+    char** values = calloc(starts_with, sizeof(*values));
+    for(int i = 0; i < starts_with; i++)
+        values[i] = calloc(max_length, sizeof(**values));
+
+    int* word_count = calloc(starts_with, sizeof(*word_count));
+
+    unsigned int count = str_trie_children(trie_set, "c", values, starts_with, max_length, true);
+    ck_assert(count == starts_with);
+
+    for(int i = 0; i < count; i++) {
+        int index;
+        ck_assert(si_trie_try_get(trie_map, values[i], &index));
+        word_count[index]++;
+    }
+
+    for(int i = 0; i < count; i++) {
+        free(values[i]);
+        ck_assert(word_count[i] == 1);
+    }
+
+    free(values);
+    free(word_count);
+    si_trie_free(trie_map);
+}
+END_TEST
+
+START_TEST(trie_set_simple_children_partial) {
+    str_trie_add(trie_set, "read");
+    str_trie_add(trie_set, "reads");
+    char buffer[10] = {0};
+    char* values[2] = { buffer }; 
+
+    const int max_length = 4;
+
+    ck_assert(str_trie_children_count(trie_set, "r", max_length) == 1);
+    unsigned int count = str_trie_children(trie_set, "r", values, 1, max_length, false);
+    ck_assert(count == 1);
+    ck_assert(strcmp(buffer, "read") == 0);
+}
+END_TEST
+
+START_TEST(trie_set_complex_children_all_alloc) {
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++)
+        ck_assert(str_trie_add(trie_set, complex_words[i]));
+
+    trie_map = si_trie_create();
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++) {
+        if(complex_words[i][0] == 'c') {
+            si_trie_add(trie_map, complex_words[i], starts_with);
+            starts_with++;
+        }
+    }
+
+    const int max_length = 20;
+
+    char** values = calloc(starts_with, sizeof(*values));
+    for(int i = 0; i < starts_with; i++)
+        values[i] = calloc(max_length, sizeof(**values));
+    int* word_count = calloc(starts_with, sizeof(*word_count));
+
+    unsigned int count = str_trie_children(trie_set, "c", values, starts_with, max_length, true);
+    ck_assert(count == starts_with);
+
+    for(int i = 0; i < count; i++) {
+        int index;
+        ck_assert(si_trie_try_get(trie_map, values[i], &index));
+        word_count[index]++;
+    }
+
+    for(int i = 0; i < count; i++) {
+        free(values[i]);
+        ck_assert(word_count[i] == 1);
+    }
+
+    free(values);
+    free(word_count);
+    si_trie_free(trie_map);
+}
+END_TEST
+
+START_TEST(trie_set_complex_children_all_no_alloc) {
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++)
+        ck_assert(str_trie_add(trie_set, complex_words[i]));
+
+    trie_map = si_trie_create();
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(complex_words); i++) {
+        if(complex_words[i][0] == 'c') {
+            si_trie_add(trie_map, complex_words[i], starts_with);
+            starts_with++;
+        }
+    }
+
+
+    char** values = calloc(starts_with, sizeof(*values));
+    int* word_count = calloc(starts_with, sizeof(*word_count));
+
+    unsigned int count = str_trie_children(trie_set, "c", values, starts_with, 20, true);
+    ck_assert(count == starts_with);
+
+    for(int i = 0; i < count; i++) {
+        int index;
+        ck_assert(si_trie_try_get(trie_map, values[i], &index));
+        word_count[index]++;
+    }
+
+    for(int i = 0; i < count; i++) {
+        free(values[i]);
+        ck_assert(word_count[i] == 1);
+    }
+
+    free(values);
+    free(word_count);
+    si_trie_free(trie_map);
+}
+END_TEST
+
+START_TEST(trie_set_children_null_out_values_returns_children_count) {
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++)
+        ck_assert(str_trie_add(trie_set, simple_words[i]));
+
+    int starts_with = 0;
+    for(int i = 0; i < ARRAY_SIZE(simple_words); i++) {
+        if(simple_words[i][0] == 'c') {
+            starts_with++;
+        }
+    }
+
+    unsigned int count = str_trie_children(trie_set, "c", NULL, 0, 20, false);
+    ck_assert(count == starts_with);
+}
+END_TEST
+
 START_TEST(trie_set_simple_iter) {
     int word_count[ARRAY_SIZE(simple_words)] = { 0 };
     for(int i = 0; i < ARRAY_SIZE(simple_words); i++)
@@ -800,6 +1048,15 @@ int main(void) {
     tcase_add_test(tc_set, trie_set_complex_remove_missing_value_fails);
     tcase_add_test(tc_set, trie_set_simple_add_and_remove);
     tcase_add_test(tc_set, trie_set_complex_add_and_remove);
+    tcase_add_test(tc_set, trie_set_simple_children_count);
+    tcase_add_test(tc_set, trie_set_complex_children_count);
+    tcase_add_test(tc_set, trie_set_large_children_count);
+    tcase_add_test(tc_set, trie_set_simple_children_all_alloc);
+    tcase_add_test(tc_set, trie_set_simple_children_all_no_alloc);
+    tcase_add_test(tc_set, trie_set_simple_children_partial);
+    tcase_add_test(tc_set, trie_set_complex_children_all_alloc);
+    tcase_add_test(tc_set, trie_set_complex_children_all_no_alloc);
+    tcase_add_test(tc_set, trie_set_children_null_out_values_returns_children_count);
     tcase_add_test(tc_set, trie_set_simple_iter);
     tcase_add_test(tc_set, trie_set_complex_iter);
 
