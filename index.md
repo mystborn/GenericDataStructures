@@ -69,6 +69,33 @@ title: Home
 </ul>
 </li>
 <li>
+<a href="{{site.baseurl}}/event">Event</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/event/event-create">event_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-free">event_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-free-resources">event_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-init">event_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-subscribe">event_subscribe</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-trigger">event_trigger</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/event/event-unsubscribe">event_unsubscribe</a>
+</li>
+</ul>
+</li>
+<li>
 <a href="{{site.baseurl}}/grid">Grid</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
@@ -197,6 +224,51 @@ title: Home
 </li>
 <li>
 <a href="{{site.baseurl}}/map/map-try-get">map_try_get</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="{{site.baseurl}}/option">Option</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/option/option-default">option_default</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/option/option-has-value">option_has_value</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/option/option-make">option_make</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/option/option-value">option_value</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/option/option-value-or-default">option_value_or_default</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool">Pool</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/pool/pool-create">pool_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool/pool-free">pool_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool/pool-free-resources">pool_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool/pool-get">pool_get</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool/pool-init">pool_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/pool/pool-release">pool_release</a>
 </li>
 </ul>
 </li>
@@ -356,6 +428,98 @@ title: Home
 </li>
 </ul>
 </li>
+<li>
+<a href="{{site.baseurl}}/trie">Trie</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map">trie\trie_map</a>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-add">trie_add</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children">trie_children</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children-count">trie_children_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-clear">trie_clear</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-count">trie_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-create">trie_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free">trie_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free-resources">trie_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get">trie_get</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-init">trie_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-map/trie-try-get">trie_try_get</a>
+</li>
+</ul>
+</li>
+<li>
+<button class="nav-dropdown">trie\trie_set</button>
+<ul class="nav-dropdown-container">
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-add">trie_add</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children">trie_children</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children-count">trie_children_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-clear">trie_clear</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-contains">trie_contains</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-count">trie_count</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-create">trie_create</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free">trie_free</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free-resources">trie_free_resources</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-init">trie_init</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie/trie-set/trie-remove">trie_remove</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </nav>
@@ -365,7 +529,7 @@ title: Home
 
 # Generic Data Structures
 
-GenericDataStructures is a set of C header files that contain macros which generate strongly typed data structures in a fashion similar to C++ templates. Each data structure has two macros to generate the type: `<TYPE>\_DEFINE\_H` and `<TYPE>\_DEFINE_C` where `<TYPE>` corresponds to the data structure name. The first macro can can go in a header file if the functions are used across multiple compilation units. The second should only be used in a source file. If you only need the collection in one location, both macros can be in the same file, as long as the `\_H` one is placed first.
+GenericDataStructures is a set of C header files that contain macros which generate strongly typed data structures in a fashion similar to C++ templates. Each data structure has two macros to generate the type: `<TYPE>\_DEFINE\_H` and `<TYPE>\_DEFINE_C` where `<TYPE>` corresponds to the data structure name. The first macro can go in a header file if the functions are used across multiple compilation units. The second should only be used in a source file. If you only need the collection in one location, both macros can be in the same file, as long as the `\_H` one is placed first.
 
 Those macros will generate a type and any functions needed to use the type. Each macro takes the desired type name as its first argument, then takes a name to prefix each function related to the type as its second. For example, when generating a list of ints (i.e. C++ `vector<int>` or C# `List<T>`), the macros will look something like this:
 
