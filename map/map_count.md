@@ -26,7 +26,10 @@ si_map_add(map, "one", 1);
 si_map_add(map, "zero", 0);
 
 uint32_t count = si_map_count(map);
-assert(count == 2);
+printf("Count: %u\n", count);
 
 si_map_free(map);
+
+// Output:
+// Count: 2
 ```

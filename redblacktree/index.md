@@ -136,7 +136,7 @@ nodes[2].value = "Elise";
 
 ### Iterating
 
-There are a couple of extensions for iterating over the nodes in a rb-tree. All of them iterate over the tree in-order. One iterates over the keys, one over the values, and finally one iterates over both the keys and values together. It's meant to be used like a for loop. Unfortunately, the extension needs the type of the tree to function properly, making it a little more cumbersome compared to the iterators, but it's still immensely useful.
+There are a couple of extensions for iterating over the nodes in a rb-tree. All of them iterate over the tree in-order. One iterates over the keys, one over the values, and finally one iterates over both the keys and values together. It's meant to be used like a for loop. Unfortunately, the extension needs the type of the tree to function properly, making it a little more cumbersome compared to the other iterators, but it's still immensely useful.
 
 ```c
 #include <generic_rbtree.h>

@@ -1,6 +1,6 @@
 # Generic Data Structures
 
-GenericDataStructures is a set of C header files that contain macros which generate strongly typed data structures in a fashion similar to C++ templates. Each data structure has two macros to generate the type: `<TYPE>\_DEFINE\_H` and `<TYPE>\_DEFINE_C` where `<TYPE>` corresponds to the data structure name. The first macro can can go in a header file if the functions are used across multiple compilation units. The second should only be used in a source file. If you only need the collection in one location, both macros can be in the same file, as long as the `\_H` one is placed first.
+GenericDataStructures is a set of C header files that contain macros which generate strongly typed data structures in a fashion similar to C++ templates. Each data structure has two macros to generate the type: `<TYPE>\_DEFINE\_H` and `<TYPE>\_DEFINE_C` where `<TYPE>` corresponds to the data structure name. The first macro can go in a header file if the functions are used across multiple compilation units. The second should only be used in a source file. If you only need the collection in one location, both macros can be in the same file, as long as the `\_H` one is placed first.
 
 Those macros will generate a type and any functions needed to use the type. Each macro takes the desired type name as its first argument, then takes a name to prefix each function related to the type as its second. For example, when generating a list of ints (i.e. C++ `vector<int>` or C# `List<T>`), the macros will look something like this:
 
