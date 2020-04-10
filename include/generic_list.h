@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Todo: 
+// bool add_range(type_name* list, value_type* values, unsigned int count);
+// bool insert_range(type_name* list, unsigned int index, value_type* values, unsigned int count);
+
 #define LIST_DEFINE_H(type_name, function_prefix, value_type) \
     typedef struct type_name { \
         value_type* buffer; \
@@ -28,7 +32,7 @@
     \
     static inline void function_prefix ## _free(type_name* list) { free(list->buffer); free(list); } \
     \
-    static inline value_type function_prefix ## _get(type_name* list, unsigned int index) {  \
+    static inline value_type function_prefix ## _get(type_name* list, unsigned int index) { \
         assert(index < list->count); \
         return list->buffer[index]; \
     } \

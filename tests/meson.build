@@ -80,9 +80,33 @@ grid_test = executable(
     dependencies: deps
 )
 
+pool_test = executable(
+    'pool_test',
+    'pool_test.c',
+    link_args: link_args,
+    include_directories: test_inc,
+    dependencies: deps
+)
+
+event_test = executable(
+    'event_test',
+    'event_test.c',
+    link_args: link_args,
+    include_directories: test_inc,
+    dependencies: deps
+)
+
 trie_test = executable(
     'trie_test',
     'trie_test.c',
+    link_args: link_args,
+    include_directories: test_inc,
+    dependencies: deps
+)
+
+option_test = executable(
+    'option_test',
+    'option_test.c',
     link_args: link_args,
     include_directories: test_inc,
     dependencies: deps
@@ -95,4 +119,7 @@ test('Queue Test', queue_test)
 test('Deque Test', deque_test)
 test('List Test', list_test)
 test('Grid Test', grid_test)
+test('Pool Test', pool_test)
+test('Event Test', event_test)
 test('Trie Test', trie_test)
+test('Option Test', option_test)
