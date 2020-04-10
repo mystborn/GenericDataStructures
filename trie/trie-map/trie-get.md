@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_count
+title: trie_get
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_count
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_count
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,21 +527,26 @@ title: trie_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_count (Map)
+# trie_get (Map)
 
-Gets the number of items in a trie.
+Gets the value mapped to a key in a trie.
 
 ## Syntax
 
 ```c
-unsigned int trie_count(TrieMap* trie);
+value_type trie_get(TrieMap* trie, key_type* key);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | An array of values that make a key (e.g. a string). |
 
-**Returns:** The number of items.
+**Returns:** The value mapped to the key.
+
+## Remarks
+
+If the key did not exist in the trie, the returned value is equal to `(value_type){0}`.
 
 ## Example
 
@@ -552,16 +557,13 @@ TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 StringTrie* trie = str_trie_create();
 
 str_trie_add(trie, "one", 1);
-str_trie_add(trie, "two", 2);
-str_trie_add(trie, "three", 3);
 
-unsigned int count = str_trie_count(trie);
-printf("Count: %u\n", count);
+printf("Value: %d\n", str_trie_get(trie, "one"));
 
 str_trie_free(trie);
 
 // Output:
-// Count: 3
+// Value: 1
 ```
 
 {% include footer.html %}

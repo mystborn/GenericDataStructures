@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_children
+title: trie_get_and_remove
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_children
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_children
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown active">Trie (Set)</button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown">Trie (Set)</button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,71 +527,51 @@ title: trie_children
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_children (Set)
+# trie_get_and_remove (Map)
 
-Gets the values in a trie that start with the specified value.
+Gets the value mapped to a key in a trie, then removes both.
 
 ## Syntax
 
 ```c
-unsigned int trie_children(TrieSet* trie, value_type* value, value_type** out_values, unsigned int size, unsigned int max_length, bool allocate_results);
+bool trie_get_and_remove(TrieMap* trie, key_type* key, value_type* out_value);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieSet* | A pointer to the trie. |
-| value | value_type* | The starting value of the items. |
-| out_values | value_type** | An array to store the children in. |
-| size | unsigned int | The length of `out_values`. |
-| max_length | unsigned int | The maximum length of an item to be added. |
-| allocate_results | bool | Determines if the items in out_values are allocated by the function or the user. |
+| trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | An array of values that make a key (e.g. a string). |
+| out_value | value_type* | A pointer to be filled with the value if the key is found. |
 
-**Returns:** If `out_values` is not `NULL`, the number of items added to `out_values`. Otherwise, this returns the number of items that start with `value` and are no longer than `max_length`.
+**Returns:** `true` if the key exists; `false` otherwise.
 
 ## Remarks
 
-If `value` is `NULL`, gets all of the children. Consider using the trie_iter extension.
+The `out_value` will only be assigned to if it's not NULL. `out_value` is not modified if the key was not found.
 
-If `out_values` is `NULL`, returns the result of [trie_children_count]({{site.baseurl}}/trie/trie-set/trie_children_count).
-
-If `allocate_results` is `true`, the items in `out_values` will be allocated by this function. In this case, it's up to the caller to free the memory. Otherwise, it's expected that each item in `out_values` should be big enough to fit an item as large as `max_length` + 1 (to null-terminate).
-
-When the function allocates the results, it uses the minimum amount of space necessary for each value, so it is more memory efficient, but if the memory is already allocated, might as well use the existing space.
+This function can be used to efficiently get a value for further use before removing it from the trie.
 
 ## Example
 
 ```c
-TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
-TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
+TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
+TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "adam");
-str_trie_add(trie, "alex");
-str_trie_add(trie, "alejandro");
+str_trie_add(trie, "one", 1);
 
-unsigned int size = 4;
-char** values = malloc(4 * sizeof(*values));
+int value = 0;
+bool removed = str_trie_get_and_remove(trie, "one", &value);
 
-unsigned int count = str_trie_children(trie, "al", values, size, INT_MAX, true);
-
-printf("Count: %u\n", count);
-
-for(int i = 0; i < count; i++) {
-    printf("%s\n", values[i]);
-}
-
-// Make sure to clean up the memory allocated by the function.
-for(int i = 0; i < count; i++) {
-    free(values[i]);
-}
+printf("Removed? %s\n", removed ? "true" : "false");
+printf("Value: %d\n", value);
 
 str_trie_free(trie);
 
 // Output:
-// Count: 2
-// alex
-// alejandro
+// Removed? true
+// Value: 1
 ```
 
 {% include footer.html %}

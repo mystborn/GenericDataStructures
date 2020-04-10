@@ -437,9 +437,6 @@ title: deque_capacity
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: deque_capacity
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>

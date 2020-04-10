@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_count
+title: trie_children_count
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_count
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_count
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown active">Trie (Set)</button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown">Trie (Set)</button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,41 +527,48 @@ title: trie_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_count (Set)
+# trie_children_count (Map)
 
-Gets the number of items in the trie.
+Gets the number of keys in a trie that start with the specified value.
 
 ## Syntax
 
 ```c
-unsigned int trie_count(TrieSet* trie);
+unsigned int trie_children_count(TrieMap* trie, key_type* key, unsigned int max_length);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieSet* | A pointer to the trie. |
+| trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | The starting value of the children keys. |
+| max_length | unsigned int | The maximum length of a key to be counted. |
 
-**Returns:** The number of items currently in the trie.
+**Returns:** The number of keys in the trie that start with `key` and are no longer than `max_width`. Returns 0 if `key` is not in the trie.
+
+## Remarks
+
+If `key` is `NULL`, counts all children.
 
 ## Example
 
 ```c
-TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
-TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
+TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
+TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "moo");
-str_trie_add(trie, "caw");
-str_trie_add(trie, "oink");
+str_trie_add(trie, "one", 1);
+str_trie_add(trie, "two", 2);
+str_trie_add(trie, "three", 3);
 
-unsigned int count = str_trie_count(trie);
-printf("Count: %u\n", count);
+unsigned int count = str_trie_children_count(trie, "t", INT_MAX);
+
+printf("Keys starting with 't': %u", count);
 
 str_trie_free(trie);
 
 // Output:
-// Count: 3
+// Keys starting with 't': 2
 ```
 
 {% include footer.html %}

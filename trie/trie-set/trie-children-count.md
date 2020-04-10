@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_create
+title: trie_children_count
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_create
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_create
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,17 +527,27 @@ title: trie_create
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_create (Set)
+# trie_children_count (Set)
 
-Allocates and initializes a new trie.
+Gets the number of items in a trie that start with the specified value.
 
 ## Syntax
 
 ```c
-TrieSet* trie_create(void);
+unsigned int trie_children_count(TrieSet* trie, value_type* value, unsigned int max_length);
 ```
 
-**Returns:** The newly created trie on success, NULL on allocation failure.
+| Name | Type | Description |
+| --- | --- | --- |
+| trie | TrieSet* | A pointer to the trie. |
+| value | value_type* | The starting value of the items. |
+| max_length | unsigned int | The maximum length of an item to be counted. |
+
+**Returns:** The number of items in the trie that start with `value` and are no longer than `max_length`. Returns 0 if `item` is not in the trie.
+
+## Remarks
+
+If `value` is `NULL`, counts all children.
 
 ## Example
 
@@ -547,9 +557,23 @@ TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
 StringTrie* trie = str_trie_create();
 
-// Use the trie...
+str_trie_add(trie, "adam");
+str_trie_add(trie, "alex");
+str_trie_add(trie, "alejandro");
+
+unsigned int count = str_trie_children_count(trie, "al", INT_MAX);
+
+printf("Names starting with 'al': %u\n", count);
+
+count = str_trie_children_count(trie, "al", 6);
+
+printf("Names starting with 'al' with 6 characters or less: %u\n", count);
 
 str_trie_free(trie);
+
+// Output:
+// Names starting with 'al': 2
+// Names starting with 'al' with 6 characters or less: 1
 ```
 
 {% include footer.html %}

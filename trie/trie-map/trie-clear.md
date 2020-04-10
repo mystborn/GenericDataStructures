@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_init
+title: trie_clear
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_init
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_init
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,21 +527,25 @@ title: trie_init
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_init (Map)
+# trie_clear (Map)
 
-Initializes an existing trie.
+Removes all items from a trie.
 
 ## Syntax
 
 ```c
-bool trie_init(TrieMap* trie);
+bool trie_clear(TrieMap* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
 
-**Returns:** `true` on success, `false` if there was an allocation failure.
+**Returns:** `true` on success, `false` if there was an allocation error.
+
+## Remarks
+
+This function literally just calls [trie_free_resource]({{site.baseurl}}/trie/trie-map/trie_free_resources) then [trie_init]({{site.baseurl}}/trie/trie-map/trie_init), so the return value is just forwarded from `trie_init`.
 
 ## Example
 
@@ -549,12 +553,22 @@ bool trie_init(TrieMap* trie);
 TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
 TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
-StringTrie trie;
-str_trie_init(&trie);
+StringTrie* trie = str_trie_create();
 
-// Use the trie...
+str_trie_add(trie, "one", 1);
+str_trie_add(trie, "two", 2);
 
-str_trie_free_resources(&trie);
+printf("Count: %u\n", str_trie_count(trie));
+
+str_trie_clear(trie);
+
+printf("Count: %u\n", str_trie_count(trie));
+
+str_trie_free(trie);
+
+// Output:
+// Count: 2
+// Count: 0
 ```
 
 {% include footer.html %}

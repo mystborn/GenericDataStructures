@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_children
+title: Trie (Map)
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_children
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_children
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,81 +527,151 @@ title: trie_children
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_children (Map)
+# Trie (Map Version)
 
-Gets the items in a trie whose keys start with the specified value.
+A [trie](https://en.wikipedia.org/wiki/Trie) is a data structure that specializes in fast array lookups. This implementation can only use strings as the map key. They can, however be of type `char*` or `wchar_t*` or some compiler specific string type.
 
-## Syntax
+# Syntax
 
 ```c
-unsigned int trie_children(TrieMap* trie, key_type* key, key_type** keys, unsigned int keys_size, value_type* values, unsigned int values_size, unsigned int max_length, bool allocate_keys);
+TRIE_MAP_DEFINE_H(type_name, function_prefix, key_type, value_type)
+TRIE_MAP_DEFINE_C(type_name, function_prefix, key_type, value_type)
 ```
+
+| Name | Description |
+| --- | --- |
+| type_name | The name of the generated type. |
+| function_prefix | The name to prefix the trie functions with. |
+| key_type | The type of the key used for lookups. |
+| value_type | The value associated with the key. |
+
+## Fields
+
+These generally shouldn't be accessed directly (instead use the corresponding functions. They should be inlined), but they're documented just in case they're needed. This data type creates a node type `struct <type_name>Node` where `<type_name>` will be the name of the trie type. It also creates a helper struct used to aid in iterating over the trie called `<type_name>IterState`. In addition, it creates a [map]({{site.baseurl/map}}) that is used internally as well.
+
+__Node:__
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | The starting value of the children keys. |
-| keys | key_type** | An array to store the keys in. |
-| keys_size | unsigned int | The length of `keys`. |
-| values | value_type* | An array to store the values in. |
-| values_size | unsigned int | The length of `values`. |
-| max_length | unsigned int | The maximum length of a key to be added. |
-| allocate_keys | bool | Determines if the keys in `keys` are allocated by the function or the user. |
+| map | ___&lt;type_name&gt;Map* | A map used to store child nodes. |
+| count | unsigned int | The number of children in this node. |
+| depth | unsigned int | This nodes location in the key array. |
+| key | key_type | Stores the raw key value at this location in the key array. |
+| value | value_type | If this node has a value, stores the value. |
 
-**Returns:** If `keys` or `values` are not `NULL`, the number of items added to them. Otherwise, returns the number of keys that start with `key` and are no longer than `max_length`.
+__Trie:__
 
-## Remarks
+| Name | Type | Description |
+| --- | --- | --- |
+| root | TrieNode | A blank root node that leads to all of the children. |
+| count | unsigned int | The number of values in the trie. |
+| max_depth | The maximum length of an array added to the trie so far. |
 
-If `key` is `NULL`, gets all of the children. Consider using the trie_iter extension.
+__IterState:__
 
-`keys` or `values` can be `NULL` to only get one or the other.
+| Name | Type | Description |
+| --- | --- | --- |
+| node | TrieNode | The current node visited by the iterating function. |
+| index | unsigned int | The number of values found by the iterating function so far. |
 
-The key and value at an index in `keys` and `values` correlate to the item in the map. For example if `keys[0]` is `"one"` and `values[0]` is `1`, the item was added to the trie like so `trie_add(trie, "one", 1)`.
+__Map:__
 
-The sizes of `keys` and `values` can be different.
+```c
+MAP_DEFINE_H(___<type_name>Map, ___<function_prefix>_map, key_type, <type_name>Node)
+```
 
-If both `keys` and `values` are `NULL`, returns the result of [trie_children_count]({{site.baseurl}}/trie/trie-map/trie_children_count).
-
-If `allocate_keys` is `true`, the values in `keys` will be allocated by the function. In this case, it's up to the called to free the memory. Otherwise, it's expected that each item in `keys` should be big enough to a fit a key as large as `max_length`  + 1 (to null-terminate).
-
-When the function allocates a key, it uses the minimum amount of space necessary to hold the value, so it is more memory efficient, but it the memory has alread been allocated, might as well use the existing space.
+This may seem pretty complicated, but the actual api of the trie is relatively simple.
 
 ## Example
 
+The following creates a trie that maps words to their definitions, gets some of the definitions, and then removes one of the words.
+
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+#include <generic_trie.h>
 
-StringTrie* trie = str_trie_create();
+TRIE_MAP_DEFINE_H(Dictionary, dict, char, char*)
+TRIE_MAP_DEFINE_C(Dictionary, dict, char, char*)
 
-str_trie_add(trie, "one", 1);
-str_trie_add(trie, "two", 2);
-str_trie_add(trie, "three", 3);
+Dictionary* dict = dict_create();
 
-unsigned int size = 4;
-char** keys = malloc(size * sizeof(*keys));
-int* values = malloc(size * sizeof(*values));
+dict_add(dict, "abolish", "To do away with");
+dict_add(dict, "abolition", "The act of abolishing");
+dict_add(dict, "absolve", "To free from guilt");
+dict_add(dict, "absolute", "Free from imperfection");
 
-unsigned int count = str_trie_childre(trie, "t", keys, size, values, size, INT_MAX, true);
+char* definition = dict_get("absolve");
+printf("absolve: %s\n", definition);
 
-printf("Count: %u\n", count);
+definition = dict_get("abolish");
+printf("abolish: %s\n", definition);
 
-for(int i = 0; i < count; i++) {
-    printf("Key: %s, Value: %d\n", keys[i], values[i]);
-}
+dict_remove(dict, "abolition");
 
-// Make sure to clean up the memory allocated by the function.
-
-for(int i = 0; i < count; i++) {
-    free(keys[i]);
-}
-
-str_trie_free(trie);
+dict_free(dict);
 
 // Output:
-// Count: 2
-// Key: two, Value: 2
-// Key: three, Value: 3
+// absolve: To free from guilt
+// abolish: To do away with
+```
+
+### Iterating
+
+There is a function that gets the values from either the whole trie, or just the values starting from a specific key called [trie_children]({{site.baseurl}}/trie/trie-map/trie-children). This can be used to efficiently iterate over the values. However, there is a set of macro-based extension that also allows iterating over the trie. These are meant to be used like a for-loop. Unfortunately, the extension requires the type of the trie to function properly, making it a little more cumbersome compared to the other iterators, but it's still useful.
+
+This trie implementation is unordered.
+
+Keep in mind that this extension does perform heap-based allocations. It's also a rather large macro, so use it sparingly, or else the output size will increase rapidly.
+
+In the following, we map words to their definitions, then iterate over the trie in all of the possible ways.
+
+```c
+#include <generic_trie.h>
+
+TRIE_MAP_DEFINE_H(Dictionary, dict, char, char*)
+TRIE_MAP_DEFINE_C(Dictionary, dict, char, char*)
+
+Dictionary* dict = dict_create();
+
+dict_add(dict, "abolish", "To do away with");
+dict_add(dict, "abolition", "The act of abolishing");
+dict_add(dict, "absolve", "To free from guilt");
+dict_add(dict, "absolute", "Free from imperfection");
+
+char* word;
+char* definition;
+
+trie_map_iter_key_start(Dictionary, dict, word) {
+    puts(word);
+}
+trie_map_iter_end
+
+// Output:
+// abolish
+// abolition
+// absolve
+// absolute
+
+trie_map_iter_value_start(Dictionary, dict, definition)
+    puts(definition);
+trie_map_iter_end
+
+// Output:
+// To do away with
+// The act of abolishing
+// To free from guilt
+// free from imperfection
+
+trie_map_iter_start(Dictionary, dict, word, definition) {
+    printf("%s: %s\n", word, definition);
+}
+
+// Output:
+// abolish: To do away with
+// abolition: The act of abolishing
+// absolve: To free from guilt
+// absolute: Free from imperfection
+
+dict_free(dict);
 ```
 
 {% include footer.html %}

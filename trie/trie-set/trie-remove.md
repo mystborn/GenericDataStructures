@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_free
+title: trie_remove
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_free
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_free
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,19 +527,22 @@ title: trie_free
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_ (Set)
+# trie_remove (Set)
 
-Frees the resources used by the trie, then frees the trie itself.
+Removes an item from the trie.
 
 ## Syntax
 
 ```c
-void trie_free(TrieSet* trie);
+bool trie_remove(TrieSet* trie, value_type* item);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieSet* | A pointer to the trie. |
+| item | value_type* | An array of values that make an item (e.g. a string). |
+
+**Returns:** `true` on success, `false` if the item has not been added.
 
 ## Example
 
@@ -549,9 +552,24 @@ TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
 StringTrie* trie = str_trie_create();
 
-// Use the trie...
+str_trie_add(trie, "moo");
+str_trie_add(trie, "caw");
+
+printf("Count: %u\n", str_trie_count(trie));
+printf("Conains moo? %s\n", str_trie_contains(trie, "moo") ? "true" : "false");
+
+str_trie_remove(trie, "moo");
+
+printf("Count: %u\n", str_trie_count(trie));
+printf("Conains moo? %s\n", str_trie_contains(trie, "moo") ? "true" : "false");
 
 str_trie_free(trie);
+
+// Output:
+// Count: 2
+// Conains moo? true
+// Count 1
+// Contains moo? false
 ```
 
 {% include footer.html %}

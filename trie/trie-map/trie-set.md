@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_free_resources
+title: trie_set
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_free_resources
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_free_resources
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,19 +527,23 @@ title: trie_free_resources
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_free_resources (Map)
+# trie_set (Map)
 
-Frees the resources used internally by the trie without freeing the trie itself.
+Adds or replaces a key-value pair in a trie.
 
 ## Syntax
 
 ```c
-void trie_free_resources(TrieMap* trie);
+bool trie_set(TrieMap* trie, key_type* key, value_type value);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | An array of values that make a key (e.g. a string). |
+| value | value_type | The value to set in the trie. |
+
+**Returns:** `true` on success, `false` on allocation failure.
 
 ## Example
 
@@ -547,12 +551,21 @@ void trie_free_resources(TrieMap* trie);
 TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
 TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
-StringTrie trie;
-str_trie_init(&trie);
+StringTrie* trie = str_trie_create();
 
-// Use the trie...
+str_trie_add(trie, "one", 1);
 
-str_trie_free_resources(&trie);
+bool result = str_trie_add(trie, "one", 2);
+printf("Replaced? %s\n", result ? "true" : "false");
+
+result = str_trie_set(trie, "one", 2);
+printf("Replaced? %s\n", result ? "true" : "false");
+
+str_trie_free(trie);
+
+// Output:
+// Replaced? false
+// Replaced? true
 ```
 
 {% include footer.html %}

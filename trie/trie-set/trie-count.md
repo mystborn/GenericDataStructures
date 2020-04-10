@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_get_and_remove
+title: trie_count
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_get_and_remove
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_get_and_remove
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">Trie (Set)</button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active">Trie (Set)</button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,51 +527,41 @@ title: trie_get_and_remove
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_get_and_remove (Map)
+# trie_count (Set)
 
-Gets the value mapped to a key in a trie, then removes both.
+Gets the number of items in the trie.
 
 ## Syntax
 
 ```c
-bool trie_get_and_remove(TrieMap* trie, key_type* key, value_type* out_value);
+unsigned int trie_count(TrieSet* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| out_value | value_type* | A pointer to be filled with the value if the key is found. |
+| trie | TrieSet* | A pointer to the trie. |
 
-**Returns:** `true` if the key exists; `false` otherwise.
-
-## Remarks
-
-The `out_value` will only be assigned to if it's not NULL. `out_value` is not modified if the key was not found.
-
-This function can be used to efficiently get a value for further use before removing it from the trie.
+**Returns:** The number of items currently in the trie.
 
 ## Example
 
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
+TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "one", 1);
+str_trie_add(trie, "moo");
+str_trie_add(trie, "caw");
+str_trie_add(trie, "oink");
 
-int value = 0;
-bool removed = str_trie_get_and_remove(trie, "one", &value);
-
-printf("Removed? %s\n", removed ? "true" : "false");
-printf("Value: %d\n", value);
+unsigned int count = str_trie_count(trie);
+printf("Count: %u\n", count);
 
 str_trie_free(trie);
 
 // Output:
-// Removed? true
-// Value: 1
+// Count: 3
 ```
 
 {% include footer.html %}

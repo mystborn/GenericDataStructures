@@ -434,11 +434,8 @@ title: trie_remove
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_remove
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown active">Trie (Set)</button>
-<ul class="nav-dropdown-container" style="display: block;">
+<button class="nav-dropdown">Trie (Set)</button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,49 +527,52 @@ title: trie_remove
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_remove (Set)
+# trie_remove (Map)
 
-Removes an item from the trie.
+Removes a key (and the value mapped to it) from a trie.
 
 ## Syntax
 
 ```c
-bool trie_remove(TrieSet* trie, value_type* item);
+bool trie_remove(TrieMap* trie, key_type* key);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieSet* | A pointer to the trie. |
-| item | value_type* | An array of values that make an item (e.g. a string). |
+| trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | An array of values that make a key (e.g. a string). |
 
-**Returns:** `true` on success, `false` if the item has not been added.
+**Returns:** `true` on success; `false` if the key wasn't added.
 
 ## Example
 
 ```c
-TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
-TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
+TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
+TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "moo");
-str_trie_add(trie, "caw");
+str_trie_add(trie, "one", 1);
+str_trie_add(trie, "two", 2);
+str_trie_add(trie, "three", 3)
 
 printf("Count: %u\n", str_trie_count(trie));
-printf("Conains moo? %s\n", str_trie_contains(trie, "moo") ? "true" : "false");
 
-str_trie_remove(trie, "moo");
+bool removed = str_trie_remove(trie, "one");
+printf("Removed? %s\n", removed ? "true" : "false");
 
 printf("Count: %u\n", str_trie_count(trie));
-printf("Conains moo? %s\n", str_trie_contains(trie, "moo") ? "true" : "false");
+
+removed = str_trie_remove(trie, "four");
+printf("Removed? %s\n", removed ? "true" : "false");
 
 str_trie_free(trie);
 
 // Output:
+// Count: 3
+// Removed? true
 // Count: 2
-// Conains moo? true
-// Count 1
-// Contains moo? false
+// Removed? false
 ```
 
 {% include footer.html %}

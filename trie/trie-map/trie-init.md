@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_get
+title: trie_init
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_get
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_get
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,26 +527,21 @@ title: trie_get
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_get (Map)
+# trie_init (Map)
 
-Gets the value mapped to a key in a trie.
+Initializes an existing trie.
 
 ## Syntax
 
 ```c
-value_type trie_get(TrieMap* trie, key_type* key);
+bool trie_init(TrieMap* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
 
-**Returns:** The value mapped to the key.
-
-## Remarks
-
-If the key did not exist in the trie, the returned value is equal to `(value_type){0}`.
+**Returns:** `true` on success, `false` if there was an allocation failure.
 
 ## Example
 
@@ -554,16 +549,12 @@ If the key did not exist in the trie, the returned value is equal to `(value_typ
 TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
 TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
-StringTrie* trie = str_trie_create();
+StringTrie trie;
+str_trie_init(&trie);
 
-str_trie_add(trie, "one", 1);
+// Use the trie...
 
-printf("Value: %d\n", str_trie_get(trie, "one"));
-
-str_trie_free(trie);
-
-// Output:
-// Value: 1
+str_trie_free_resources(&trie);
 ```
 
 {% include footer.html %}

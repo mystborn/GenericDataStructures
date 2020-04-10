@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_children_count
+title: trie_count
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_children_count
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_children_count
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,27 +527,21 @@ title: trie_children_count
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_children_count (Map)
+# trie_count (Map)
 
-Gets the number of keys in a trie that start with the specified value.
+Gets the number of items in a trie.
 
 ## Syntax
 
 ```c
-unsigned int trie_children_count(TrieMap* trie, key_type* key, unsigned int max_length);
+unsigned int trie_count(TrieMap* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | The starting value of the children keys. |
-| max_length | unsigned int | The maximum length of a key to be counted. |
 
-**Returns:** The number of keys in the trie that start with `key` and are no longer than `max_width`. Returns 0 if `key` is not in the trie.
-
-## Remarks
-
-If `key` is `NULL`, counts all children.
+**Returns:** The number of items.
 
 ## Example
 
@@ -561,14 +555,13 @@ str_trie_add(trie, "one", 1);
 str_trie_add(trie, "two", 2);
 str_trie_add(trie, "three", 3);
 
-unsigned int count = str_trie_children_count(trie, "t", INT_MAX);
-
-printf("Keys starting with 't': %u", count);
+unsigned int count = str_trie_count(trie);
+printf("Count: %u\n", count);
 
 str_trie_free(trie);
 
 // Output:
-// Keys starting with 't': 2
+// Count: 3
 ```
 
 {% include footer.html %}

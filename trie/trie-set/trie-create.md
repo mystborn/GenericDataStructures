@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_try_get
+title: trie_create
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_try_get
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_try_get
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">Trie (Set)</button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active">Trie (Set)</button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,59 +527,29 @@ title: trie_try_get
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_try_get (Map)
+# trie_create (Set)
 
-Attempts to get the value mapped to a key in a trie.
+Allocates and initializes a new trie.
 
 ## Syntax
 
 ```c
-bool trie_try_get(TrieMap* trie, key_type* key, value_type* out_value);
+TrieSet* trie_create(void);
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| out_value | value_type* | A pointer to be filled with the value if the key is found. |
-
-**Returns:** `true` if the key exists; `false` otherwise.
-
-## Remarks
-
-The `out_value` will only be assigned to if it's not NULL. Therefore, if you just need to check if the key exists in the trie, you can use this function and just pass NULL for the last parameter.
-
-`out_value` is not modified if the key was not found.
+**Returns:** The newly created trie on success, NULL on allocation failure.
 
 ## Example
 
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
+TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "one", 1);
-
-int value;
-bool result;
-
-result = str_trie_try_get(trie, "one", &value);
-printf("Contains one? %s\n", result ? "true" : "false");
-if(result)
-    printf("Value: %d\n", value);
-
-result = str_trie_try_get(trie, "two", &value);
-printf("Contains two? %s\n", result ? "true" : "false");
-if(result)
-    printf("Value: %d\n", value);
+// Use the trie...
 
 str_trie_free(trie);
-
-// Output:
-// Contains one? true
-// Value: 1
-// Contains two? false
 ```
 
 {% include footer.html %}

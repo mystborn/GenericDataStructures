@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_free_resources
+title: trie_contains
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_free_resources
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_free_resources
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,19 +527,22 @@ title: trie_free_resources
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_free_resources (Set)
+# trie_contains (Set)
 
-Frees the resources used internally by the trie without freeing the trie itself.
+Determines if the trie contains the specified item.
 
 ## Syntax
 
 ```c
-void trie_free_resources(TrieSet* trie);
+bool trie_contains(TrieSet* trie, value_type* item);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieSet* | A pointer to the trie. |
+| item | value_type* | An array of values that make an item (e.g. a string). |
+
+**Returns:** `true` if the item was previously added to the trie, `false` otherwise.
 
 ## Example
 
@@ -547,12 +550,19 @@ void trie_free_resources(TrieSet* trie);
 TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
 TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
-StringTrie trie;
-trie_init(&trie);
+StringTrie* trie = str_trie_create();
 
-// Use the trie...
+str_trie_add(trie, "moo");
 
-str_trie_free_resources(&trie);
+bool contains = str_trie_contains(trie, "moo");
+printf("Contains moo? %s\n", contains ? "true" : "false");
+printf("Contains caw? %s\n", contains ? "true" : "false");
+
+str_trie_free(trie);
+
+// Output:
+// Contains moo? true
+// Contains caw? false
 ```
 
 {% include footer.html %}

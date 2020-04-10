@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_add
+title: trie_free_resources
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_add
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_add
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">Trie (Set)</button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active">Trie (Set)</button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,43 +527,32 @@ title: trie_add
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_add (Map)
+# trie_free_resources (Set)
 
-Adds key-value pair to the trie.
+Frees the resources used internally by the trie without freeing the trie itself.
 
 ## Syntax
 
 ```c
-bool trie_add(TrieMap* trie, key_type* key, value_type value);
+void trie_free_resources(TrieSet* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| value | value_type | The value to add. |
-
-**Returns:** `true` on success, `false` if the key was already added or if there was an allocation failure.
+| trie | TrieSet* | A pointer to the trie. |
 
 ## Example
 
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
+TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
-StringTrie* trie = str_trie_create();
+StringTrie trie;
+trie_init(&trie);
 
-bool result = str_trie_add(trie, "one", 1);
-printf("Added? %s\n", result ? "true" : "false");
+// Use the trie...
 
-result = str_trie_add(trie, "one", 1);
-printf("Added? %s\n", result ? "true" : "false");
-
-str_trie_free(trie);
-
-// Output:
-// Added? true
-// Added? false
+str_trie_free_resources(&trie);
 ```
 
 {% include footer.html %}

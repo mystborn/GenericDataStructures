@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_create
+title: trie_free
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -434,11 +434,8 @@ title: trie_create
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
-<button class="nav-dropdown active"></button>
-<ul class="nav-dropdown-container" style="display: block;">
-<li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
+<button class="nav-dropdown"></button>
+<ul class="nav-dropdown-container">
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
@@ -476,13 +473,16 @@ title: trie_create
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
+</li>
+<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">Trie (Set)</button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active">Trie (Set)</button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
 <a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
@@ -527,23 +527,25 @@ title: trie_create
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_create (Map)
+# trie_ (Set)
 
-Allocates and initializes a new trie.
+Frees the resources used by the trie, then frees the trie itself.
 
 ## Syntax
 
 ```c
-TrieMap* trie_create(void);
+void trie_free(TrieSet* trie);
 ```
 
-**Returns:** The newly created trie on success, `NULL` if there was an allocation failure.
+| Name | Type | Description |
+| --- | --- | --- |
+| trie | TrieSet* | A pointer to the trie. |
 
 ## Example
 
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
+TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
 StringTrie* trie = str_trie_create();
 

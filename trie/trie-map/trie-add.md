@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_clear
+title: trie_add
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_clear
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_clear
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,25 +527,23 @@ title: trie_clear
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_clear (Map)
+# trie_add (Map)
 
-Removes all items from a trie.
+Adds key-value pair to the trie.
 
 ## Syntax
 
 ```c
-bool trie_clear(TrieMap* trie);
+bool trie_add(TrieMap* trie, key_type* key, value_type value);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
+| key | key_type* | An array of values that make a key (e.g. a string). |
+| value | value_type | The value to add. |
 
-**Returns:** `true` on success, `false` if there was an allocation error.
-
-## Remarks
-
-This function literally just calls [trie_free_resource]({{site.baseurl}}/trie/trie-map/trie_free_resources) then [trie_init]({{site.baseurl}}/trie/trie-map/trie_init), so the return value is just forwarded from `trie_init`.
+**Returns:** `true` on success, `false` if the key was already added or if there was an allocation failure.
 
 ## Example
 
@@ -555,20 +553,17 @@ TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
 StringTrie* trie = str_trie_create();
 
-str_trie_add(trie, "one", 1);
-str_trie_add(trie, "two", 2);
+bool result = str_trie_add(trie, "one", 1);
+printf("Added? %s\n", result ? "true" : "false");
 
-printf("Count: %u\n", str_trie_count(trie));
-
-str_trie_clear(trie);
-
-printf("Count: %u\n", str_trie_count(trie));
+result = str_trie_add(trie, "one", 1);
+printf("Added? %s\n", result ? "true" : "false");
 
 str_trie_free(trie);
 
 // Output:
-// Count: 2
-// Count: 0
+// Added? true
+// Added? false
 ```
 
 {% include footer.html %}

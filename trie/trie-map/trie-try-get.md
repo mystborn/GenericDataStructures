@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_remove
+title: trie_try_get
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -437,9 +437,6 @@ title: trie_remove
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
-</li>
-<li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
@@ -474,6 +471,9 @@ title: trie_remove
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
+</li>
+<li>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">trie_set</a>
 </li>
 <li>
 <a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
@@ -527,22 +527,29 @@ title: trie_remove
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_remove (Map)
+# trie_try_get (Map)
 
-Removes a key (and the value mapped to it) from a trie.
+Attempts to get the value mapped to a key in a trie.
 
 ## Syntax
 
 ```c
-bool trie_remove(TrieMap* trie, key_type* key);
+bool trie_try_get(TrieMap* trie, key_type* key, value_type* out_value);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
 | key | key_type* | An array of values that make a key (e.g. a string). |
+| out_value | value_type* | A pointer to be filled with the value if the key is found. |
 
-**Returns:** `true` on success; `false` if the key wasn't added.
+**Returns:** `true` if the key exists; `false` otherwise.
+
+## Remarks
+
+The `out_value` will only be assigned to if it's not NULL. Therefore, if you just need to check if the key exists in the trie, you can use this function and just pass NULL for the last parameter.
+
+`out_value` is not modified if the key was not found.
 
 ## Example
 
@@ -553,26 +560,26 @@ TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 StringTrie* trie = str_trie_create();
 
 str_trie_add(trie, "one", 1);
-str_trie_add(trie, "two", 2);
-str_trie_add(trie, "three", 3)
 
-printf("Count: %u\n", str_trie_count(trie));
+int value;
+bool result;
 
-bool removed = str_trie_remove(trie, "one");
-printf("Removed? %s\n", removed ? "true" : "false");
+result = str_trie_try_get(trie, "one", &value);
+printf("Contains one? %s\n", result ? "true" : "false");
+if(result)
+    printf("Value: %d\n", value);
 
-printf("Count: %u\n", str_trie_count(trie));
-
-removed = str_trie_remove(trie, "four");
-printf("Removed? %s\n", removed ? "true" : "false");
+result = str_trie_try_get(trie, "two", &value);
+printf("Contains two? %s\n", result ? "true" : "false");
+if(result)
+    printf("Value: %d\n", value);
 
 str_trie_free(trie);
 
 // Output:
-// Count: 3
-// Removed? true
-// Count: 2
-// Removed? false
+// Contains one? true
+// Value: 1
+// Contains two? false
 ```
 
 {% include footer.html %}
