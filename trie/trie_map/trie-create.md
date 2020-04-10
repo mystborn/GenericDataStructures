@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_add
+title: trie_create
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -433,88 +433,88 @@ title: trie_add
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map">trie\trie_map</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get">trie_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get">trie_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-set">trie_set</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-try-get">trie_try_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">trie\trie_set</button>
+<button class="nav-dropdown">Trie (Set)</button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-contains">trie_contains</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-contains">trie_contains</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-remove">trie_remove</a>
 </li>
 </ul>
 </li>
@@ -527,23 +527,17 @@ title: trie_add
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_add (Map)
+# trie_create (Map)
 
-Adds key-value pair to the trie.
+Allocates and initializes a new trie.
 
 ## Syntax
 
 ```c
-bool trie_add(TrieMap* trie, key_type* key, value_type value);
+TrieMap* trie_create(void);
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| value | value_type | The value to add. |
-
-**Returns:** `true` on success, `false` if the key was already added or if there was an allocation failure.
+**Returns:** The newly created trie on success, `NULL` if there was an allocation failure.
 
 ## Example
 
@@ -553,17 +547,9 @@ TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 
 StringTrie* trie = str_trie_create();
 
-bool result = str_trie_add(trie, "one", 1);
-printf("Added? %s\n", result ? "true" : "false");
-
-result = str_trie_add(trie, "one", 1);
-printf("Added? %s\n", result ? "true" : "false");
+// Use the trie...
 
 str_trie_free(trie);
-
-// Output:
-// Added? true
-// Added? false
 ```
 
 {% include footer.html %}

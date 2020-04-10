@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_try_get
+title: trie_count
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -433,88 +433,88 @@ title: trie_try_get
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map">trie\trie_map</a>
-<button class="nav-dropdown"></button>
-<ul class="nav-dropdown-container">
+<a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
+<button class="nav-dropdown active"></button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get">trie_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get">trie_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-set">trie_set</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-try-get">trie_try_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">trie\trie_set</button>
+<button class="nav-dropdown">Trie (Set)</button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-contains">trie_contains</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-contains">trie_contains</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-remove">trie_remove</a>
 </li>
 </ul>
 </li>
@@ -527,29 +527,21 @@ title: trie_try_get
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_try_get (Map)
+# trie_count (Map)
 
-Attempts to get the value mapped to a key in a trie.
+Gets the number of items in a trie.
 
 ## Syntax
 
 ```c
-bool trie_try_get(TrieMap* trie, key_type* key, value_type* out_value);
+unsigned int trie_count(TrieMap* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
 | trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| out_value | value_type* | A pointer to be filled with the value if the key is found. |
 
-**Returns:** `true` if the key exists; `false` otherwise.
-
-## Remarks
-
-The `out_value` will only be assigned to if it's not NULL. Therefore, if you just need to check if the key exists in the trie, you can use this function and just pass NULL for the last parameter.
-
-`out_value` is not modified if the key was not found.
+**Returns:** The number of items.
 
 ## Example
 
@@ -560,26 +552,16 @@ TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
 StringTrie* trie = str_trie_create();
 
 str_trie_add(trie, "one", 1);
+str_trie_add(trie, "two", 2);
+str_trie_add(trie, "three", 3);
 
-int value;
-bool result;
-
-result = str_trie_try_get(trie, "one", &value);
-printf("Contains one? %s\n", result ? "true" : "false");
-if(result)
-    printf("Value: %d\n", value);
-
-result = str_trie_try_get(trie, "two", &value);
-printf("Contains two? %s\n", result ? "true" : "false");
-if(result)
-    printf("Value: %d\n", value);
+unsigned int count = str_trie_count(trie);
+printf("Count: %u\n", count);
 
 str_trie_free(trie);
 
 // Output:
-// Contains one? true
-// Value: 1
-// Contains two? false
+// Count: 3
 ```
 
 {% include footer.html %}

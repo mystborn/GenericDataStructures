@@ -1,6 +1,6 @@
 ---
 layout: default
-title: trie_set
+title: trie_init
 ---
 <div class="row">
 <div class="col-md-3 side-nav text-light">
@@ -433,88 +433,88 @@ title: trie_set
 <button class="nav-dropdown active"></button>
 <ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map">trie\trie_map</a>
+<a href="{{site.baseurl}}/trie/trie-map">Trie (Map)</a>
 <button class="nav-dropdown"></button>
 <ul class="nav-dropdown-container">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-set">Trie (Set)</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get">trie_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get">trie_get</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-get-and-remove">trie_get_and_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-set">trie_set</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-remove">trie_remove</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-map/trie-try-get">trie_try_get</a>
+<a href="{{site.baseurl}}/trie/trie-map/trie-try-get">trie_try_get</a>
 </li>
 </ul>
 </li>
 <li>
-<button class="nav-dropdown">trie\trie_set</button>
-<ul class="nav-dropdown-container">
+<button class="nav-dropdown active">Trie (Set)</button>
+<ul class="nav-dropdown-container" style="display: block;">
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-add">trie_add</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-add">trie_add</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children">trie_children</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children">trie_children</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-children-count">trie_children_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-children-count">trie_children_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-clear">trie_clear</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-clear">trie_clear</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-contains">trie_contains</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-contains">trie_contains</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-count">trie_count</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-count">trie_count</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-create">trie_create</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-create">trie_create</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free">trie_free</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free">trie_free</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-free-resources">trie_free_resources</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-free-resources">trie_free_resources</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-init">trie_init</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-init">trie_init</a>
 </li>
 <li>
-<a href="{{site.baseurl}}/trie/trie/trie-set/trie-remove">trie_remove</a>
+<a href="{{site.baseurl}}/trie/trie-set/trie-remove">trie_remove</a>
 </li>
 </ul>
 </li>
@@ -527,45 +527,34 @@ title: trie_set
 <div class="col-md-3"></div>
 <div class="col-md-8" markdown="1">
 
-# trie_set (Map)
+# trie_init (Set)
 
-Adds or replaces a key-value pair in a trie.
+Initializes an existing trie.
 
 ## Syntax
 
 ```c
-bool trie_set(TrieMap* trie, key_type* key, value_type value);
+bool trie_init(TrieSet* trie);
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| trie | TrieMap* | A pointer to the trie. |
-| key | key_type* | An array of values that make a key (e.g. a string). |
-| value | value_type | The value to set in the trie. |
+| trie | TrieSet* | A pointer to the trie. |
 
-**Returns:** `true` on success, `false` on allocation failure.
+**Returns:** `true` on success, `false` if there wasn't enough memory.
 
 ## Example
 
 ```c
-TRIE_MAP_DEFINE_H(StringTrie, str_trie, char, int)
-TRIE_MAP_DEFINE_C(StringTrie, str_trie, char, int)
+TRIE_SET_DEFINE_H(StringTrie, str_trie, char)
+TRIE_SET_DEFINE_C(StringTrie, str_trie, char)
 
-StringTrie* trie = str_trie_create();
+StringTrie trie;
+trie_init(&trie);
 
-str_trie_add(trie, "one", 1);
+// Use the trie...
 
-bool result = str_trie_add(trie, "one", 2);
-printf("Replaced? %s\n", result ? "true" : "false");
-
-result = str_trie_set(trie, "one", 2);
-printf("Replaced? %s\n", result ? "true" : "false");
-
-str_trie_free(trie);
-
-// Output:
-// Replaced? false
-// Replaced? true
+str_trie_free_resources(&trie);
 ```
 
 {% include footer.html %}
