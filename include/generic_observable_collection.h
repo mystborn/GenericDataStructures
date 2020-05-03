@@ -194,8 +194,9 @@ typedef enum GdsNotifyCollectionChangedAction {
  \
     void function_prefix ## _clear(type_name* observer) { \
         function_prefix ## _check_reentrance(observer); \
-        observer->count = 0; \
         type_name ## ChangedData data = { .action = GDS_OBSERVABLE_COLLECTION_CHANGED_CLEAR }; \
+        function_prefix ## _on_collection_changed(observer, &data); \
+        observer->count = 0; \
     } \
  \
     void function_prefix ## _remove(type_name* observer, unsigned int index) { \
