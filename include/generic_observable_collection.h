@@ -93,7 +93,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    type_name* function_prefix ## create(void) { \
+    type_name* function_prefix ## _create(void) { \
         type_name* observer = malloc(sizeof(*observer)); \
         if(!observer) \
             return NULL; \
