@@ -56,7 +56,7 @@ typedef enum GdsNotifyCollectionChangedAction {
  \
     static inline unsigned int function_prefix ## _count(type_name* observer) { return observer->count; } \
     static inline type_name ## ChangedEvent* function_prefix ## _collection_changed(type_name* observer) { return observer->collection_changed; } \
-    static inline value_type* function_prefix ## _items(type_name* observer, int* out_count) { out_count = observer->count; return observer->buffer; } \
+    static inline value_type* function_prefix ## _items(type_name* observer, int* out_count) { *out_count = observer->count; return observer->buffer; } \
     static inline void function_prefix ## _block_entrance(type_name* observer) { observer->block_reentrance_count++; } \
     static inline void function_prefix ## _free_entrance(type_name* observer) { observer->block_reentrance_count--; } \
  \
@@ -68,6 +68,8 @@ typedef enum GdsNotifyCollectionChangedAction {
 
 
 #define OBSERVABLE_COLLECTION_DEFINE_C(type_name, function_prefix, value_type) \
+    EVENT_DEFINE_C(type_name ## ChangedEvent, function_prefix ## _changed_event) \
+ \
     static inline void function_prefix ## _check_reentrance(type_name* observer) { \
         if(observer->block_reentrance_count > 0) { \
             /* Changes are allowed if there's only one listener */ \
