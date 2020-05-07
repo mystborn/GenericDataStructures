@@ -50,6 +50,12 @@
                                               unsigned int size, \
                                               unsigned int max_length, \
                                               bool allocate_results); \
+    unsigned int function_prefix ## _children_fast(type_name* trie, \
+                                              value_type* value, \
+                                              value_type** out_values, \
+                                              unsigned int size, \
+                                              unsigned int max_length, \
+                                              bool allocate_results); \
  \
     static inline unsigned int function_prefix ## _count(type_name* trie) { return trie->count; } \
  \
@@ -284,11 +290,13 @@
  \
     unsigned int function_prefix ## _children_count(type_name* trie, value_type* value, unsigned int max_length) { \
         type_name ## Node* node = trie->root; \
-        while(*value != 0) { \
-            node = function_prefix ## _get_node(node, *value); \
-            if(!node) \
-                return 0; \
-            value++; \
+        if(value) { \
+            while(*value != 0) { \
+                node = function_prefix ## _get_node(node, *value); \
+                if(!node) \
+                    return 0; \
+                value++; \
+            } \
         } \
  \
         if(___TRIE_DEPTH(node->depth) >= max_length) \
@@ -389,11 +397,13 @@
             return 0; \
  \
         type_name ## Node* node = trie->root; \
-        while(*value != 0) { \
-            node = function_prefix ## _get_node(node, *value); \
-            if(!node) \
-                return 0; \
-            value++; \
+        if(value) { \
+            while(*value != 0) { \
+                node = function_prefix ## _get_node(node, *value); \
+                if(!node) \
+                    return 0; \
+                value++; \
+            } \
         } \
  \
         if(___TRIE_DEPTH(node->depth) >= max_length) \
@@ -402,11 +412,7 @@
         unsigned int min_length = max_length < trie->max_depth ? max_length : trie->max_depth; \
         unsigned int capacity = min_length - ___TRIE_DEPTH(node->depth) + 1; \
  \
-        if(min_length < 16) { \
-            value_type result[16]; \
-            struct type_name ## IterState stack[16]; \
-            return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-        } else if(min_length < 32) { \
+        if(min_length < 32) { \
             value_type result[32]; \
             if(capacity < 16) { \
                 struct type_name ## IterState stack[16]; \
@@ -415,45 +421,48 @@
                 struct type_name ## IterState stack[32]; \
                 return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
             } \
-        } else if(min_length < 64) { \
-            value_type result[64]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
+        } else { \
+            value_type* result = malloc(min_length * sizeof(*result) + 1); \
+            struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+            unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
+            free(result); \
+            free(stack); \
+            return num; \
+        } \
+    } \
+ \
+    unsigned int function_prefix ## _children_fast(type_name* trie,  \
+                                              value_type* value,  \
+                                              value_type** out_values,  \
+                                              unsigned int size,  \
+                                              unsigned int max_length,  \
+                                              bool allocate_results) \
+    { \
+        if(!out_values) \
+            return function_prefix ## _children_count(trie, value, max_length); \
+ \
+        if(size == 0) \
+            return 0; \
+ \
+        type_name ## Node* node = trie->root; \
+        if(value) { \
+            while(*value != 0) { \
+                node = function_prefix ## _get_node(node, *value); \
+                if(!node) \
+                    return 0; \
+                value++; \
             } \
-        } else if(min_length < 128) { \
-            value_type result[128]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else { \
-                struct type_name ## IterState stack[128]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } \
-        } else if(min_length < 256) { \
+        } \
+ \
+        if(___TRIE_DEPTH(node->depth) >= max_length) \
+            return 0; \
+ \
+        unsigned int min_length = max_length < trie->max_depth ? max_length : trie->max_depth; \
+        unsigned int capacity = min_length - ___TRIE_DEPTH(node->depth) + 1; \
+ \
+        if(min_length < 256) { \
             value_type result[256]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            } else if(capacity < 128) { \
+            if(capacity < 128) { \
                 struct type_name ## IterState stack[128]; \
                 return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
             } else { \
@@ -464,22 +473,7 @@
             } \
         } else { \
             value_type* result = malloc(min_length * sizeof(*result) + 1); \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(result); \
-                return num; \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(result); \
-                return num; \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(result); \
-                return num; \
-            } else if(capacity < 128) { \
+            if(capacity < 128) { \
                 struct type_name ## IterState stack[128]; \
                 unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
                 free(result); \
@@ -838,11 +832,13 @@
  \
     unsigned int function_prefix ## _children_count(type_name* trie, key_type* key, unsigned int max_length) { \
         type_name ## Node* node = trie->root; \
-        while(*key != 0) { \
-            node = function_prefix ## _get_node(node, *key); \
-            if(!node) \
-                return 0; \
-            key++; \
+        if(key) { \
+            while(*key != 0) { \
+                node = function_prefix ## _get_node(node, *key); \
+                if(!node) \
+                    return 0; \
+                key++; \
+            } \
         } \
  \
         unsigned int count = 0; \
@@ -959,11 +955,13 @@
             return 0; \
  \
         type_name ## Node* node = trie->root; \
-        while(*key != 0) { \
-            node = function_prefix ## _get_node(node, *key); \
-            if(!node) \
-                return 0; \
-            key++; \
+        if(key) { \
+            while(*key != 0) { \
+                node = function_prefix ## _get_node(node, *key); \
+                if(!node) \
+                    return 0; \
+                key++; \
+            } \
         } \
  \
         if(___TRIE_DEPTH(node->depth) >= max_length) \
@@ -972,11 +970,7 @@
         unsigned int min_length = max_length < trie->max_depth ? max_length : trie->max_depth; \
         unsigned int capacity = min_length - ___TRIE_DEPTH(node->depth) + 1; \
  \
-        if(min_length < 16) { \
-            key_type result[16]; \
-            struct type_name ## IterState stack[16]; \
-            return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-        } else if(min_length < 32) { \
+        if(min_length < 32) { \
             key_type result[32]; \
             if(capacity < 16) { \
                 struct type_name ## IterState stack[16]; \
@@ -985,82 +979,13 @@
                 struct type_name ## IterState stack[32]; \
                 return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
             } \
-        } else if(min_length < 64) { \
-            key_type result[64]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } \
-        } else if(min_length < 128) { \
-            key_type result[128]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else { \
-                struct type_name ## IterState stack[128]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } \
-        } else if(min_length < 256) { \
-            key_type result[256]; \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else if(capacity < 128) { \
-                struct type_name ## IterState stack[128]; \
-                return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            } else { \
-                struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
-                unsigned int num = function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(stack); \
-                return num; \
-            } \
         } else { \
             key_type* result = malloc(min_length * sizeof(*result) + 1); \
-            if(capacity < 16) { \
-                struct type_name ## IterState stack[16]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(result); \
-                return num; \
-            } else if(capacity < 32) { \
-                struct type_name ## IterState stack[32]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(result); \
-                return num; \
-            } else if(capacity < 64) { \
-                struct type_name ## IterState stack[64]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(result); \
-                return num; \
-            } else if(capacity < 128) { \
-                struct type_name ## IterState stack[128]; \
-                unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(result); \
-                return num; \
-            } else { \
-                struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
-                unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-                free(result); \
-                free(stack); \
-                return num; \
-            } \
+            struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+            unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
+            free(result); \
+            free(stack); \
+            return num; \
         } \
     } \
 
