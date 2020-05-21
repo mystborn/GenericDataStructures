@@ -93,9 +93,9 @@
  \
             grid->grid = buffer; \
  \
-            for(int y = 0; y < width; y++) { \
-                for(int x = 0; x < height; x++) { \
-                    if(x < width && y < height) \
+            for(int y = 0; y < height; y++) { \
+                for(int x = 0; x < width; x++) { \
+                    if(x < min_width && y < min_height) \
                         continue; \
  \
                     grid->grid[y * width + x] = default_value; \
@@ -103,14 +103,15 @@
             } \
         } \
  \
-        /* This will copy the rows over in chunks. It starts from the top */ \
-        /* to avoid any weird memory rewriting issues. */ \
-        for(int y = min_height - 1; y >= 0; y--) \
+        /* This will copy the rows over in chunks. */ \
+        for(int y = 0; y < min_height; y++) \
             memmove(&grid->grid[y * width], &original[y * grid->width], min_width * sizeof(*grid->grid)); \
  \
         /* If the grid was smaller than before, prune excess memory. */ \
         if(width == min_width && height == min_height) \
             grid->grid = realloc(grid->grid, width * height * sizeof(*grid->grid)); \
+        else \
+            free(original); \
  \
         grid->width = width; \
         grid->height = height; \
