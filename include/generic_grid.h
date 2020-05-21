@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define GRID_DEFINE_H(type_name, function_prefix, value_type) \
     typedef struct type_name { \
@@ -17,6 +18,7 @@
     void function_prefix ## _free(type_name* grid); \
     void function_prefix ## _free_resources(type_name* grid); \
     void function_prefix ## _clear(type_name* grid, value_type default_value); \
+    bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value); \
  \
     static inline unsigned int function_prefix ## _width(type_name* grid) { \
         return grid->width; \
@@ -37,6 +39,9 @@
         assert(y < grid->height); \
         grid->grid[y * grid->width + x] = value; \
     } \
+
+// TODO: Optimize resize function
+//       Especially try to avoid an extra malloc if unneeded.
 
 #define GRID_DEFINE_C(type_name, function_prefix, value_type) \
     bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
@@ -71,6 +76,47 @@
                 grid->grid[h * grid->width + w] = default_value; \
             } \
         } \
-    }
+    } \
+ \
+    bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value) { \
+        if(width == grid->width && height == grid->height) \
+            return true; \
+ \
+        unsigned int min_width = width < grid->width ? width : grid->width; \
+        unsigned int min_height = height < grid->height ? height : grid->height; \
+        value_type* original = grid->grid; \
+ \
+        if(min_width != width || min_height != height) { \
+            value_type* buffer = malloc(width * height * sizeof(*buffer)); \
+            if(!buffer) \
+                return false; \
+ \
+            grid->grid = buffer; \
+ \
+            for(int y = 0; y < width; y++) { \
+                for(int x = 0; x < height; x++) { \
+                    if(x < width && y < height) \
+                        continue; \
+ \
+                    grid->grid[y * width + x] = default_value; \
+                } \
+            } \
+        } \
+ \
+        /* This will copy the rows over in chunks. It starts from the top */ \
+        /* to avoid any weird memory rewriting issues. */ \
+        for(int y = min_height - 1; y >= 0; y--) \
+            memmove(&grid->grid[y * width], &original[y * grid->width], min_width * sizeof(*grid->grid)); \
+ \
+        /* If the grid was smaller than before, prune excess memory. */ \
+        if(width == min_width && height == min_height) \
+            grid->grid = realloc(grid->grid, width * height * sizeof(*grid->grid)); \
+ \
+        grid->width = width; \
+        grid->height = height; \
+ \
+        return true; \
+    } \
+
 
 #endif
