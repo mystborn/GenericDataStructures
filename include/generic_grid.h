@@ -34,6 +34,12 @@
         return grid->grid[y * grid->width + x]; \
     } \
  \
+    static inline value_type* function_prefix ## _get_ref(type_name* grid, unsigned int x, unsigned int y) { \
+        assert(x < grid->width); \
+        assert(y < grid->height); \
+        return &grid->grid[y * grid->width + x]; \
+    } \
+ \
     static inline void function_prefix ## _set(type_name* grid, unsigned int x, unsigned int y, value_type value) { \
         assert(x < grid->width); \
         assert(y < grid->height); \

@@ -37,6 +37,11 @@
         return list->buffer[index]; \
     } \
     \
+    static inline value_type* function_prefix ## _get_ref(type_name* list, unsigned int index) { \
+        assert(index < list->count); \
+        return list->buffer + index; \
+    } \
+    \
     static inline void function_prefix ## _set(type_name* list, unsigned int index, value_type value) { \
         assert(index <= list->count); \
         if(index == list->count) \
