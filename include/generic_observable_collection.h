@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include "generic_event.h"
+#include "generic_alloc.h"
 
 typedef enum GdsNotifyCollectionChangedAction {
     /// One or more items were added to the collection.
@@ -61,7 +62,7 @@ typedef enum GdsNotifyCollectionChangedAction {
     static inline void function_prefix ## _free_entrance(type_name* observer) { observer->block_reentrance_count--; } \
  \
     static inline value_type function_prefix ## _get(type_name* observer, unsigned int index) { \
-        assert(index < observer->count); \
+        gds_assert_bounds(index < observer->count); \
         return observer->buffer[index]; \
     } \
 
@@ -73,7 +74,7 @@ typedef enum GdsNotifyCollectionChangedAction {
     static inline void function_prefix ## _check_reentrance(type_name* observer) { \
         if(observer->block_reentrance_count > 0) { \
             /* Changes are allowed if there's only one listener */ \
-            assert(observer->collection_changed->count <= 1); \
+            gds_assert_bounds(observer->collection_changed->count <= 1); \
         } \
     } \
  \
@@ -85,7 +86,7 @@ typedef enum GdsNotifyCollectionChangedAction {
  \
     static bool function_prefix ## _resize(type_name* observer) { \
         unsigned int capacity = observer->capacity == 0 ? 4 : observer->capacity * 2; \
-        void* buffer = realloc(observer->buffer, capacity * sizeof(*observer->buffer)); \
+        void* buffer = gds_realloc(observer->buffer, capacity * sizeof(*observer->buffer)); \
         if(!buffer) \
             return false; \
         observer->buffer = buffer; \
@@ -94,12 +95,12 @@ typedef enum GdsNotifyCollectionChangedAction {
     } \
  \
     type_name* function_prefix ## _create(void) { \
-        type_name* observer = malloc(sizeof(*observer)); \
+        type_name* observer = gds_malloc(sizeof(*observer)); \
         if(!observer) \
             return NULL; \
  \
         if(!function_prefix ## _init(observer)) { \
-            free(observer); \
+            gds_free(observer); \
             return NULL; \
         } \
  \
@@ -123,19 +124,19 @@ typedef enum GdsNotifyCollectionChangedAction {
         function_prefix ## _check_reentrance(observer); \
  \
         function_prefix ## _changed_event_free(observer->collection_changed); \
-        free(observer->buffer); \
-        free(observer); \
+        gds_free(observer->buffer); \
+        gds_free(observer); \
     } \
  \
     void function_prefix ## _free_resources(type_name* observer) { \
         function_prefix ## _check_reentrance(observer); \
  \
         function_prefix ## _changed_event_free(observer->collection_changed); \
-        free(observer->buffer); \
+        gds_free(observer->buffer); \
     } \
  \
     bool function_prefix ## _set(type_name* observer, unsigned int index, value_type value) { \
-        assert(index <= observer->count); \
+        gds_assert_bounds(index <= observer->count); \
  \
         if(index == observer->count) \
             return function_prefix ## _add(observer, value); \
@@ -202,7 +203,7 @@ typedef enum GdsNotifyCollectionChangedAction {
     } \
  \
     void function_prefix ## _remove(type_name* observer, unsigned int index) { \
-        assert(index < observer->count); \
+        gds_assert_bounds(index < observer->count); \
         function_prefix ## _check_reentrance(observer); \
  \
         value_type value = observer->buffer[index]; \
@@ -219,7 +220,7 @@ typedef enum GdsNotifyCollectionChangedAction {
     } \
  \
     void function_prefix ## _move(type_name* observer, unsigned int old_index, unsigned int new_index) { \
-        assert(old_index < observer->count && new_index < observer->count); \
+        gds_assert_bounds(old_index < observer->count && new_index < observer->count); \
         function_prefix ## _check_reentrance(observer); \
  \
         value_type value = observer->buffer[old_index]; \

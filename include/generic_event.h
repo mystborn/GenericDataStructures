@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "generic_alloc.h"
+
 // ============================================================================
 // Generic Event via template-like macros
 // ============================================================================
@@ -31,7 +33,7 @@
     } \
  \
     static inline type_name* function_prefix ## _create(void) { \
-        type_name* ev = malloc(sizeof(*ev)); \
+        type_name* ev = gds_malloc(sizeof(*ev)); \
         if(!ev) \
             return NULL; \
  \
@@ -40,12 +42,12 @@
     } \
  \
     static inline void function_prefix ## _free(type_name* ev) { \
-        free(ev->subscriptions); \
-        free(ev); \
+        gds_free(ev->subscriptions); \
+        gds_free(ev); \
     } \
  \
     static inline void function_prefix ## _free_resources(type_name* ev) { \
-        free(ev->subscriptions); \
+        gds_free(ev->subscriptions); \
     } \
 
 #define EVENT_DEFINE_0_H(type_name, function_prefix) \
@@ -200,7 +202,7 @@
             else \
                 capacity *= 2; \
  \
-            void* buffer = realloc(ev->subscriptions, capacity * sizeof(*ev->subscriptions)); \
+            void* buffer = gds_realloc(ev->subscriptions, capacity * sizeof(*ev->subscriptions)); \
             if(!buffer) \
                 return false; \
  \
@@ -254,7 +256,7 @@ static inline void gds_event_init(GdsEvent* ev) {
 }
 
 static inline GdsEvent* gds_event_create(void) {
-    GdsEvent* ev = malloc(sizeof(*ev));
+    GdsEvent* ev = gds_malloc(sizeof(*ev));
     if(!ev)
         return NULL;
 
@@ -262,8 +264,8 @@ static inline GdsEvent* gds_event_create(void) {
     return ev;
 }
 
-static inline void gds_event_free_resources(GdsEvent* ev) { free(ev->subscriptions); }
-static inline void gds_event_free(GdsEvent* ev) { free(ev->subscriptions); free(ev); }
+static inline void gds_event_free_resources(GdsEvent* ev) { gds_free(ev->subscriptions); }
+static inline void gds_event_free(GdsEvent* ev) { gds_free(ev->subscriptions); gds_free(ev); }
 
 #define GDS_EVENT_DEFAULT void (*)(void*)
 #define GDS_EVENT_SIGNATURE(...) void (*)(void*, ## __VA_ARGS__ )
@@ -289,7 +291,7 @@ bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function) {
         else
             capacity *= 2;
 
-        void* buffer = realloc(ev->subscriptions, capacity * sizeof(*ev->subscriptions));
+        void* buffer = gds_realloc(ev->subscriptions, capacity * sizeof(*ev->subscriptions));
         if(!buffer)
             return false;
 

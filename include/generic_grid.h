@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "generic_alloc.h"
+
 #define GRID_DEFINE_H(type_name, function_prefix, value_type) \
     typedef struct type_name { \
         value_type* grid; \
@@ -53,27 +55,27 @@
     bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
         grid->width = width; \
         grid->height = height; \
-        return (grid->grid = malloc(width * height * sizeof(value_type))) != NULL; \
+        return (grid->grid = gds_malloc(width * height * sizeof(value_type))) != NULL; \
     } \
  \
     type_name* function_prefix ## _create(unsigned int width, unsigned int height) { \
-        type_name* grid = malloc(sizeof(type_name)); \
+        type_name* grid = gds_malloc(sizeof(type_name)); \
         if(!grid) \
             return NULL; \
         if(!function_prefix ## _init(grid, width, height)) { \
-            free(grid); \
+            gds_free(grid); \
             return NULL; \
         } \
         return grid; \
     } \
  \
     void function_prefix ## _free(type_name* grid) { \
-        free(grid->grid); \
-        free(grid); \
+        gds_free(grid->grid); \
+        gds_free(grid); \
     } \
  \
     void function_prefix ## _free_resources(type_name* grid) { \
-        free(grid->grid); \
+        gds_free(grid->grid); \
     } \
     \
     void function_prefix ## _clear(type_name* grid, value_type default_value) { \
@@ -93,7 +95,7 @@
         value_type* original = grid->grid; \
  \
         if(min_width != width || min_height != height) { \
-            value_type* buffer = malloc(width * height * sizeof(*buffer)); \
+            value_type* buffer = gds_malloc(width * height * sizeof(*buffer)); \
             if(!buffer) \
                 return false; \
  \
@@ -115,9 +117,9 @@
  \
         /* If the grid was smaller than before, prune excess memory. */ \
         if(width == min_width && height == min_height) \
-            grid->grid = realloc(grid->grid, width * height * sizeof(*grid->grid)); \
+            grid->grid = gds_realloc(grid->grid, width * height * sizeof(*grid->grid)); \
         else \
-            free(original); \
+            gds_free(original); \
  \
         grid->width = width; \
         grid->height = height; \

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "generic_hash_utils.h"
+#include "generic_alloc.h"
 
 #define MAP_DEFINE_H(type_name, function_prefix, key_type, value_type) \
     typedef struct type_name ## Cell { \
@@ -28,8 +29,8 @@
     static inline uint32_t function_prefix ## _count(type_name* map) { return map->count; } \
     static inline uint32_t function_prefix ## _capacity(type_name* map) { return map->load_factor; } \
     static inline uint32_t function_prefix ## _allocated(type_name* map) { return map->capacity; } \
-    static inline void function_prefix ## _free(type_name* map) { free(map->cells); free(map); } \
-    static inline void function_prefix ## _free_resources(type_name* map) { free(map->cells); } \
+    static inline void function_prefix ## _free(type_name* map) { gds_free(map->cells); gds_free(map); } \
+    static inline void function_prefix ## _free_resources(type_name* map) { gds_free(map->cells); } \
  \
     type_name* function_prefix ## _create(void); \
     bool function_prefix ## _init(type_name* map); \
@@ -46,11 +47,11 @@
 
 #define MAP_DEFINE_C(type_name, function_prefix, key_type, value_type, hash_fn, compare_fn) \
     type_name* function_prefix ## _create(void) { \
-        type_name* map = malloc(sizeof(type_name)); \
+        type_name* map = gds_malloc(sizeof(type_name)); \
         if(!map) \
             return NULL; \
         if(!function_prefix ## _init(map)) { \
-            free(map); \
+            gds_free(map); \
             return NULL; \
         } \
         return map; \
@@ -61,14 +62,14 @@
         map->capacity = 8; \
         map->count = 0; \
         map->load_factor = 4; \
-        return (map->cells = calloc(8, sizeof(type_name ## Cell))) != NULL; \
+        return (map->cells = gds_calloc(8, sizeof(type_name ## Cell))) != NULL; \
     } \
  \
     static void function_prefix ## _resize(type_name* map) { \
         int capacity = map->load_factor = map->capacity; \
         map->capacity = 1 << (32 - (--map->shift)); \
         type_name ## Cell* old = map->cells; \
-        type_name ## Cell* new = calloc(map->capacity, sizeof(type_name ## Cell)); \
+        type_name ## Cell* new = gds_calloc(map->capacity, sizeof(type_name ## Cell)); \
         assert(new); \
  \
         for(int i = 0; i < capacity; i++) { \
@@ -80,7 +81,7 @@
                 new[cell] = old[i]; \
             } \
         } \
-        free(old); \
+        gds_free(old); \
         map->cells = new; \
     } \
  \
@@ -219,7 +220,7 @@
  \
     void function_prefix ## _clear(type_name* map, bool reset_capacity) { \
         if(reset_capacity) { \
-            free(map->cells); \
+            gds_free(map->cells); \
             function_prefix ## _init(map); \
         } else { \
             map->count = 0; \

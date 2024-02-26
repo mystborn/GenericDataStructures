@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #include "generic_hash_utils.h"
+#include "generic_alloc.h"
 
 #define SET_DEFINE_H(type_name, function_prefix, value_type) \
     typedef struct type_name ## Cell { \
@@ -29,8 +30,8 @@
     static inline uint32_t function_prefix ## _count(type_name* set) { return set->count; } \
     static inline uint32_t function_prefix ## _capacity(type_name* set) { return set->load_factor; } \
     static inline uint32_t function_prefix ## _allocated(type_name* set) { return set->capacity; } \
-    static inline void function_prefix ## _free(type_name* set) { free(set->cells); free(set); } \
-    static inline void function_prefix ## _free_resources(type_name* set) { free(set->cells); } \
+    static inline void function_prefix ## _free(type_name* set) { gds_free(set->cells); gds_free(set); } \
+    static inline void function_prefix ## _free_resources(type_name* set) { gds_free(set->cells); } \
  \
     type_name* function_prefix ## _create(void); \
     bool function_prefix ## _init(type_name* set); \
@@ -48,7 +49,7 @@
 
 #define SET_DEFINE_C(type_name, function_prefix, value_type, hash_fn, compare_fn) \
     type_name* function_prefix ## _create(void) { \
-        type_name* set = malloc(sizeof(type_name)); \
+        type_name* set = gds_malloc(sizeof(type_name)); \
         if(!set) \
             return NULL; \
         function_prefix ## _init(set); \
@@ -60,15 +61,15 @@
         set->capacity = 8; \
         set->count = 0; \
         set->load_factor = 4; \
-        return (set->cells = calloc(8, sizeof(type_name ## Cell))) != NULL; \
+        return (set->cells = gds_calloc(8, sizeof(type_name ## Cell))) != NULL; \
     } \
  \
     static void function_prefix ## _resize(type_name* set) { \
         int capacity = set->load_factor = set->capacity; \
         set->capacity = 1u << (32 - (--set->shift)); \
         type_name ## Cell* old = set->cells; \
-        type_name ## Cell* current = calloc(set->capacity, sizeof(type_name ## Cell)); \
-        assert(current); \
+        type_name ## Cell* current = gds_calloc(set->capacity, sizeof(type_name ## Cell)); \
+        gds_assert_arg(current); \
  \
         for(uint32_t i = 0; i < capacity; i++) { \
             if(old[i].active) { \
@@ -81,7 +82,7 @@
                 current[cell] = old[i]; \
             } \
         } \
-        free(old); \
+        gds_free(old); \
         set->cells = current; \
     } \
  \
@@ -187,7 +188,7 @@
  \
     void function_prefix ## _clear(type_name* set, bool reset_capacity) { \
         if(reset_capacity) { \
-            free(set->cells); \
+            gds_free(set->cells); \
             function_prefix ## _init(set); \
         } else { \
             for(uint32_t i = 0; i < set->capacity; i++) \

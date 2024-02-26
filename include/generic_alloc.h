@@ -10,7 +10,7 @@
 #endif
 
 #ifndef gds_calloc
-#define gds_callod calloc
+#define gds_calloc calloc
 #endif
 
 #ifndef gds_free

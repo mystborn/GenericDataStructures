@@ -6,6 +6,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#include "generic_alloc.h"
+
 // Macros to define a strongly typed rb-tree data structure.
 // TODO: Return error value if a new node fails to allocate.
 
@@ -52,7 +54,7 @@ typedef enum RBColor {
     static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree); \
     \
     static inline type_name* function_prefix ## _create(void) { \
-        type_name* tree = malloc(sizeof(type_name)); \
+        type_name* tree = gds_malloc(sizeof(type_name)); \
         if(!tree) \
             return NULL; \
         tree->root = NULL; \
@@ -68,7 +70,7 @@ typedef enum RBColor {
     static inline void function_prefix ## _free(type_name* tree, bool free_nodes) { \
         if(free_nodes) \
             function_prefix ## _free_resources(tree); \
-        free(tree); \
+        gds_free(tree); \
     } \
     \
     static inline type_name ## Node* function_prefix ## _root(type_name* tree) { \
@@ -80,7 +82,7 @@ typedef enum RBColor {
     } \
     \
     static inline type_name ## Node* function_prefix ## _add(type_name* tree, key_type key, value_type value) { \
-        type_name ## Node* node = malloc(sizeof(type_name ## Node)); \
+        type_name ## Node* node = gds_malloc(sizeof(type_name ## Node)); \
         if(!node) \
             return NULL; \
         node->key = key; \
@@ -125,7 +127,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        free(function_prefix ## _remove_node(tree, node)); \
+        gds_free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -135,7 +137,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        free(function_prefix ## _remove_node(tree, node)); \
+        gds_free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -145,7 +147,7 @@ typedef enum RBColor {
             return false; \
  \
         if(out_value != NULL) *out_value = node->value; \
-        free(function_prefix ## _remove_node(tree, node)); \
+        gds_free(function_prefix ## _remove_node(tree, node)); \
         return true; \
     } \
     \
@@ -476,7 +478,7 @@ typedef enum RBColor {
                 } \
                 tree->count--; \
                 temp = current->parent; \
-                free(current); \
+                gds_free(current); \
                 current = temp; \
             } \
         } \

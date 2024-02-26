@@ -3,6 +3,7 @@
 
 #include "generic_map.h"
 #include "generic_iterators/map_iterator.h"
+#include "generic_alloc.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -98,7 +99,7 @@
  \
     static type_name ## Node* function_prefix ## _add_child(type_name ## Node* node, value_type value) { \
         if(node->count == 0 && node->array == NULL) { \
-            node->array = malloc(sizeof(type_name ## Node) * ___TRIE_ARRAY_SIZE); \
+            node->array = gds_malloc(sizeof(type_name ## Node) * ___TRIE_ARRAY_SIZE); \
             for(int i = 0; i < ___TRIE_ARRAY_SIZE; i++) \
                 function_prefix ## _node_init(&node->array[i], ___TRIE_DEPTH(node->depth + 1) | ___TRIE_NODE_NOT_FREE); \
         } else if(node->count == ___TRIE_ARRAY_SIZE) { \
@@ -117,7 +118,7 @@
         if(node->count < ___TRIE_ARRAY_SIZE) { \
             result = node->array + node->count; \
         } else { \
-            result = malloc(sizeof(*result)); \
+            result = gds_malloc(sizeof(*result)); \
             function_prefix ## _node_init(result, ___TRIE_DEPTH(node->depth + 1)); \
             ___ ## function_prefix ## _map_add(node->map, value, result); \
         } \
@@ -170,21 +171,21 @@
  \
         cleanup: \
  \
-        free(node->array); \
+        gds_free(node->array); \
         node->array = NULL; \
  \
         if((node->depth & ___TRIE_NODE_NOT_FREE) == 0) {\
-            free(node); \
+            gds_free(node); \
         } \
     } \
  \
     type_name* function_prefix ## _create(void) { \
-        type_name* trie = malloc(sizeof(*trie)); \
+        type_name* trie = gds_malloc(sizeof(*trie)); \
         if(!trie) \
             return NULL; \
  \
         if(!function_prefix ## _init(trie)) { \
-            free(trie); \
+            gds_free(trie); \
             return NULL; \
         } \
  \
@@ -192,7 +193,7 @@
     } \
  \
     bool function_prefix ## _init(type_name* trie) { \
-        trie->root = malloc(sizeof(*trie->root)); \
+        trie->root = gds_malloc(sizeof(*trie->root)); \
         if(!trie->root) \
             return false; \
         function_prefix ## _node_init(trie->root, 0); \
@@ -203,7 +204,7 @@
  \
     void function_prefix ## _free(type_name* trie) { \
         function_prefix ## _free_resources(trie); \
-        free(trie); \
+        gds_free(trie); \
     } \
  \
     void function_prefix ## _free_resources(type_name* trie) { \
@@ -370,7 +371,7 @@
             last = node; \
  \
             if(allocate_results) { \
-                value_type* result = malloc(depth * sizeof(*result) + 1); \
+                value_type* result = gds_malloc(depth * sizeof(*result) + 1); \
                 values[index] = result; \
             } \
  \
@@ -422,11 +423,11 @@
                 return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
             } \
         } else { \
-            value_type* result = malloc(min_length * sizeof(*result) + 1); \
-            struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+            value_type* result = gds_malloc(min_length * sizeof(*result) + 1); \
+            struct type_name ## IterState* stack = gds_malloc(capacity * sizeof(*stack)); \
             unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-            free(result); \
-            free(stack); \
+            gds_free(result); \
+            gds_free(stack); \
             return num; \
         } \
     } \
@@ -466,23 +467,23 @@
                 struct type_name ## IterState stack[128]; \
                 return function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
             } else { \
-                struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+                struct type_name ## IterState* stack = gds_malloc(capacity * sizeof(*stack)); \
                 unsigned int num = function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(stack); \
+                gds_free(stack); \
                 return num; \
             } \
         } else { \
-            value_type* result = malloc(min_length * sizeof(*result) + 1); \
+            value_type* result = gds_malloc(min_length * sizeof(*result) + 1); \
             if(capacity < 128) { \
                 struct type_name ## IterState stack[128]; \
                 unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(result); \
+                gds_free(result); \
                 return num; \
             } else { \
-                struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+                struct type_name ## IterState* stack = gds_malloc(capacity * sizeof(*stack)); \
                 unsigned int num =  function_prefix ## _node_children(node, result, out_values, size, stack, max_length, allocate_results); \
-                free(result); \
-                free(stack); \
+                gds_free(result); \
+                gds_free(stack); \
                 return num; \
             } \
         } \
@@ -582,7 +583,7 @@
  \
     static type_name ## Node* function_prefix ## _add_child(type_name ## Node* node, key_type key) { \
         if(node->count == 0 && node->array == NULL) { \
-            node->array = malloc(sizeof(type_name ## Node) * ___TRIE_ARRAY_SIZE); \
+            node->array = gds_malloc(sizeof(type_name ## Node) * ___TRIE_ARRAY_SIZE); \
             for(int i = 0; i < ___TRIE_ARRAY_SIZE; i++) \
                 function_prefix ## _node_init(&node->array[i], ___TRIE_DEPTH(node->depth + 1) | ___TRIE_NODE_NOT_FREE); \
         } else if(node->count == ___TRIE_ARRAY_SIZE) { \
@@ -601,7 +602,7 @@
         if(node->count < ___TRIE_ARRAY_SIZE) { \
             result = node->array + node->count; \
         } else { \
-            result = malloc(sizeof(*result)); \
+            result = gds_malloc(sizeof(*result)); \
             function_prefix ## _node_init(result, ___TRIE_DEPTH(node->depth + 1)); \
             ___ ## function_prefix ## _map_add(node->map, key, result); \
         } \
@@ -654,21 +655,21 @@
  \
         cleanup: \
  \
-        free(node->array); \
+        gds_free(node->array); \
         node->array = NULL; \
  \
         if((node->depth & ___TRIE_NODE_NOT_FREE) == 0) {\
-            free(node); \
+            gds_free(node); \
         } \
     } \
  \
     type_name* function_prefix ## _create(void) { \
-        type_name* trie = malloc(sizeof(*trie)); \
+        type_name* trie = gds_malloc(sizeof(*trie)); \
         if(!trie) \
             return NULL; \
  \
         if(!function_prefix ## _init(trie)) { \
-            free(trie); \
+            gds_free(trie); \
             return NULL; \
         } \
  \
@@ -676,7 +677,7 @@
     } \
  \
     bool function_prefix ## _init(type_name* trie) { \
-        trie->root = malloc(sizeof(*trie->root)); \
+        trie->root = gds_malloc(sizeof(*trie->root)); \
         if(!trie->root) \
             return false; \
         function_prefix ## _node_init(trie->root, 0); \
@@ -687,7 +688,7 @@
  \
     void function_prefix ## _free(type_name* trie) { \
         function_prefix ## _free_resources(trie); \
-        free(trie); \
+        gds_free(trie); \
     } \
  \
     void function_prefix ## _free_resources(type_name* trie) { \
@@ -913,7 +914,7 @@
  \
             if(index < keys_size) { \
                 if(allocate_keys) { \
-                    key_type* result = malloc(depth * sizeof(*result) + 1); \
+                    key_type* result = gds_malloc(depth * sizeof(*result) + 1); \
                     keys[index] = result; \
                 } \
  \
@@ -980,11 +981,11 @@
                 return function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
             } \
         } else { \
-            key_type* result = malloc(min_length * sizeof(*result) + 1); \
-            struct type_name ## IterState* stack = malloc(capacity * sizeof(*stack)); \
+            key_type* result = gds_malloc(min_length * sizeof(*result) + 1); \
+            struct type_name ## IterState* stack = gds_malloc(capacity * sizeof(*stack)); \
             unsigned int num =  function_prefix ## _node_children(node, result, keys, keys_size, values, values_size, stack, max_length, allocate_keys); \
-            free(result); \
-            free(stack); \
+            gds_free(result); \
+            gds_free(stack); \
             return num; \
         } \
     } \

@@ -153,7 +153,7 @@
 
 // Obviously this macro is just a monster. It should really be used sparingly.
 
-// IF YOU MAKE CHANGES TO THIS, PLEASE UPDATE THE NON-OBFISCATED VERSION AS WELL!
+// IF YOU MAKE CHANGES TO THIS, PLEASE UPDATE THE NON-OBFUSCATED VERSION AS WELL!
 // You don't need to comment it (though that would be appreciated), but at least make
 // sure the two forms match.
 

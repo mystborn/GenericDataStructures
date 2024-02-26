@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "generic_alloc.h"
+
 
 #define POOL_DEFINE_H(type_name, function_prefix, value_type) \
     struct type_name ## Node { \
@@ -64,12 +66,12 @@
 
 #define POOL_DEFINE_C(type_name, function_prefix, value_type, init_fn, free_resources_fn) \
     type_name* function_prefix ## _create(void) { \
-        type_name* pool = malloc(sizeof(*pool)); \
+        type_name* pool = gds_malloc(sizeof(*pool)); \
         if(!pool) \
             return NULL; \
  \
         if(!function_prefix ## _init(pool)) { \
-            free(pool); \
+            gds_free(pool); \
             return NULL; \
         } \
  \
@@ -77,12 +79,12 @@
     } \
  \
     bool function_prefix ## _init(type_name* pool) { \
-        struct type_name ## Node* node = malloc(sizeof(*node)); \
+        struct type_name ## Node* node = gds_malloc(sizeof(*node)); \
         if(!node) \
             return false; \
-        node->buffer = malloc(16 * sizeof(*node->buffer)); \
+        node->buffer = gds_malloc(16 * sizeof(*node->buffer)); \
         if(!node->buffer) { \
-            free(node); \
+            gds_free(node); \
             return false; \
         } \
         node->next = NULL; \
@@ -98,7 +100,7 @@
  \
     void function_prefix ## _free(type_name* pool) { \
         function_prefix ## _free_resources(pool); \
-        free(pool); \
+        gds_free(pool); \
     } \
  \
     void function_prefix ## _free_resources(type_name* pool) { \
@@ -106,25 +108,25 @@
  \
         while(node != NULL) { \
             struct type_name ## Node* next = node->next; \
-            free(node->buffer); \
-            free(node); \
+            gds_free(node->buffer); \
+            gds_free(node); \
             node = next; \
         } \
  \
-        free(pool->open); \
+        gds_free(pool->open); \
     } \
  \
     value_type* function_prefix ## _get(type_name* pool) { \
         value_type* result; \
         if(pool->open_count == 0) { \
             if(pool->next == pool->node_capacity) { \
-                struct type_name ## Node* node = malloc(sizeof(*node)); \
+                struct type_name ## Node* node = gds_malloc(sizeof(*node)); \
                 if(!node) \
                     return NULL; \
  \
-                node->buffer = malloc(pool->total * sizeof(*node->buffer)); \
+                node->buffer = gds_malloc(pool->total * sizeof(*node->buffer)); \
                 if(!node->buffer) { \
-                    free(node); \
+                    gds_free(node); \
                     return NULL; \
                 } \
  \
@@ -151,7 +153,7 @@
         if(pool->open_count == pool->open_capacity) { \
             unsigned int capacity = pool->open_capacity; \
             capacity = capacity == 0 ? 4 : capacity * 2; \
-            void* buffer = realloc(pool->open, capacity * sizeof(*pool->open)); \
+            void* buffer = gds_realloc(pool->open, capacity * sizeof(*pool->open)); \
             if(!buffer) \
                 return false; \
  \
