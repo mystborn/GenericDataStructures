@@ -28,13 +28,13 @@
         unsigned int total; \
     } type_name; \
  \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* pool); \
-    void function_prefix ## _free(type_name* pool); \
-    void function_prefix ## _free_resources(type_name* pool); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* pool); \
+    GDS_EXPORT void function_prefix ## _free(type_name* pool); \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* pool); \
  \
-    value_type* function_prefix ## _get(type_name* pool); \
-    bool function_prefix ## _release(type_name* pool, value_type* value); \
+    GDS_EXPORT value_type* function_prefix ## _get(type_name* pool); \
+    GDS_EXPORT bool function_prefix ## _release(type_name* pool, value_type* value); \
 
 #ifndef POOL_SKIP_RELEASE_ASSERT
 
@@ -65,7 +65,7 @@
 #endif
 
 #define POOL_DEFINE_C(type_name, function_prefix, value_type, init_fn, free_resources_fn) \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* pool = gds_malloc(sizeof(*pool)); \
         if(!pool) \
             return NULL; \
@@ -78,7 +78,7 @@
         return pool; \
     } \
  \
-    bool function_prefix ## _init(type_name* pool) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* pool) { \
         struct type_name ## Node* node = gds_malloc(sizeof(*node)); \
         if(!node) \
             return false; \
@@ -98,12 +98,12 @@
         return true; \
     } \
  \
-    void function_prefix ## _free(type_name* pool) { \
+    GDS_EXPORT void function_prefix ## _free(type_name* pool) { \
         function_prefix ## _free_resources(pool); \
         gds_free(pool); \
     } \
  \
-    void function_prefix ## _free_resources(type_name* pool) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* pool) { \
         struct type_name ## Node* node = pool->node; \
  \
         while(node != NULL) { \
@@ -116,7 +116,7 @@
         gds_free(pool->open); \
     } \
  \
-    value_type* function_prefix ## _get(type_name* pool) { \
+    GDS_EXPORT value_type* function_prefix ## _get(type_name* pool) { \
         value_type* result; \
         if(pool->open_count == 0) { \
             if(pool->next == pool->node_capacity) { \
@@ -147,7 +147,7 @@
         return result; \
     } \
  \
-    bool function_prefix ## _release(type_name* pool, value_type* value) { \
+    GDS_EXPORT bool function_prefix ## _release(type_name* pool, value_type* value) { \
         ___POOL_RELEASE_ASSERT(struct type_name ## Node*) \
  \
         if(pool->open_count == pool->open_capacity) { \

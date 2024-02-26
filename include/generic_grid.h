@@ -15,12 +15,12 @@
         unsigned int height; \
     } type_name; \
  \
-    type_name* function_prefix ## _create(unsigned int width, unsigned int height); \
-    bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height); \
-    void function_prefix ## _free(type_name* grid); \
-    void function_prefix ## _free_resources(type_name* grid); \
-    void function_prefix ## _clear(type_name* grid, value_type default_value); \
-    bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value); \
+    GDS_EXPORT type_name* function_prefix ## _create(unsigned int width, unsigned int height); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height); \
+    GDS_EXPORT void function_prefix ## _free(type_name* grid); \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* grid); \
+    GDS_EXPORT void function_prefix ## _clear(type_name* grid, value_type default_value); \
+    GDS_EXPORT bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value); \
  \
     static inline unsigned int function_prefix ## _width(type_name* grid) { \
         return grid->width; \
@@ -52,13 +52,13 @@
 //       Especially try to avoid an extra malloc if unneeded.
 
 #define GRID_DEFINE_C(type_name, function_prefix, value_type) \
-    bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* grid, unsigned int width, unsigned int height) { \
         grid->width = width; \
         grid->height = height; \
         return (grid->grid = gds_malloc(width * height * sizeof(value_type))) != NULL; \
     } \
  \
-    type_name* function_prefix ## _create(unsigned int width, unsigned int height) { \
+    GDS_EXPORT type_name* function_prefix ## _create(unsigned int width, unsigned int height) { \
         type_name* grid = gds_malloc(sizeof(type_name)); \
         if(!grid) \
             return NULL; \
@@ -69,16 +69,16 @@
         return grid; \
     } \
  \
-    void function_prefix ## _free(type_name* grid) { \
+    GDS_EXPORT void function_prefix ## _free(type_name* grid) { \
         gds_free(grid->grid); \
         gds_free(grid); \
     } \
  \
-    void function_prefix ## _free_resources(type_name* grid) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* grid) { \
         gds_free(grid->grid); \
     } \
     \
-    void function_prefix ## _clear(type_name* grid, value_type default_value) { \
+    GDS_EXPORT void function_prefix ## _clear(type_name* grid, value_type default_value) { \
         for(unsigned int h = 0; h < grid->height; h++) { \
             for(unsigned int w = 0; w < grid->width; w++) { \
                 grid->grid[h * grid->width + w] = default_value; \
@@ -86,7 +86,7 @@
         } \
     } \
  \
-    bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value) { \
+    GDS_EXPORT bool function_prefix ## _resize(type_name* grid, unsigned int width, unsigned int height, value_type default_value) { \
         if(width == grid->width && height == grid->height) \
             return true; \
  \

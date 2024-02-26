@@ -23,8 +23,8 @@
         unsigned int capacity; \
     } type_name; \
  \
-    bool function_prefix ## _subscribe(type_name* ev, void* ctx, type_name ## Delegate function); \
-    bool function_prefix ## _unsubscribe(type_name* ev, void* ctx, type_name ## Delegate function); \
+    GDS_EXPORT bool function_prefix ## _subscribe(type_name* ev, void* ctx, type_name ## Delegate function); \
+    GDS_EXPORT bool function_prefix ## _unsubscribe(type_name* ev, void* ctx, type_name ## Delegate function); \
  \
     static inline void function_prefix ## _init(type_name* ev) { \
         ev->count = 0; \
@@ -194,7 +194,7 @@
 
 
 #define EVENT_DEFINE_C(type_name, function_prefix) \
-    bool function_prefix ## _subscribe(type_name* ev, void* ctx, type_name ## Delegate function) { \
+    GDS_EXPORT bool function_prefix ## _subscribe(type_name* ev, void* ctx, type_name ## Delegate function) { \
         if(ev->count == ev->capacity) { \
             unsigned int capacity = ev->capacity; \
             if(capacity == 0) \
@@ -216,7 +216,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _unsubscribe(type_name* ev, void* ctx, type_name ## Delegate function) { \
+    GDS_EXPORT bool function_prefix ## _unsubscribe(type_name* ev, void* ctx, type_name ## Delegate function) { \
         for(unsigned int i = 0; i < ev->count; i++) { \
             if(ev->subscriptions[i].data == ctx && ev->subscriptions[i].function == function) { \
                 if(i != ev->count - 1) \
@@ -246,8 +246,8 @@ typedef struct GdsEvent {
     int capacity;
 } GdsEvent;
 
-bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function);
-bool gds_event_unsubscribe(GdsEvent* ev, void* ctx, void* function);
+GDS_EXPORT bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function);
+GDS_EXPORT bool gds_event_unsubscribe(GdsEvent* ev, void* ctx, void* function);
 
 static inline void gds_event_init(GdsEvent* ev) {
     ev->subscriptions = NULL;
@@ -283,7 +283,7 @@ static inline void gds_event_free(GdsEvent* ev) { gds_free(ev->subscriptions); g
 #ifndef GENERIC_EVENT_IMPLEMENTATION_ONCE
 #define GENERIC_EVENT_IMPLEMENTATION_ONCE
 
-bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function) {
+GDS_EXPORT bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function) {
     if(ev->count == ev->capacity) {
         unsigned int capacity = ev->capacity;
         if(capacity == 0)
@@ -305,7 +305,7 @@ bool gds_event_subscribe(GdsEvent* ev, void* ctx, void* function) {
     return true;
 }
 
-bool gds_event_unsubscribe(GdsEvent* ev, void* ctx, void* function) {
+GDS_EXPORT bool gds_event_unsubscribe(GdsEvent* ev, void* ctx, void* function) {
     for(unsigned int i = 0; i < ev->count; i++) {
         if(ev->subscriptions[i].data == ctx && ev->subscriptions[i].function == function) {
             if(i != ev->count - 1) {

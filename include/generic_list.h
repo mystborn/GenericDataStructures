@@ -19,11 +19,11 @@
         unsigned int capacity; \
     } type_name; \
     \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* list); \
-    bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity); \
-    bool function_prefix ## _add(type_name* list, value_type value); \
-    bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* list); \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity); \
+    GDS_EXPORT bool function_prefix ## _add(type_name* list, value_type value); \
+    GDS_EXPORT bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value); \
     \
     static inline void function_prefix ## _clear(type_name* list) { list->count = 0; } \
     \
@@ -76,7 +76,7 @@
 
 
 #define LIST_DEFINE_C(type_name, function_prefix, value_type) \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* list = gds_malloc(sizeof(type_name)); \
         if(!list) \
             return list; \
@@ -87,20 +87,20 @@
         return list; \
     } \
     \
-    bool function_prefix ## _init(type_name* list) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* list) { \
         list->capacity = 4; \
         list->count = 0; \
         return (list->buffer = gds_malloc(4 * sizeof(value_type))) != NULL; \
     } \
     \
-    bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity) { \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* list, unsigned int capacity) { \
         gds_assert_arg(capacity); \
         list->capacity = capacity; \
         list->count = 0; \
         return (list->buffer = gds_malloc(capacity * sizeof(value_type))) != NULL; \
     } \
     \
-    bool function_prefix ## _add(type_name* list, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _add(type_name* list, value_type value) { \
         if(list->count == list->capacity) { \
             list->capacity *= 2; \
             value_type* buffer = gds_realloc(list->buffer, list->capacity * sizeof(value_type)); \
@@ -112,7 +112,7 @@
         return true; \
     } \
     \
-    bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _insert(type_name* list, unsigned int index, value_type value) { \
         if(index > list->count) return false; \
         if(index == list->count) \
             return function_prefix ## _add(list, value); \

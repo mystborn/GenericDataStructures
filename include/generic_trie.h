@@ -37,21 +37,21 @@
         unsigned int max_depth; \
     } type_name; \
  \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* trie); \
-    void function_prefix ## _free(type_name* trie); \
-    void function_prefix ## _free_resources(type_name* trie); \
-    bool function_prefix ## _add(type_name* trie, value_type* value); \
-    bool function_prefix ## _contains(type_name* trie, value_type* value); \
-    bool function_prefix ## _remove(type_name* trie, value_type* value); \
-    unsigned int function_prefix ## _children_count(type_name* trie, value_type* value, unsigned int max_length); \
-    unsigned int function_prefix ## _children(type_name* trie, \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* trie); \
+    GDS_EXPORT void function_prefix ## _free(type_name* trie); \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* trie); \
+    GDS_EXPORT bool function_prefix ## _add(type_name* trie, value_type* value); \
+    GDS_EXPORT bool function_prefix ## _contains(type_name* trie, value_type* value); \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* trie, value_type* value); \
+    GDS_EXPORT unsigned int function_prefix ## _children_count(type_name* trie, value_type* value, unsigned int max_length); \
+    GDS_EXPORT unsigned int function_prefix ## _children(type_name* trie, \
                                               value_type* value, \
                                               value_type** out_values, \
                                               unsigned int size, \
                                               unsigned int max_length, \
                                               bool allocate_results); \
-    unsigned int function_prefix ## _children_fast(type_name* trie, \
+    GDS_EXPORT unsigned int function_prefix ## _children_fast(type_name* trie, \
                                               value_type* value, \
                                               value_type** out_values, \
                                               unsigned int size, \
@@ -179,7 +179,7 @@
         } \
     } \
  \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* trie = gds_malloc(sizeof(*trie)); \
         if(!trie) \
             return NULL; \
@@ -192,7 +192,7 @@
         return trie; \
     } \
  \
-    bool function_prefix ## _init(type_name* trie) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* trie) { \
         trie->root = gds_malloc(sizeof(*trie->root)); \
         if(!trie->root) \
             return false; \
@@ -202,16 +202,16 @@
         return true; \
     } \
  \
-    void function_prefix ## _free(type_name* trie) { \
+    GDS_EXPORT void function_prefix ## _free(type_name* trie) { \
         function_prefix ## _free_resources(trie); \
         gds_free(trie); \
     } \
  \
-    void function_prefix ## _free_resources(type_name* trie) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* trie) { \
         function_prefix ## _free_node(trie->root); \
     } \
  \
-    bool function_prefix ## _add(type_name* trie, value_type* value) { \
+    GDS_EXPORT bool function_prefix ## _add(type_name* trie, value_type* value) { \
         type_name ## Node* node = trie->root; \
  \
         while(*value != 0) { \
@@ -231,7 +231,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _contains(type_name* trie, value_type* value) { \
+    GDS_EXPORT bool function_prefix ## _contains(type_name* trie, value_type* value) { \
         type_name ## Node* node = trie->root; \
  \
         while(*value != 0) { \
@@ -244,7 +244,7 @@
         return function_prefix ## _node_is_active(node); \
     } \
  \
-    bool function_prefix ## _remove(type_name* trie, value_type* value) { \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* trie, value_type* value) { \
         if(*value == 0) \
             return false; \
  \
@@ -289,7 +289,7 @@
         } \
     } \
  \
-    unsigned int function_prefix ## _children_count(type_name* trie, value_type* value, unsigned int max_length) { \
+    GDS_EXPORT unsigned int function_prefix ## _children_count(type_name* trie, value_type* value, unsigned int max_length) { \
         type_name ## Node* node = trie->root; \
         if(value) { \
             while(*value != 0) { \
@@ -384,7 +384,7 @@
         return index; \
     } \
  \
-    unsigned int function_prefix ## _children(type_name* trie,  \
+    GDS_EXPORT unsigned int function_prefix ## _children(type_name* trie,  \
                                               value_type* value,  \
                                               value_type** out_values,  \
                                               unsigned int size,  \
@@ -432,7 +432,7 @@
         } \
     } \
  \
-    unsigned int function_prefix ## _children_fast(type_name* trie,  \
+    GDS_EXPORT unsigned int function_prefix ## _children_fast(type_name* trie,  \
                                               value_type* value,  \
                                               value_type** out_values,  \
                                               unsigned int size,  \
@@ -515,17 +515,17 @@
         unsigned int max_depth; \
     } type_name; \
  \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* trie); \
-    void function_prefix ## _free(type_name* trie); \
-    void function_prefix ## _free_resources(type_name* trie); \
-    bool function_prefix ## _add(type_name* trie, key_type* key, value_type value); \
-    bool function_prefix ## _set(type_name* trie, key_type* key, value_type value); \
-    bool function_prefix ## _try_get(type_name* trie, key_type* key, value_type* out_value); \
-    bool function_prefix ## _remove(type_name* trie, key_type* key); \
-    bool function_prefix ## _get_and_remove(type_name* trie, key_type* key, value_type* out_value); \
-    unsigned int function_prefix ## _children_count(type_name* trie, key_type* key, unsigned int max_length); \
-    unsigned int function_prefix ## _children(type_name* trie, \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* trie); \
+    GDS_EXPORT void function_prefix ## _free(type_name* trie); \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* trie); \
+    GDS_EXPORT bool function_prefix ## _add(type_name* trie, key_type* key, value_type value); \
+    GDS_EXPORT bool function_prefix ## _set(type_name* trie, key_type* key, value_type value); \
+    GDS_EXPORT bool function_prefix ## _try_get(type_name* trie, key_type* key, value_type* out_value); \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* trie, key_type* key); \
+    GDS_EXPORT bool function_prefix ## _get_and_remove(type_name* trie, key_type* key, value_type* out_value); \
+    GDS_EXPORT unsigned int function_prefix ## _children_count(type_name* trie, key_type* key, unsigned int max_length); \
+    GDS_EXPORT unsigned int function_prefix ## _children(type_name* trie, \
                                               key_type* key, \
                                               key_type** keys, \
                                               unsigned int keys_size, \
@@ -663,7 +663,7 @@
         } \
     } \
  \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* trie = gds_malloc(sizeof(*trie)); \
         if(!trie) \
             return NULL; \
@@ -676,7 +676,7 @@
         return trie; \
     } \
  \
-    bool function_prefix ## _init(type_name* trie) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* trie) { \
         trie->root = gds_malloc(sizeof(*trie->root)); \
         if(!trie->root) \
             return false; \
@@ -686,16 +686,16 @@
         return true; \
     } \
  \
-    void function_prefix ## _free(type_name* trie) { \
+    GDS_EXPORT void function_prefix ## _free(type_name* trie) { \
         function_prefix ## _free_resources(trie); \
         gds_free(trie); \
     } \
  \
-    void function_prefix ## _free_resources(type_name* trie) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* trie) { \
         function_prefix ## _free_node(trie->root); \
     } \
  \
-    bool function_prefix ## _add(type_name* trie, key_type* key, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _add(type_name* trie, key_type* key, value_type value) { \
         type_name ## Node* node = trie->root; \
  \
         while(*key != 0) { \
@@ -716,7 +716,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _set(type_name* trie, key_type* key, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _set(type_name* trie, key_type* key, value_type value) { \
         type_name ## Node* node = trie->root; \
  \
         while(*key != 0) { \
@@ -737,7 +737,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _try_get(type_name* trie, key_type* key, value_type* out_value) { \
+    GDS_EXPORT bool function_prefix ## _try_get(type_name* trie, key_type* key, value_type* out_value) { \
         type_name ## Node* node = trie->root; \
  \
         while(*key != 0) { \
@@ -756,7 +756,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _remove(type_name* trie, key_type* key) { \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* trie, key_type* key) { \
         if(*key == 0) \
             return false; \
  \
@@ -783,7 +783,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _get_and_remove(type_name* trie, key_type* key, value_type* out_value) { \
+    GDS_EXPORT bool function_prefix ## _get_and_remove(type_name* trie, key_type* key, value_type* out_value) { \
         if(*key == 0) \
             return false; \
  \
@@ -831,7 +831,7 @@
         } \
     } \
  \
-    unsigned int function_prefix ## _children_count(type_name* trie, key_type* key, unsigned int max_length) { \
+    GDS_EXPORT unsigned int function_prefix ## _children_count(type_name* trie, key_type* key, unsigned int max_length) { \
         type_name ## Node* node = trie->root; \
         if(key) { \
             while(*key != 0) { \
@@ -934,7 +934,7 @@
         return index; \
     } \
  \
-    unsigned int function_prefix ## _children(type_name* trie,  \
+    GDS_EXPORT unsigned int function_prefix ## _children(type_name* trie,  \
                                               key_type* key,  \
                                               key_type** keys,  \
                                               unsigned int keys_size,  \

@@ -35,7 +35,7 @@ typedef enum RBColor {
     static inline type_name* function_prefix ## _create(void); \
     static inline void function_prefix ## _init(type_name* tree); \
     static inline void function_prefix ## _free(type_name* tree, bool free_nodes); \
-                  void function_prefix ## _free_resources(type_name* tree); \
+                  GDS_EXPORT void function_prefix ## _free_resources(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _root(type_name* tree); \
     static inline unsigned int function_prefix ## _count(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _add(type_name* tree, key_type key, value_type value); \
@@ -45,11 +45,11 @@ typedef enum RBColor {
     static inline bool function_prefix ## _remove(type_name* tree, key_type key, value_type* out_value); \
     static inline bool function_prefix ## _remove_min(type_name* tree, value_type* out_value); \
     static inline bool function_prefix ## _remove_max(type_name* tree, value_type* out_value); \
-                  void function_prefix ## _add_node(type_name* tree, type_name ## Node* node); \
-                  type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key); \
+                  GDS_EXPORT void function_prefix ## _add_node(type_name* tree, type_name ## Node* node); \
+                  GDS_EXPORT type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key); \
     static inline type_name ## Node* function_prefix ## _get_min_node(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _get_max_node(type_name* tree); \
-                  type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node); \
+                  GDS_EXPORT type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node); \
     static inline type_name ## Node* function_prefix ## _remove_min_node(type_name* tree); \
     static inline type_name ## Node* function_prefix ## _remove_max_node(type_name* tree); \
     \
@@ -220,7 +220,7 @@ typedef enum RBColor {
         return node == NULL ? RB_BLACK : node->color; \
     } \
     \
-    type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key) { \
+    GDS_EXPORT type_name ## Node* function_prefix ## _get_node(type_name* tree, key_type key) { \
         type_name ## Node* node = tree->root; \
         while(node != NULL) { \
             int result = compare_fn(key, node->key); \
@@ -315,7 +315,7 @@ typedef enum RBColor {
             function_prefix ## _insert_case4(tree, node); \
     } \
     \
-    void function_prefix ## _add_node(type_name* tree, type_name ## Node* node) { \
+    GDS_EXPORT void function_prefix ## _add_node(type_name* tree, type_name ## Node* node) { \
         node->color = RB_RED; \
         node->parent = NULL; \
         node->left = NULL; \
@@ -431,7 +431,7 @@ typedef enum RBColor {
         } \
     } \
     \
-    type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
+    GDS_EXPORT type_name ## Node* function_prefix ## _remove_node(type_name* tree, type_name ## Node* node) { \
         key_type temp_key = node->key; \
         value_type temp_value = node->value; \
         if(node->left != NULL && node->right != NULL) { \
@@ -458,7 +458,7 @@ typedef enum RBColor {
         return node; \
     } \
     \
-    void function_prefix ## _free_resources(type_name* tree) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* tree) { \
         if(tree->root == NULL)  \
             return; \
         \

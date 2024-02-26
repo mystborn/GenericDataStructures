@@ -18,15 +18,15 @@
         unsigned int end; \
     } type_name; \
  \
-    type_name* function_prefix ## _create(void); \
-    type_name* function_prefix ## _create_capacity(unsigned int capacity); \
-    bool function_prefix ## _init(type_name* deque); \
-    bool function_prefix ## _init_capacity(type_name* deque, unsigned int capacity); \
-    void function_prefix ## _clear(type_name* deque, bool reset_capacity); \
-    bool function_prefix ## _push_front(type_name* deque, value_type value); \
-    bool function_prefix ## _push_back(type_name* deque, value_type value); \
-    value_type function_prefix ## _pop_front(type_name* deque); \
-    value_type function_prefix ## _pop_back(type_name* deque); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT type_name* function_prefix ## _create_capacity(unsigned int capacity); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* deque); \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* deque, unsigned int capacity); \
+    GDS_EXPORT void function_prefix ## _clear(type_name* deque, bool reset_capacity); \
+    GDS_EXPORT bool function_prefix ## _push_front(type_name* deque, value_type value); \
+    GDS_EXPORT bool function_prefix ## _push_back(type_name* deque, value_type value); \
+    GDS_EXPORT value_type function_prefix ## _pop_front(type_name* deque); \
+    GDS_EXPORT value_type function_prefix ## _pop_back(type_name* deque); \
  \
     static inline value_type function_prefix ## _peek_front(const type_name* deque) { \
         gds_assert_bounds(deque->count); \
@@ -45,7 +45,7 @@
 
 
 #define DEQUE_DEFINE_C(type_name, function_prefix, value_type) \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* deque = gds_malloc(sizeof(type_name)); \
         if(!deque) \
             return NULL; \
@@ -56,7 +56,7 @@
         return deque; \
     } \
  \
-    type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
+    GDS_EXPORT type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
         type_name* deque = gds_malloc(sizeof(type_name)); \
         if(!deque) \
             return NULL; \
@@ -67,7 +67,7 @@
         return deque; \
     } \
  \
-    bool function_prefix ## _init(type_name* deque) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* deque) { \
         deque->start = 0; \
         deque->end = 0; \
         deque->count = 0; \
@@ -75,7 +75,7 @@
         return (deque->buffer = gds_malloc(deque->capacity * sizeof(value_type))) != NULL; \
     } \
  \
-    bool function_prefix ## _init_capacity(type_name* deque, unsigned int capacity) { \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* deque, unsigned int capacity) { \
         deque->start = 0; \
         deque->end = 0; \
         deque->count = 0; \
@@ -83,7 +83,7 @@
         return (deque->buffer = gds_malloc(deque->capacity * sizeof(value_type))) != NULL; \
     } \
  \
-    void function_prefix ## _clear(type_name* deque, bool reset_capacity) { \
+    GDS_EXPORT void function_prefix ## _clear(type_name* deque, bool reset_capacity) { \
         if(reset_capacity) { \
             function_prefix ## _free_resources(deque); \
             function_prefix ## _init(deque); \
@@ -115,7 +115,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _push_front(type_name* deque, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _push_front(type_name* deque, value_type value) { \
         if(deque->count == deque->capacity) { \
             if(!function_prefix ## _resize(deque)) \
                 return false; \
@@ -126,7 +126,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _push_back(type_name* deque, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _push_back(type_name* deque, value_type value) { \
         if(deque->count == deque->capacity) { \
             if(!function_prefix ## _resize(deque)) \
                 return false; \
@@ -137,7 +137,7 @@
         return true; \
     } \
  \
-    value_type function_prefix ## _pop_front(type_name* deque) { \
+    GDS_EXPORT value_type function_prefix ## _pop_front(type_name* deque) { \
         gds_assert_bounds(deque->count); \
         deque->count--; \
         value_type value = deque->buffer[deque->start]; \
@@ -145,7 +145,7 @@
         return value; \
     } \
  \
-    value_type function_prefix ## _pop_back(type_name* deque) { \
+    GDS_EXPORT value_type function_prefix ## _pop_back(type_name* deque) { \
         gds_assert_bounds(deque->count); \
         deque->count--; \
         deque->end = deque->end == 0 ? deque->capacity - 1 : deque->end - 1; \

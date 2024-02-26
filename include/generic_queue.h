@@ -20,13 +20,13 @@
         unsigned int end; \
     } type_name; \
     \
-    type_name* function_prefix ## _create(void); \
-    type_name* function_prefix ## _create_capacity(unsigned int capacity); \
-    bool function_prefix ## _init(type_name* queue); \
-    bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity); \
-    void function_prefix ## _clear(type_name* queue); \
-    bool function_prefix ## _enqueue(type_name* queue, value_type value); \
-    value_type function_prefix ## _dequeue(type_name* queue); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT type_name* function_prefix ## _create_capacity(unsigned int capacity); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* queue); \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity); \
+    GDS_EXPORT void function_prefix ## _clear(type_name* queue); \
+    GDS_EXPORT bool function_prefix ## _enqueue(type_name* queue, value_type value); \
+    GDS_EXPORT value_type function_prefix ## _dequeue(type_name* queue); \
     static inline value_type function_prefix ## _peek(type_name* queue) { \
         gds_assert_bounds(queue->count); \
         return queue->buffer[queue->start]; \
@@ -37,7 +37,7 @@
 
 #define QUEUE_DEFINE_C(type_name, function_prefix, value_type) \
     /* todo: inline the create functions. */ \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* queue = gds_malloc(sizeof(type_name)); \
         if(!queue) \
             return NULL; \
@@ -48,7 +48,7 @@
         return queue; \
     } \
     \
-    type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
+    GDS_EXPORT type_name* function_prefix ## _create_capacity(unsigned int capacity) { \
         type_name* queue = gds_malloc(sizeof(type_name)); \
         if(!queue) \
             return NULL; \
@@ -59,7 +59,7 @@
         return queue; \
     } \
     \
-    bool function_prefix ## _init(type_name* queue) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* queue) { \
         queue->start = 0; \
         queue->end = 0; \
         queue->count = 0; \
@@ -67,7 +67,7 @@
         return (queue->buffer = gds_malloc(queue->capacity * sizeof(value_type))) != NULL; \
     } \
     \
-    bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity) { \
+    GDS_EXPORT bool function_prefix ## _init_capacity(type_name* queue, unsigned int capacity) { \
         queue->start = 0; \
         queue->end = 0; \
         queue->count = 0; \
@@ -75,13 +75,13 @@
         return (queue->buffer = gds_malloc(queue->capacity * sizeof(value_type))) != NULL; \
     } \
     \
-    void function_prefix ## _clear(type_name* queue) { \
+    GDS_EXPORT void function_prefix ## _clear(type_name* queue) { \
         queue->start = 0; \
         queue->end = 0; \
         queue->count = 0; \
     } \
     \
-    bool function_prefix ## _enqueue(type_name* queue, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _enqueue(type_name* queue, value_type value) { \
         if(queue->end == queue->capacity) \
             queue->end = 0; \
         if(queue->count == queue->capacity) { \
@@ -101,7 +101,7 @@
         return true; \
     } \
     \
-    value_type function_prefix ## _dequeue(type_name* queue) { \
+    GDS_EXPORT value_type function_prefix ## _dequeue(type_name* queue) { \
         assert(queue->count); \
         queue->count--; \
         if(queue->start == queue->capacity - 1) { \

@@ -33,22 +33,22 @@
     static inline void function_prefix ## _free(type_name* set) { gds_free(set->cells); gds_free(set); } \
     static inline void function_prefix ## _free_resources(type_name* set) { gds_free(set->cells); } \
  \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* set); \
-    bool function_prefix ## _add(type_name* set, value_type value); \
-    bool function_prefix ## _contains(type_name* set, value_type value); \
-    bool function_prefix ## _remove(type_name* set, value_type value); \
-    bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value); \
-    bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value); \
-    void function_prefix ## _clear(type_name* set, bool reset_capacity); \
-    bool function_prefix ## _union(type_name* left, type_name* right, type_name* result); \
-    bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result); \
-    bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result); \
-    bool function_prefix ## _is_superset(type_name* superset, type_name* subset); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* set); \
+    GDS_EXPORT bool function_prefix ## _add(type_name* set, value_type value); \
+    GDS_EXPORT bool function_prefix ## _contains(type_name* set, value_type value); \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* set, value_type value); \
+    GDS_EXPORT bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value); \
+    GDS_EXPORT bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value); \
+    GDS_EXPORT void function_prefix ## _clear(type_name* set, bool reset_capacity); \
+    GDS_EXPORT bool function_prefix ## _union(type_name* left, type_name* right, type_name* result); \
+    GDS_EXPORT bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result); \
+    GDS_EXPORT bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result); \
+    GDS_EXPORT bool function_prefix ## _is_superset(type_name* superset, type_name* subset); \
 
 
 #define SET_DEFINE_C(type_name, function_prefix, value_type, hash_fn, compare_fn) \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* set = gds_malloc(sizeof(type_name)); \
         if(!set) \
             return NULL; \
@@ -56,7 +56,7 @@
         return set; \
     } \
  \
-    bool function_prefix ## _init(type_name* set) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* set) { \
         set->shift = 29; \
         set->capacity = 8; \
         set->count = 0; \
@@ -86,7 +86,7 @@
         set->cells = current; \
     } \
  \
-    bool function_prefix ## _add(type_name* set, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _add(type_name* set, value_type value) { \
         uint32_t hash, cell; \
  \
         if(set->count == set->load_factor) \
@@ -152,12 +152,12 @@
         set->cells[start].active = false; \
     } \
  \
-    bool function_prefix ## _contains(type_name* set, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _contains(type_name* set, value_type value) { \
         uint32_t cell, hash; \
         return function_prefix ## _find_cell(set, value, &hash, &cell); \
     } \
  \
-    bool function_prefix ## _remove(type_name* set, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _remove(type_name* set, value_type value) { \
         uint32_t cell, hash; \
         if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
             return false; \
@@ -167,7 +167,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value) { \
+    GDS_EXPORT bool function_prefix ## _get(type_name* set, value_type value, value_type* out_value) { \
         uint32_t cell, hash; \
         if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
             return false; \
@@ -175,7 +175,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value) { \
+    GDS_EXPORT bool function_prefix ## _get_and_remove(type_name* set, value_type value, value_type* out_value) { \
         uint32_t cell, hash; \
         if(!function_prefix ## _find_cell(set, value, &hash, &cell)) \
             return false; \
@@ -186,7 +186,7 @@
         return true; \
     } \
  \
-    void function_prefix ## _clear(type_name* set, bool reset_capacity) { \
+    GDS_EXPORT void function_prefix ## _clear(type_name* set, bool reset_capacity) { \
         if(reset_capacity) { \
             gds_free(set->cells); \
             function_prefix ## _init(set); \
@@ -196,7 +196,7 @@
         } \
     } \
  \
-    bool function_prefix ## _union(type_name* left, type_name* right, type_name* result) { \
+    GDS_EXPORT bool function_prefix ## _union(type_name* left, type_name* right, type_name* result) { \
         if(!left || !right || !result) \
             return false; \
  \
@@ -215,7 +215,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result) { \
+    GDS_EXPORT bool function_prefix ## _intersect(type_name* left, type_name* right, type_name* result) { \
         if(!left || !right || !result) \
             return false; \
  \
@@ -229,7 +229,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result) { \
+    GDS_EXPORT bool function_prefix ## _complement(type_name* left, type_name* right, type_name* result) { \
         if(!left || !right || !result) \
             return false; \
  \
@@ -243,7 +243,7 @@
         return true; \
     } \
  \
-    bool function_prefix ## _is_superset(type_name* superset, type_name* subset) { \
+    GDS_EXPORT bool function_prefix ## _is_superset(type_name* superset, type_name* subset) { \
         if(!superset || !subset) \
             return false; \
  \

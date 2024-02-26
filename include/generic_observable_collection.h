@@ -43,17 +43,17 @@ typedef enum GdsNotifyCollectionChangedAction {
         int block_reentrance_count; \
     }; \
  \
-    type_name* function_prefix ## _create(void); \
-    bool function_prefix ## _init(type_name* observer); \
-    void function_prefix ## _free(type_name* observer); \
-    void function_prefix ## _free_resources(type_name* observer); \
+    GDS_EXPORT type_name* function_prefix ## _create(void); \
+    GDS_EXPORT bool function_prefix ## _init(type_name* observer); \
+    GDS_EXPORT void function_prefix ## _free(type_name* observer); \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* observer); \
  \
-    bool function_prefix ## _set(type_name* observer, unsigned int index, value_type value); \
-    bool function_prefix ## _add(type_name* observer, value_type value); \
-    bool function_prefix ## _insert(type_name* observer, unsigned int index, value_type value); \
-    void function_prefix ## _clear(type_name* observer); \
-    void function_prefix ## _remove(type_name* observer, unsigned int index); \
-    void function_prefix ## _move(type_name* observer, unsigned int old_index, unsigned int new_index); \
+    GDS_EXPORT bool function_prefix ## _set(type_name* observer, unsigned int index, value_type value); \
+    GDS_EXPORT bool function_prefix ## _add(type_name* observer, value_type value); \
+    GDS_EXPORT bool function_prefix ## _insert(type_name* observer, unsigned int index, value_type value); \
+    GDS_EXPORT void function_prefix ## _clear(type_name* observer); \
+    GDS_EXPORT void function_prefix ## _remove(type_name* observer, unsigned int index); \
+    GDS_EXPORT void function_prefix ## _move(type_name* observer, unsigned int old_index, unsigned int new_index); \
  \
     static inline unsigned int function_prefix ## _count(type_name* observer) { return observer->count; } \
     static inline type_name ## ChangedEvent* function_prefix ## _collection_changed(type_name* observer) { return observer->collection_changed; } \
@@ -94,7 +94,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    type_name* function_prefix ## _create(void) { \
+    GDS_EXPORT type_name* function_prefix ## _create(void) { \
         type_name* observer = gds_malloc(sizeof(*observer)); \
         if(!observer) \
             return NULL; \
@@ -107,7 +107,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return observer; \
     } \
  \
-    bool function_prefix ## _init(type_name* observer) { \
+    GDS_EXPORT bool function_prefix ## _init(type_name* observer) { \
         type_name ## ChangedEvent* ev = function_prefix ## _changed_event_create(); \
         if(!ev) \
             return false; \
@@ -120,7 +120,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    void function_prefix ## _free(type_name* observer) { \
+    GDS_EXPORT void function_prefix ## _free(type_name* observer) { \
         function_prefix ## _check_reentrance(observer); \
  \
         function_prefix ## _changed_event_free(observer->collection_changed); \
@@ -128,14 +128,14 @@ typedef enum GdsNotifyCollectionChangedAction {
         gds_free(observer); \
     } \
  \
-    void function_prefix ## _free_resources(type_name* observer) { \
+    GDS_EXPORT void function_prefix ## _free_resources(type_name* observer) { \
         function_prefix ## _check_reentrance(observer); \
  \
         function_prefix ## _changed_event_free(observer->collection_changed); \
         gds_free(observer->buffer); \
     } \
  \
-    bool function_prefix ## _set(type_name* observer, unsigned int index, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _set(type_name* observer, unsigned int index, value_type value) { \
         gds_assert_bounds(index <= observer->count); \
  \
         if(index == observer->count) \
@@ -155,7 +155,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    bool function_prefix ## _add(type_name* observer, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _add(type_name* observer, value_type value) { \
         function_prefix ## _check_reentrance(observer); \
  \
         if(observer->count == observer->capacity) { \
@@ -172,7 +172,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    bool function_prefix ## _insert(type_name* observer, unsigned int index, value_type value) { \
+    GDS_EXPORT bool function_prefix ## _insert(type_name* observer, unsigned int index, value_type value) { \
         if(index > observer->count) return false; \
         if(index == observer->count) \
             return function_prefix ## _add(observer, value); \
@@ -195,14 +195,14 @@ typedef enum GdsNotifyCollectionChangedAction {
         return true; \
     } \
  \
-    void function_prefix ## _clear(type_name* observer) { \
+    GDS_EXPORT void function_prefix ## _clear(type_name* observer) { \
         function_prefix ## _check_reentrance(observer); \
         type_name ## ChangedData data = { .action = GDS_OBSERVABLE_COLLECTION_CHANGED_CLEAR }; \
         function_prefix ## _on_collection_changed(observer, &data); \
         observer->count = 0; \
     } \
  \
-    void function_prefix ## _remove(type_name* observer, unsigned int index) { \
+    GDS_EXPORT void function_prefix ## _remove(type_name* observer, unsigned int index) { \
         gds_assert_bounds(index < observer->count); \
         function_prefix ## _check_reentrance(observer); \
  \
@@ -219,7 +219,7 @@ typedef enum GdsNotifyCollectionChangedAction {
         function_prefix ## _on_collection_changed(observer, &data); \
     } \
  \
-    void function_prefix ## _move(type_name* observer, unsigned int old_index, unsigned int new_index) { \
+    GDS_EXPORT void function_prefix ## _move(type_name* observer, unsigned int old_index, unsigned int new_index) { \
         gds_assert_bounds(old_index < observer->count && new_index < observer->count); \
         function_prefix ## _check_reentrance(observer); \
  \
